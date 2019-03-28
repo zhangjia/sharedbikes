@@ -1,5 +1,7 @@
 package tv.zhangjia.bike.entity;
 
+import java.util.Date;
+
 /**
  * 用户类
  * @ProjectName SharedBikes
@@ -15,161 +17,79 @@ public class User {
 	private String password; // 密码
 	private String tel; // 用户手机号
 	private boolean isAdmin; // 用户是否是管理员
-	private double balance; // 用户余额
-	private double coupon; // 用户优惠券剩余
-	private long cyclingTime; // 用户总骑行时间
-	private String registerTime;// 用户注册时间
-
-	/**
-	 * 无参构造方法
-	 */
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * 带ID的带参构造方法
-	 * @param id	用户id
-	 * @param username	用户名
-	 * @param password	密码
-	 * @param tel	手机号
-	 * @param isAdmin	是否是管理员
-	 * @param balance	余额
-	 * @param coupon	优惠券余额
-	 * @param cyclingTime	总骑行时间
-	 * @param registerTime	注册时间
-	 */
-
-	public User(int id, String username, String password, String tel, boolean isAdmin, double balance, double coupon,
-			long cyclingTime, String registerTime) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.tel = tel;
-		this.isAdmin = isAdmin;
-		this.balance = balance;
-		this.coupon = coupon;
-		this.cyclingTime = cyclingTime;
-		this.registerTime = registerTime;
-	}
-
-	/**
-	 * 不带ID的带参构造方法
-	 * @param username	用户名
-	 * @param password	密码
-	 * @param tel	手机号
-	 * @param isAdmin	是否是管理员
-	 * @param balance	余额
-	 * @param coupon	优惠券余额
-	 * @param cyclingTime	总骑行时间
-	 * @param registerTime	注册时间
-	 */
-	public User(String username, String password, String tel, boolean isAdmin, double balance, double coupon,
-			long cyclingTime, String registerTime) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.tel = tel;
-		this.isAdmin = isAdmin;
-		this.balance = balance;
-		this.coupon = coupon;
-		this.cyclingTime = cyclingTime;
-		this.registerTime = registerTime;
-	}
-
+	private Date cyclingTime; // 用户总骑行时间
+	private Date registerTime;// 用户注册时间
+	private String location;
+	private Wallet wallet;
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public String getUsername() {
 		return username;
 	}
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getTel() {
 		return tel;
 	}
-
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
-
 	public boolean isAdmin() {
 		return isAdmin;
 	}
-
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
-
-	public double getBalance() {
-		return balance;
-	}
-
-	public void setBalance(double balance) {
-		this.balance = balance;
-	}
-
-	public double getCoupon() {
-		return coupon;
-	}
-
-	public void setCoupon(double coupon) {
-		this.coupon = coupon;
-	}
-
-	public long getCyclingTime() {
+	public Date getCyclingTime() {
 		return cyclingTime;
 	}
-
-	public void setCyclingTime(long cyclingTime) {
+	public void setCyclingTime(Date cyclingTime) {
 		this.cyclingTime = cyclingTime;
 	}
-
-	public String getRegisterTime() {
+	public Date getRegisterTime() {
 		return registerTime;
 	}
-
-	public void setRegisterTime(String registerTime) {
+	public void setRegisterTime(Date registerTime) {
 		this.registerTime = registerTime;
 	}
-
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public Wallet getWallet() {
+		return wallet;
+	}
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(balance);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(coupon);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + (int) (cyclingTime ^ (cyclingTime >>> 32));
+		result = prime * result + ((cyclingTime == null) ? 0 : cyclingTime.hashCode());
 		result = prime * result + id;
 		result = prime * result + (isAdmin ? 1231 : 1237);
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((registerTime == null) ? 0 : registerTime.hashCode());
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((wallet == null) ? 0 : wallet.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -179,15 +99,19 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
-			return false;
-		if (Double.doubleToLongBits(coupon) != Double.doubleToLongBits(other.coupon))
-			return false;
-		if (cyclingTime != other.cyclingTime)
+		if (cyclingTime == null) {
+			if (other.cyclingTime != null)
+				return false;
+		} else if (!cyclingTime.equals(other.cyclingTime))
 			return false;
 		if (id != other.id)
 			return false;
 		if (isAdmin != other.isAdmin)
+			return false;
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -209,15 +133,53 @@ public class User {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
+		if (wallet == null) {
+			if (other.wallet != null)
+				return false;
+		} else if (!wallet.equals(other.wallet))
+			return false;
 		return true;
 	}
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
-				+ isAdmin + ", balance=" + balance + ", coupon=" + coupon + ", cyclingTime=" + cyclingTime
-				+ ", registerTime=" + registerTime + "]";
+				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", location=" + location
+				+ ", wallet=" + wallet + "]";
+	}
+	public User(int id, String username, String password, String tel, boolean isAdmin, Date cyclingTime,
+			Date registerTime, String location, Wallet wallet) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.tel = tel;
+		this.isAdmin = isAdmin;
+		this.cyclingTime = cyclingTime;
+		this.registerTime = registerTime;
+		this.location = location;
+		this.wallet = wallet;
+	}
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public User(String username, String password, String tel, boolean isAdmin, Date cyclingTime, Date registerTime,
+			String location, Wallet wallet) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.tel = tel;
+		this.isAdmin = isAdmin;
+		this.cyclingTime = cyclingTime;
+		this.registerTime = registerTime;
+		this.location = location;
+		this.wallet = wallet;
 	}
 
+	
+	
+	
+	
+	
 	
 }

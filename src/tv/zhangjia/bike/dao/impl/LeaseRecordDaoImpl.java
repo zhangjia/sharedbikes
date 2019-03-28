@@ -41,4 +41,15 @@ public class LeaseRecordDaoImpl implements RecordDao<LeaseRecord>{
 		return null;
 	}
 	
+	
+	public List<LeaseRecord> queryNotReturnByUserId(int userid) {
+		List<LeaseRecord> records = new ArrayList<>();
+		for (LeaseRecord record : this.lrs) {
+			if(record.getUserId() == userid && record.getReturnTime() == null) {
+				records.add(record);
+			}
+		}
+		return records;
+	}
+	
 }
