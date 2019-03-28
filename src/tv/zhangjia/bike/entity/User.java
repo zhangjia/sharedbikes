@@ -9,7 +9,7 @@ import java.util.Date;
  * @ClassName User
  * @author ZhangJia
  * @Version v1.0
- * @date 2019年3月25日 下午6:10:17
+ * @date 2019年3月25日 下午6:10:17new ArrayList<Bike>().add(BIKES.get(0))
  */
 public class User {
 	private int id; // 用户id
@@ -19,7 +19,7 @@ public class User {
 	private boolean isAdmin; // 用户是否是管理员
 	private Date cyclingTime; // 用户总骑行时间
 	private Date registerTime;// 用户注册时间
-	private String location;
+	private int locationID;
 	private Wallet wallet;
 	public int getId() {
 		return id;
@@ -63,11 +63,11 @@ public class User {
 	public void setRegisterTime(Date registerTime) {
 		this.registerTime = registerTime;
 	}
-	public String getLocation() {
-		return location;
+	public int getLocationID() {
+		return locationID;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocationID(int locationID) {
+		this.locationID = locationID;
 	}
 	public Wallet getWallet() {
 		return wallet;
@@ -82,7 +82,7 @@ public class User {
 		result = prime * result + ((cyclingTime == null) ? 0 : cyclingTime.hashCode());
 		result = prime * result + id;
 		result = prime * result + (isAdmin ? 1231 : 1237);
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + locationID;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((registerTime == null) ? 0 : registerTime.hashCode());
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
@@ -108,10 +108,7 @@ public class User {
 			return false;
 		if (isAdmin != other.isAdmin)
 			return false;
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
+		if (locationID != other.locationID)
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -143,11 +140,11 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
-				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", location=" + location
-				+ ", wallet=" + wallet + "]";
+				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", locationID="
+				+ locationID + ", wallet=" + wallet + "]";
 	}
 	public User(int id, String username, String password, String tel, boolean isAdmin, Date cyclingTime,
-			Date registerTime, String location, Wallet wallet) {
+			Date registerTime, int locationID, Wallet wallet) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -156,15 +153,11 @@ public class User {
 		this.isAdmin = isAdmin;
 		this.cyclingTime = cyclingTime;
 		this.registerTime = registerTime;
-		this.location = location;
+		this.locationID = locationID;
 		this.wallet = wallet;
 	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	public User(String username, String password, String tel, boolean isAdmin, Date cyclingTime, Date registerTime,
-			String location, Wallet wallet) {
+			int locationID, Wallet wallet) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -172,14 +165,11 @@ public class User {
 		this.isAdmin = isAdmin;
 		this.cyclingTime = cyclingTime;
 		this.registerTime = registerTime;
-		this.location = location;
+		this.locationID = locationID;
 		this.wallet = wallet;
 	}
-
-	
-	
-	
-	
-	
+	public User() {
+		super();
+	}
 	
 }

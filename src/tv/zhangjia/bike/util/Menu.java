@@ -230,8 +230,8 @@ public class Menu {
 		String type = input.next();
 		System.out.println("请输入价格：");
 		double price = input.nextDouble();
-		System.out.println("请输入位置：");
-		String location = input.next();
+		System.out.println("请输入位置ID：");
+		int locationId = input.nextInt();
 		System.out.println("请输入状态：");
 		int status = input.nextInt();
 		System.out.println("请输入次数：");
@@ -243,7 +243,7 @@ public class Menu {
 		if (bike == null) {
 			System.out.println("没有该ID");
 		} else {
-			Bike bike2 = new Bike(id, type, price, location, status, amount, qr);
+			Bike bike2 = new Bike(id, type, price, locationId, status, amount, qr);
 			boolean doUpdate = bikedao.doUpdate(bike2);
 			if (doUpdate) {
 				System.out.println("修改成功");
@@ -273,11 +273,11 @@ public class Menu {
 		System.out.println("请输入价格：");
 		double price = input.nextDouble();
 		System.out.println("请输入位置：");
-		String location = input.next();
+		int locationId = input.nextInt();
 		System.out.println("请输入qr");
 		String qr = input.next();
 
-		Bike bike = new Bike(type, price, location, 1, 0, qr);
+		Bike bike = new Bike(type, price, locationId, 1, 0, qr);
 		boolean doInsert = bikedao.doInsert(bike);
 		if (doInsert) {
 			System.out.println("添加成功");

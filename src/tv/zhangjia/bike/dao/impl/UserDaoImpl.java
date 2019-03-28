@@ -8,6 +8,7 @@ import java.util.List;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.Wallet;
 
 public class UserDaoImpl implements UserDao {
 	private List<User> users = Database.USERS;
@@ -47,8 +48,7 @@ public class UserDaoImpl implements UserDao {
 			}
 		}
 		String nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		users.add(new User(Database.nextUserId(),username,password,"нч",false,5,0,
-				0, nowDate));
+		users.add(new User(Database.nextUserId(),username,password,"нч",false,new Date(),new Date(),1,new Wallet()));
 		return 1;
 	}
 
