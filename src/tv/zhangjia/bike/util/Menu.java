@@ -138,11 +138,55 @@ public class Menu {
 
 	private void deleteBike() {
 		// TODO Auto-generated method stub
-
+		System.out.println("请输入您要删除的单车ID：");
+		int id = input.nextInt();
+		
+		
+		if(bikedao.queryById(id) == null) {
+			System.out.println("不存在此id");
+			
+		} else {
+			if(bikedao.doDelete(id) ) {
+				System.out.println("删除成功");
+			} else {
+				System.out.println("删除失败");
+			}
+		}
+		returnMenu();
 	}
 
 	private void editBike() {
 		// TODO Auto-generated method stub
+		List<Bike> bikes = bikedao.queryAll();
+		System.out.println("请输入您要修改的单车ID");
+		int id = input.nextInt();
+		System.out.println("请输入单车类型：");
+		String type = input.next();
+		System.out.println("请输入价格：");
+		double price = input.nextDouble();
+		System.out.println("请输入位置：");
+		String location = input.next();
+		System.out.println("请输入状态：");
+		int status = input.nextInt();
+		System.out.println("请输入次数：");
+		int amount = input.nextInt();
+		System.out.println("请输入qr");
+		String qr = input.next();
+
+		Bike bike = bikedao.queryById(id);
+		if (bike == null) {
+			System.out.println("没有该ID");
+		} else {
+			Bike bike2 = new Bike(type, price, location, status, amount, qr);
+			boolean doUpdate = bikedao.doUpdate(bike2);
+			if (doUpdate) {
+				System.out.println("修改成功");
+			} else {
+				System.out.println("修改失败");
+			}
+		}
+
+		returnMenu();
 
 	}
 
@@ -156,15 +200,15 @@ public class Menu {
 		String location = input.next();
 		System.out.println("请输入qr");
 		String qr = input.next();
-		
-		Bike bike = new Bike(type,price,location,1,0,"二维码");
+
+		Bike bike = new Bike(type, price, location, 1, 0, "二维码");
 		boolean doInsert = bikedao.doInsert(bike);
 		if (doInsert) {
 			System.out.println("添加成功");
-		}else {
+		} else {
 			System.out.println("添加失败");
 		}
-		
+
 		System.out.println();
 		returnMenu();
 	}

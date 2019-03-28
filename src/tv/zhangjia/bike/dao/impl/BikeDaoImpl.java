@@ -26,14 +26,29 @@ public class BikeDaoImpl implements BikeDao{
 
 	@Override
 	public boolean doDelete(int bikeId) {
-		// TODO Auto-generated method stub
+		Bike d = new Bike();
+		for (Bike bike : bikes) {
+			if(bike.getId() == bikeId) {
+				d = bike;
+				bikes.remove(d);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
 	@Override
-	public boolean doUpdate(Bike book) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean doUpdate(Bike bike) {
+		for (int i = 0; i < bikes.size(); i++) {
+			if(bikes.get(i).getId() == bike.getId()) {
+				bikes.set(i, bike);
+				return false;
+			}
+			
+		}
+		
+		return true;
 	}
 
 	@Override
@@ -42,8 +57,12 @@ public class BikeDaoImpl implements BikeDao{
 	}
 
 	@Override
-	public Bike queryByBid(int bikeid) {
-		// TODO Auto-generated method stub
+	public Bike queryById(int bikeId) {
+		for (Bike bike : bikes) {
+			if(bike.getId() == bikeId) {
+				return bike;
+			}
+		}
 		return null;
 	}
 

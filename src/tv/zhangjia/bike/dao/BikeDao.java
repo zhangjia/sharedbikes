@@ -43,5 +43,5 @@ public interface BikeDao {
 	  * @param bikeid
 	  * @return
 	  */
-	 Bike queryByBid(int bikeid); 
+	 Bike queryById(int bikeId); 
 }
