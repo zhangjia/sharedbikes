@@ -3,6 +3,7 @@ package tv.zhangjia.bike.entity;
 import java.util.Date;
 
 public class Wallet {
+	private int id;
 	private int userId; //用户ID
 	private double balance; //用户余额
 	private double coupon; // 用户优惠券余额
@@ -10,6 +11,12 @@ public class Wallet {
 	private Date vipDate; //VIP时间
 	private double vipPrice; //开通VIP的价格
 	private double vipRebate; //vip打几折
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -61,6 +68,7 @@ public class Wallet {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(coupon);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + id;
 		result = prime * result + (isVIP ? 1231 : 1237);
 		result = prime * result + userId;
 		result = prime * result + ((vipDate == null) ? 0 : vipDate.hashCode());
@@ -83,6 +91,8 @@ public class Wallet {
 			return false;
 		if (Double.doubleToLongBits(coupon) != Double.doubleToLongBits(other.coupon))
 			return false;
+		if (id != other.id)
+			return false;
 		if (isVIP != other.isVIP)
 			return false;
 		if (userId != other.userId)
@@ -100,12 +110,13 @@ public class Wallet {
 	}
 	@Override
 	public String toString() {
-		return "Wallet [userId=" + userId + ", balance=" + balance + ", coupon=" + coupon + ", isVIP=" + isVIP
-				+ ", vipDate=" + vipDate + ", vipPrice=" + vipPrice + ", vipRebate=" + vipRebate + "]";
+		return "Wallet [id=" + id + ", userId=" + userId + ", balance=" + balance + ", coupon=" + coupon + ", isVIP="
+				+ isVIP + ", vipDate=" + vipDate + ", vipPrice=" + vipPrice + ", vipRebate=" + vipRebate + "]";
 	}
-	public Wallet(int userId, double balance, double coupon, boolean isVIP, Date vipDate, double vipPrice,
+	public Wallet(int id, int userId, double balance, double coupon, boolean isVIP, Date vipDate, double vipPrice,
 			double vipRebate) {
 		super();
+		this.id = id;
 		this.userId = userId;
 		this.balance = balance;
 		this.coupon = coupon;
@@ -117,6 +128,17 @@ public class Wallet {
 	public Wallet() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public Wallet(int userId, double balance, double coupon, boolean isVIP, Date vipDate, double vipPrice,
+			double vipRebate) {
+		super();
+		this.userId = userId;
+		this.balance = balance;
+		this.coupon = coupon;
+		this.isVIP = isVIP;
+		this.vipDate = vipDate;
+		this.vipPrice = vipPrice;
+		this.vipRebate = vipRebate;
 	}
 	
 	

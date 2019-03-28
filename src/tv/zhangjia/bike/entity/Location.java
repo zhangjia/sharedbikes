@@ -3,15 +3,15 @@ package tv.zhangjia.bike.entity;
 import java.util.List;
 
 public class Location {
-	private int locationId; //位置ID
+	private int id; //位置ID
 	private String location;  //位置名称
 	private List<Bike> bikes; //自行车ID
 	private int bikesAmount; //当前位置下车辆总数
-	public int getLocationId() {
-		return locationId;
+	public int getId() {
+		return id;
 	}
-	public void setLocationId(int locationId) {
-		this.locationId = locationId;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public String getLocation() {
 		return location;
@@ -37,8 +37,8 @@ public class Location {
 		int result = 1;
 		result = prime * result + ((bikes == null) ? 0 : bikes.hashCode());
 		result = prime * result + bikesAmount;
+		result = prime * result + id;
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + locationId;
 		return result;
 	}
 	@Override
@@ -57,23 +57,26 @@ public class Location {
 			return false;
 		if (bikesAmount != other.bikesAmount)
 			return false;
+		if (id != other.id)
+			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
-		if (locationId != other.locationId)
-			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Location [locationId=" + locationId + ", location=" + location + ", bikes=" + bikes + ", bikesAmount="
-				+ bikesAmount + "]";
+		return "Location [id=" + id + ", location=" + location + ", bikes=" + bikes + ", bikesAmount=" + bikesAmount
+				+ "]";
 	}
-	public Location() {
+	public Location(int id, String location, List<Bike> bikes, int bikesAmount) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.id = id;
+		this.location = location;
+		this.bikes = bikes;
+		this.bikesAmount = bikesAmount;
 	}
 	public Location(String location, List<Bike> bikes, int bikesAmount) {
 		super();
@@ -81,12 +84,9 @@ public class Location {
 		this.bikes = bikes;
 		this.bikesAmount = bikesAmount;
 	}
-	public Location(int locationId, String location, List<Bike> bikes, int bikesAmount) {
+	public Location() {
 		super();
-		this.locationId = locationId;
-		this.location = location;
-		this.bikes = bikes;
-		this.bikesAmount = bikesAmount;
+		// TODO Auto-generated constructor stub
 	}
 	
 	

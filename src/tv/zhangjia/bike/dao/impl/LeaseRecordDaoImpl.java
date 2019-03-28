@@ -8,7 +8,7 @@ import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.LeaseRecord;
 
 public class LeaseRecordDaoImpl implements RecordDao<LeaseRecord>{
-	private List<LeaseRecord> lrs = Database.LEASERECORD;
+	private List<LeaseRecord> lrs = Database.LEASERECORDS;
 	@Override
 	public boolean addRecord(LeaseRecord lr) {
 		lr.setId(Database.nextLeaseRecordId());

@@ -21,8 +21,9 @@ import tv.zhangjia.bike.entity.Wallet;
 public class Database {
 	public static final List<User> USERS = new ArrayList<>();
 	public static final List<Bike> BIKES = new ArrayList<>();
-	public static final List<Location> LOCATION = new ArrayList<>();
-	public static final List<LeaseRecord> LEASERECORD = new ArrayList<>();
+	public static final List<Location> LOCATIONS = new ArrayList<>();
+	public static final List<LeaseRecord> LEASERECORDS = new ArrayList<>();
+	public static final List<Wallet> WALLETS = new ArrayList<>();
 	static {
 		//向数据库中默认添加一个管理员
 			USERS.add(new User(1,"1","1","15628",true,new Date(),new Date(),1,new Wallet(1,100,10,true,new Date(),10,0.8)));
@@ -47,10 +48,10 @@ public class Database {
 			b1.add(BIKES.get(3));
 			
 			//将上面的四辆车分别加入到对应的位置中
-			LOCATION.add((new Location(1,"创意大厦",b1,1)));
-			LOCATION.add((new Location(2,"绿色家园",b1,1)));
-			LOCATION.add((new Location(3,"青年公寓",b1,1)));
-			LOCATION.add((new Location(4,"万达广场",b1,1)));
+			LOCATIONS.add((new Location(1,"创意大厦",b1,1)));
+			LOCATIONS.add((new Location(2,"绿色家园",b1,1)));
+			LOCATIONS.add((new Location(3,"青年公寓",b1,1)));
+			LOCATIONS.add((new Location(4,"万达广场",b1,1)));
 	}
 	
 	/**
@@ -81,10 +82,10 @@ public class Database {
 	 * @return 下一个Bike的ID
 	 */
 	public static int nextLeaseRecordId() {
-		if(LEASERECORD.isEmpty()) {
+		if(LEASERECORDS.isEmpty()) {
 			return 1;
 		}
-		return LEASERECORD.get(LEASERECORD.size() - 1).getId() + 1;
+		return LEASERECORDS.get(LEASERECORDS.size() - 1).getId() + 1;
 	}
 	
 	
@@ -93,10 +94,21 @@ public class Database {
 	 * @return 下一个Bike的ID
 	 */
 	public static int nextLocationId() {
-		if(LOCATION.isEmpty()) {
+		if(LOCATIONS.isEmpty()) {
 			return 1;
 		}
-		return LOCATION.get(LOCATION.size() - 1).getLocationId() + 1;
+		return LOCATIONS.get(LOCATIONS.size() - 1).getId() + 1;
+	}
+	
+	/**
+	 * 生成下一个钱包的ID
+	 * @return 下一个Bike的ID
+	 */
+	public static int nextWalletId() {
+		if(WALLETS.isEmpty()) {
+			return 1;
+		}
+		return WALLETS.get(WALLETS.size() - 1).getId() + 1;
 	}
 	
 	
