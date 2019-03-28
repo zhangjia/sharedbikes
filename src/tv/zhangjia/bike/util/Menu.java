@@ -136,17 +136,18 @@ public class Menu {
 
 	}
 
+	/**
+	 * 根据ID删除单车
+	 */
 	private void deleteBike() {
-		// TODO Auto-generated method stub
 		System.out.println("请输入您要删除的单车ID：");
 		int id = input.nextInt();
-		
-		
-		if(bikedao.queryById(id) == null) {
+
+		if (bikedao.queryById(id) == null) {
 			System.out.println("不存在此id");
-			
+
 		} else {
-			if(bikedao.doDelete(id) ) {
+			if (bikedao.doDelete(id)) {
 				System.out.println("删除成功");
 			} else {
 				System.out.println("删除失败");
@@ -155,9 +156,11 @@ public class Menu {
 		returnMenu();
 	}
 
+	/**
+	 * 根据ID修改单车信息
+	 */
 	private void editBike() {
 		// TODO Auto-generated method stub
-		List<Bike> bikes = bikedao.queryAll();
 		System.out.println("请输入您要修改的单车ID");
 		int id = input.nextInt();
 		System.out.println("请输入单车类型：");
@@ -177,7 +180,7 @@ public class Menu {
 		if (bike == null) {
 			System.out.println("没有该ID");
 		} else {
-			Bike bike2 = new Bike(type, price, location, status, amount, qr);
+			Bike bike2 = new Bike(id,type, price, location, status, amount, qr);
 			boolean doUpdate = bikedao.doUpdate(bike2);
 			if (doUpdate) {
 				System.out.println("修改成功");
@@ -190,6 +193,9 @@ public class Menu {
 
 	}
 
+	/**
+	 * 添加单车
+	 */
 	private void saveBike() {
 		System.out.println("添加单车");
 		System.out.println("请输入单车类型：");
@@ -213,6 +219,9 @@ public class Menu {
 		returnMenu();
 	}
 
+	/**
+	 * 查询所有的单车
+	 */
 	private void queryBike() {
 		// TODO Auto-generated method stub
 		System.out.println("下面是所有的单车");
@@ -232,12 +241,91 @@ public class Menu {
 		System.out.println("\t1.查询单车");
 		System.out.println("\t2.租借单车");
 		System.out.println("\t3.归还单车");
-		System.out.println("\t4.删除单车");
-		System.out.println("\t5.个人信息");
+		System.out.println("\t4.个人信息");
+		System.out.println("\t5.充值金额");
 		System.out.println("\t6.租赁记录");
-		System.out.println("\t7.退出登录");
-		System.out.println("\t8.退出系统");
+		System.out.println("\t7.个人设置"); // TODO 可以选择修改个人信息，还是其他设置
+		System.out.println("\t8.退出登录");
+		System.out.println("\t9.退出系统");
+		System.out.print("请选择您接下来的操作:");
+		int nextInt = input.nextInt();
+		switch (nextInt) {
+		case 1:
+			queryBike();
+			break;
+		case 2:
+			leaseBike();
+			break;
+		case 3:
+			returnBike();
+			break;
+		case 4:
+			personInfo();
+			break;
+		case 5:
+			recharge();
+			break;
+		case 6:
+			leaseRecord();
+			break;
+		case 7:
+			Setting();
+			break;
+		case 8:
+			logout();// 退出登录
+			break;
+		case 9:
+			exit();// 退出
+			break;
+		}
 
+	}
+
+	private void Setting() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void leaseRecord() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void recharge() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void returnBike() {
+		System.out.println("请输入您要归还的单车Id");
+		int id = input.nextInt();
+		int result = bikedao.doReturn(id);
+		if(result == 1) {
+			System.out.println("归还成功！");
+			userMenu();
+		} else if(result == 0) {
+			System.out.println("ID不存在");
+			userMenu();
+		} else {
+			System.out.println("该ID状态不可借");
+			userMenu();
+		}
+	}
+
+	private void leaseBike() {
+		System.out.println("请输入您要租借的单车ID：");
+		int id = input.nextInt();
+		int result = bikedao.doLease(id);
+		if(result == 1) {
+			System.out.println("借出成功！");
+			userMenu();
+		} else if(result == 0) {
+			System.out.println("ID不存在");
+			userMenu();
+		} else {
+			System.out.println("该ID状态不可借");
+			userMenu();
+		}
 	}
 
 	/**

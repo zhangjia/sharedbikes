@@ -19,9 +19,9 @@ public class Database {
 	public static final List<Bike> BIKES = new ArrayList<>();
 	static {
 		//向数据库中默认添加一个管理员
-			USERS.add(new User(1,"a","a","15628",true,10,0,0,"2019-03-25"));
+			USERS.add(new User(1,"1","1","15628",true,10,0,0,"2019-03-25"));
 		//向数据库中默认添加一个数据库
-			USERS.add(new User(2,"b","b","15629",false,10,0,0,"2019-03-25"));
+			USERS.add(new User(2,"2","2","15629",false,10,0,0,"2019-03-25"));
 			
 			BIKES.add((new Bike(1,"脚蹬车",0.1,"创意大厦",1,0,"二维码")));
 			BIKES.add((new Bike(2,"助力车",0.2,"绿色家园",1,0,"二维码")));

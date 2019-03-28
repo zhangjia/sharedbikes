@@ -25,10 +25,10 @@ public class BikeDaoImpl implements BikeDao{
 	}
 
 	@Override
-	public boolean doDelete(int bikeId) {
+	public boolean doDelete(int id) {
 		Bike d = new Bike();
 		for (Bike bike : bikes) {
-			if(bike.getId() == bikeId) {
+			if(bike.getId() == id) {
 				d = bike;
 				bikes.remove(d);
 				return true;
@@ -64,6 +64,36 @@ public class BikeDaoImpl implements BikeDao{
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public int doLease(int id) {
+		for (Bike bike : bikes) {
+		
+			if(bike.getId() == id ) {
+				if (bike.getStatus() == 1) {
+					bike.setStatus(0); //设置为借出状态
+					bike.setAmount(bike.getAmount() + 1);
+ 					return 1; 	//如果有该ID，并且状态是可借,返回1代表可借
+				}
+				return -1; //-1 代表不可借
+			} 
+		}
+		return 0; //0代表ID不存在
+	}
+
+	@Override
+	public int doReturn(int id) {
+		for (Bike bike : bikes) {
+			if(bike.getId() == id ) {
+				if (bike.getStatus() == 0) {  //如果是借出状态
+					bike.setStatus(1); //设置为归还状态
+ 					return 1; 	//如果有该ID，并且状态是不可借,返回1代表归还
+				}
+				return -1; //-1 代表不可还
+			} 
+		}
+		return 0; //0代表ID不存在
 	}
 
 }

@@ -25,7 +25,7 @@ public interface BikeDao {
 	  * @param bikeId
 	  * @return
 	  */
-	 boolean doDelete(int bikeId);
+	 boolean doDelete(int id);
 	 
 	 /**
 	  * 修改单车
@@ -44,4 +44,20 @@ public interface BikeDao {
 	  * @return
 	  */
 	 Bike queryById(int bikeId); 
+	 
+	 /**
+	  * 根据ID借单车
+	  * @param id
+	  * @return
+	  */
+	 int doLease(int id);
+	 
+	 /**
+	  * 根据ID还单车
+	  * @param id
+	  * @return
+	  */
+	 int doReturn(int id);
+	 
+	 
 }
