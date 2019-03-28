@@ -42,9 +42,8 @@ public class UserDaoImpl implements UserDao {
 	public int register(String username, String password) {
 		
 		for(User user : users) {
-			//如果用户名已经有了
 			if(user.getUsername().equals(username)) {
-				return -1; //密码已经存在
+				return -1; //用户名已经存在
 			}
 		}
 		String nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

@@ -13,7 +13,7 @@ public class Bike {
 	private String type; 	//单车类型
 	private double price;	//单车价格
 	private String location;//单车位置
-	private int status;		//单车骑行次数
+	private int status;		//单车状态
 	private int amount;		//单车骑行次数
 	private String qr;		//单车二维码
 	public int getId() {
