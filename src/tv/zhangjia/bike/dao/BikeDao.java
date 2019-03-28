@@ -3,6 +3,7 @@ package tv.zhangjia.bike.dao;
 import java.util.List;
 
 import tv.zhangjia.bike.entity.Bike;
+import tv.zhangjia.bike.entity.User;
 /**
  * Bike接口
  * @ProjectName	SharedBikes	  
@@ -43,14 +44,14 @@ public interface BikeDao {
 	  * @param bikeid
 	  * @return
 	  */
-	 Bike queryById(int bikeId); 
+	 Bike queryById(int id); 
 	 
 	 /**
 	  * 根据ID借单车
 	  * @param id
 	  * @return
 	  */
-	 int doLease(int id);
+	 int doLease(int id,User user);
 	 
 	 /**
 	  * 根据ID还单车

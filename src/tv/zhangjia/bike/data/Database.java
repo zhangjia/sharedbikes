@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tv.zhangjia.bike.entity.Bike;
+import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.User;
 /**
  * 模拟数据库
@@ -17,6 +18,7 @@ import tv.zhangjia.bike.entity.User;
 public class Database {
 	public static final List<User> USERS = new ArrayList<>();
 	public static final List<Bike> BIKES = new ArrayList<>();
+	public static final List<LeaseRecord> LEASERECORD = new ArrayList<>();
 	static {
 		//向数据库中默认添加一个管理员
 			USERS.add(new User(1,"1","1","15628",true,10,0,0,"2019-03-25"));
@@ -47,6 +49,18 @@ public class Database {
 			return 1;
 		}
 		return BIKES.get(BIKES.size() - 1).getId() + 1;
+	}
+	
+	
+	/**
+	 * 生成下一个记录的ID
+	 * @return 下一个Bike的ID
+	 */
+	public static int nextLeaseRecordId() {
+		if(LEASERECORD.isEmpty()) {
+			return 1;
+		}
+		return LEASERECORD.get(LEASERECORD.size() - 1).getId() + 1;
 	}
 	
 }

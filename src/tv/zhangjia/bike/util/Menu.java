@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import tv.zhangjia.bike.dao.BikeDao;
+import tv.zhangjia.bike.dao.RecordDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
+import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 import tv.zhangjia.bike.entity.Bike;
+import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.User;
 
 /**
@@ -25,6 +28,7 @@ public class Menu {
 	private User user = null;
 	private UserDao userdao = new UserDaoImpl();
 	private BikeDao bikedao = new BikeDaoImpl();
+	private RecordDao<LeaseRecord> leaseRecordDao = new LeaseRecordDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -73,7 +77,7 @@ public class Menu {
 				userMenu();
 			}
 		}
-
+		
 	}
 
 	/**
@@ -108,7 +112,7 @@ public class Menu {
 			personInfo();
 			break;
 		case 6:
-			queryRecord();
+			leaseRecord();
 			break;
 		case 7:
 			logout();// 退出登录
@@ -122,12 +126,30 @@ public class Menu {
 	}
 
 	private void logout() {
-		// TODO Auto-generated method stub
+//		user = null;
+		mainMenu();
 
 	}
 
-	private void queryRecord() {
-		// TODO Auto-generated method stub
+	private void leaseRecord() {
+		if(user.isAdmin()) {
+			System.out.println("下面是所有的单车租赁记录");
+			List<LeaseRecord> bike = leaseRecordDao.queryAll();
+			System.out.println("编号\t自行车ID\t用户ID\t租赁用户\t租借时间\t归还时间\t消费金额");
+			for (LeaseRecord leaseRecord : bike) {
+				System.out.println(leaseRecord);
+			}
+			returnMenu();
+		} else {
+			System.out.println("下面是您的单车租赁记录");
+			List<LeaseRecord> bike = leaseRecordDao.queryByUserId(user.getId());
+			System.out.println("编号\t自行车ID\t用户ID\t租赁用户\t租借时间\t归还时间\t消费金额");
+			for (LeaseRecord leaseRecord : bike) {
+				System.out.println(leaseRecord);
+			}
+			returnMenu();
+		}
+		
 
 	}
 
@@ -160,7 +182,6 @@ public class Menu {
 	 * 根据ID修改单车信息
 	 */
 	private void editBike() {
-		// TODO Auto-generated method stub
 		System.out.println("请输入您要修改的单车ID");
 		int id = input.nextInt();
 		System.out.println("请输入单车类型：");
@@ -223,7 +244,14 @@ public class Menu {
 	 * 查询所有的单车
 	 */
 	private void queryBike() {
-		// TODO Auto-generated method stub
+		/*System.out.println("下面是所有的单车");
+		List<LeaseRecord> leaseRecordDaos = leaseRecordDao.queryAll();
+		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
+		for (LeaseRecord record : leaseRecordDaos) {
+			System.out.println(record);
+		}
+		returnMenu();*/
+		
 		System.out.println("下面是所有的单车");
 		List<Bike> bike = bikedao.queryAll();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
@@ -286,10 +314,7 @@ public class Menu {
 		
 	}
 
-	private void leaseRecord() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	private void recharge() {
 		// TODO Auto-generated method stub
@@ -300,6 +325,7 @@ public class Menu {
 		System.out.println("请输入您要归还的单车Id");
 		int id = input.nextInt();
 		int result = bikedao.doReturn(id);
+		
 		if(result == 1) {
 			System.out.println("归还成功！");
 			userMenu();
@@ -315,7 +341,7 @@ public class Menu {
 	private void leaseBike() {
 		System.out.println("请输入您要租借的单车ID：");
 		int id = input.nextInt();
-		int result = bikedao.doLease(id);
+		int result = bikedao.doLease(id,user);
 		if(result == 1) {
 			System.out.println("借出成功！");
 			userMenu();
@@ -376,17 +402,41 @@ public class Menu {
 	 * @Title returnMenu
 	 */
 	private void returnMenu() {
-		System.out.println("输入1继续,任意键退出");
+		System.out.println("输入y继续,任意键退出");
 		String next = input.next();
-		if (next.equals("1")) {
+		
+		if (next.equals("y")) {
+			if(user == null ) {
+				mainMenu();
+				return;
+			}
 			if (user.isAdmin()) {
 				adminMenu();// 管理员菜单
 			} else {
 				userMenu();// 普通用户菜单
 			}
 		} else {
-			exit();
+			isTrueInput(0,2); //0代表登录注册页面，1代表adimin页面，2代表普通用户
 		}
 	}
 
+	
+	public void isTrueInput(int i, int j) {
+		switch(i) {
+		case 1:
+			System.out.println("确定退出？（y/n）不是手滑？");
+			String y = input.next();
+			// 不区分大小写
+			if (y.equalsIgnoreCase("y")) {
+				System.out.println("感谢您的使用，再见！");
+				System.exit(0);
+			}  else if (j == 1) {
+				mainMenu();
+			} else if (j == 2) {
+				adminMenu();
+			} else if (j == 3) {
+				userMenu();
+			}
+		}
+	}
 }
