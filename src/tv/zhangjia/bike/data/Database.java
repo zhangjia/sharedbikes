@@ -1,5 +1,7 @@
 package tv.zhangjia.bike.data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,11 +27,22 @@ public class Database {
 	public static final List<LeaseRecord> LEASERECORDS = new ArrayList<>();
 	public static final List<Wallet> WALLETS = new ArrayList<>();
 	static {
+		String str = "2019-03-28";
+		//将String转换为Date
+		Date date = null;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			date = dateFormat.parse(str);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		//向数据库中默认添加一个管理员
-			USERS.add(new User(1,"1","1","15628",true,new Date(),new Date(),1,1));
+			USERS.add(new User(1,"1","1","15628",true,0,date,1,1));
 		//向数据库中默认添加二个用户
-			USERS.add(new User(2,"2","2","15629",false,new Date(),new Date(),2,2));
-			USERS.add(new User(3,"3","3","15620",false,new Date(),new Date(),3,3));
+			USERS.add(new User(2,"2","2","15629",false,0,date,2,2));
+			USERS.add(new User(3,"3","3","15620",false,0,date,3,3));
 			
 			
 			WALLETS.add(new Wallet(1,1,1000,100,true,new Date()));

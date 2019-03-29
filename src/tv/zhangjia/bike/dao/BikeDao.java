@@ -58,7 +58,7 @@ public interface BikeDao {
 	  * @param id
 	  * @return
 	  */
-	 int doReturn(int id);
+	 int doReturn(int bikeId, int userId, int recordId);
 	 
 	 
 }

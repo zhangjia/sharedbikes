@@ -29,8 +29,8 @@ import tv.zhangjia.bike.entity.Wallet;
 public class Menu {
 	private Scanner input = new Scanner(System.in);
 	private User user = null;
-	private UserDao userdao = new UserDaoImpl();
-	private BikeDao bikedao = new BikeDaoImpl();
+	private UserDao userDao = new UserDaoImpl();
+	private BikeDao bikeDao = new BikeDaoImpl();
 	private RecordDao<LeaseRecord> leaseRecordDao = new LeaseRecordDaoImpl();
 	private WalletDao walletDao = new WalletDaoImpl();
 	private InputIsValid iiv = new InputIsValid();
@@ -83,7 +83,7 @@ public class Menu {
 		String username = input.next();
 		System.out.print("请输入您的密码：");
 		String password = input.next();
-		User login = userdao.login(username, password);
+		User login = userDao.login(username, password);
 
 		if (login == null) {
 			System.out.println("登录失败，您的用户名或者密码错误");
@@ -190,7 +190,11 @@ public class Menu {
 	}
 
 	private void personInfo() {
-		// TODO Auto-generated method stub
+		System.out.println("下面是您的个人信息");
+		User user = userDao.queryByUserId(this.user.getId());
+		System.out.println("编号\t用户名\t用户手机号\t骑行时间\t注册时间");
+		System.out.println(user);
+		returnMenu();
 
 	}
 
@@ -202,11 +206,11 @@ public class Menu {
 		System.out.println("请输入您要删除的单车ID：");
 		int id = input.nextInt();
 
-		if (bikedao.queryById(id) == null) {
+		if (bikeDao.queryById(id) == null) {
 			System.out.println("不存在此id");
 
 		} else {
-			if (bikedao.doDelete(id)) {
+			if (bikeDao.doDelete(id)) {
 				System.out.println("删除成功");
 			} else {
 				System.out.println("删除失败");
@@ -243,12 +247,12 @@ public class Menu {
 		System.out.println("请输入qr");
 		String qr = input.next();
 
-		Bike bike = bikedao.queryById(id);
+		Bike bike = bikeDao.queryById(id);
 		if (bike == null) {
 			System.out.println("没有该ID");
 		} else {
 			Bike bike2 = new Bike(id, type, price, locationId, status, amount, qr);
-			boolean doUpdate = bikedao.doUpdate(bike2);
+			boolean doUpdate = bikeDao.doUpdate(bike2);
 			if (doUpdate) {
 				System.out.println("修改成功");
 			} else {
@@ -282,7 +286,7 @@ public class Menu {
 		String qr = input.next();
 
 		Bike bike = new Bike(type, price, locationId, 1, 0, qr);
-		boolean doInsert = bikedao.doInsert(bike);
+		boolean doInsert = bikeDao.doInsert(bike);
 		if (doInsert) {
 			System.out.println("添加成功");
 		} else {
@@ -311,7 +315,7 @@ public class Menu {
 		 */
 
 		System.out.println("下面是所有的单车");
-		List<Bike> bike = bikedao.queryAll();
+		List<Bike> bike = bikeDao.queryAll();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
 			System.out.println(bike2);
@@ -423,7 +427,7 @@ public class Menu {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要归还的单车Id");
 		int id = input.nextInt();
-		int result = bikedao.doReturn(id);
+		int result = bikeDao.doReturn(id);
 
 		if (result == 1) {
 			System.out.println("归还成功！");
@@ -441,7 +445,7 @@ public class Menu {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要租借的单车ID：");
 		int id = input.nextInt();
-		int result = bikedao.doLease(id, user);
+		int result = bikeDao.doLease(id, user);
 		if (result == 1) {
 			System.out.println("借出成功！");
 			userMenu();
@@ -476,7 +480,7 @@ public class Menu {
 			}
 		}
 
-		int register = userdao.register(username, password);
+		int register = userDao.register(username, password);
 
 		if (register == -1) {
 			System.out.println("注册失败，您的用户名已经存在");

@@ -17,7 +17,7 @@ public class User {
 	private String password; // 密码
 	private String tel; // 用户手机号
 	private boolean isAdmin; // 用户是否是管理员
-	private Date cyclingTime; // 用户总骑行时间
+	private long cyclingTime; // 用户总骑行时间
 	private Date registerTime;// 用户注册时间
 	private int locationID;
 	private int walletID;
@@ -51,10 +51,10 @@ public class User {
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
-	public Date getCyclingTime() {
+	public long getCyclingTime() {
 		return cyclingTime;
 	}
-	public void setCyclingTime(Date cyclingTime) {
+	public void setCyclingTime(long cyclingTime) {
 		this.cyclingTime = cyclingTime;
 	}
 	public Date getRegisterTime() {
@@ -79,7 +79,7 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cyclingTime == null) ? 0 : cyclingTime.hashCode());
+		result = prime * result + (int) (cyclingTime ^ (cyclingTime >>> 32));
 		result = prime * result + id;
 		result = prime * result + (isAdmin ? 1231 : 1237);
 		result = prime * result + locationID;
@@ -99,10 +99,7 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (cyclingTime == null) {
-			if (other.cyclingTime != null)
-				return false;
-		} else if (!cyclingTime.equals(other.cyclingTime))
+		if (cyclingTime != other.cyclingTime)
 			return false;
 		if (id != other.id)
 			return false;
@@ -136,11 +133,11 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
+		return id + "\t" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
 				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", locationID="
 				+ locationID + ", walletID=" + walletID + "]";
 	}
-	public User(int id, String username, String password, String tel, boolean isAdmin, Date cyclingTime,
+	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
 			Date registerTime, int locationID, int walletID) {
 		super();
 		this.id = id;
@@ -157,7 +154,8 @@ public class User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(String username, String password, String tel, boolean isAdmin, Date cyclingTime, Date registerTime,
+	
+	public User(String username, String password, String tel, boolean isAdmin, long cyclingTime, Date registerTime,
 			int locationID, int walletID) {
 		super();
 		this.username = username;
@@ -169,5 +167,8 @@ public class User {
 		this.locationID = locationID;
 		this.walletID = walletID;
 	}
+	
+	
+	
 	
 }

@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.dao.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -44,10 +45,27 @@ public class UserDaoImpl implements UserDao {
 				return -1; //用户名已经存在
 			}
 		}
-//		String nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		//TODO 更改位置ID和钱包ID的生成方式
-		users.add(new User(Database.nextUserId(),username,password,"无",false,new Date(),new Date(),1,3));
+		
+		users.add(new User(Database.nextUserId(),username,password,"无",false,0,new Date(),1,3));
 		return 1;
+	}
+
+	@Override
+	public User queryByUserId(int userId) {
+		//可以用foeach，没对数据进行改写
+		for (User user : users) {
+			if(user.getId() == userId) {
+				return user;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<User> queryAll() {
+		
+		return users;
 	}
 
 }

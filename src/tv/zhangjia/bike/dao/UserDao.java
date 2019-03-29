@@ -1,5 +1,7 @@
 package tv.zhangjia.bike.dao;
 
+import java.util.List;
+
 import tv.zhangjia.bike.entity.User;
 
 /**
@@ -27,4 +29,20 @@ public interface UserDao {
 	 * @return
 	 */
 	int register(String username, String password);
+	
+	/**
+	 * 查询指定用户的信息
+	 * @param userID
+	 * @return
+	 */
+	User queryByUserId(int userId);
+	
+	
+	
+	/**
+	 * 查询所有用户的信息
+	 */
+	
+	
+	List<User> queryAll();
 }

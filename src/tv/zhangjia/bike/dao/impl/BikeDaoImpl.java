@@ -92,7 +92,7 @@ public class BikeDaoImpl implements BikeDao{
 	}
 
 	@Override
-	public int doReturn(int id) {
+	public int doReturn(int bikeId, int userId, int recordId) {
 		for (Bike bike : bikes) {
 			if(bike.getId() == id ) {
 				if (bike.getStatus() == 0) {  //如果是借出状态
