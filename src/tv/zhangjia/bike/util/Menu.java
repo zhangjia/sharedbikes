@@ -4,15 +4,17 @@ import java.util.List;
 import java.util.Scanner;
 
 import tv.zhangjia.bike.dao.BikeDao;
+import tv.zhangjia.bike.dao.BillDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
-import tv.zhangjia.bike.dao.RecordDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
+import tv.zhangjia.bike.dao.impl.BillDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
 import tv.zhangjia.bike.entity.Bike;
+import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.Wallet;
@@ -35,6 +37,7 @@ public class Menu {
 	private LeaseRecordDao leaseRecordDao = new LeaseRecordDaoImpl();
 	private WalletDao walletDao = new WalletDaoImpl();
 	private InputIsValid iiv = new InputIsValid();
+	private BillDao billDao = new BillDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -389,10 +392,10 @@ public class Menu {
 			String money = input.next();
 			if (iiv.isDouble(money)) {
 				double m = Double.parseDouble(money);
-				if(walletDao.recharge(user.getWalletID(), m) == 1) {
-				System.out.println("充值成功");
-				personWallet();
-				break;
+				if (walletDao.recharge(user.getWalletID(), m) == 1) {
+					System.out.println("充值成功");
+					personWallet();
+					break;
 				} else {
 					System.out.println("充值失败");
 				}
@@ -407,16 +410,52 @@ public class Menu {
 		Wallet wallet = walletDao.queryByUserId(user.getId());
 		System.out.println("用户编号\t用户余额\t优惠券余额\t用户等级\tVIP时间");
 		System.out.println(wallet);
-		System.out.println("X：消费记录\t C：充值");
+		System.out.println("X：消费记录\t C：充值 v:会员");
 		String s = input.next();
 		if (s.equals("x")) {
-
+			billMenu();
 		} else if (s.equals("c")) {
 			recharge();
-		} else {
+		} else if(s.equals("v")) {
+			becomeVIPMenu();
+		}
+		else {
 
 			userMenu();
 		}
+	}
+
+	private void becomeVIPMenu() {
+		System.out.println("请输入您要充值的月份");
+		
+		int month = 0;
+		while(true) {
+			String m = input.next();
+			if(iiv.isNumber(m)) {
+				month = Integer.parseInt(m);
+				break;
+			} else {
+				System.out.println("请重新输入：");
+			}
+		}
+		
+		int result = walletDao.becomeVIP(user.getId(), month);
+		if(result == -5) {
+			recharge();
+		} else {
+			System.out.println("恭喜您开通成功");
+			userMenu();
+		}
+		
+		
+	}
+
+	private void billMenu() {
+		System.out.println("下面是您的消费账单");
+		// List<Bill> userBills = billDao.queryAll();
+		List<Bill> userBills = billDao.queryUserBill(user.getId());
+		System.out.println("用户编号\t用户余额\t优惠券余额\t用户等级\tVIP时间");
+		System.out.println(userBills);
 	}
 
 	private void Setting() {
@@ -436,6 +475,8 @@ public class Menu {
 		} else if (result == 0 || result == 11) {
 			System.out.println("您未租借该单车");
 			userMenu();
+		} else if (result == -5) {
+			recharge();
 		} else {
 			System.out.println("该ID不存在");
 			userMenu();
@@ -450,7 +491,7 @@ public class Menu {
 		if (result == 1) {
 			System.out.println("借出成功！");
 			userMenu();
-		} else if (result == 10 ) {
+		} else if (result == 10) {
 			System.out.println("该车辆已经被租出");
 			userMenu();
 		} else {
