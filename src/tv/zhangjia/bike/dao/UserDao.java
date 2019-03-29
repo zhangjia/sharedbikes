@@ -45,4 +45,12 @@ public interface UserDao {
 	
 	
 	List<User> queryAll();
+	
+	/**
+	 * 根据用户ID返回用户名
+	 * @param id
+	 * @return
+	 */
+	String queryUserName(int id);
+	
 }

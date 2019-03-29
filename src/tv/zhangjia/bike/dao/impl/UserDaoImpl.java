@@ -1,6 +1,5 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -66,6 +65,16 @@ public class UserDaoImpl implements UserDao {
 	public List<User> queryAll() {
 		
 		return users;
+	}
+
+	@Override
+	public String queryUserName(int id) {
+		for (User user : users) {
+			if(user.getId() == id) {
+				return user.getUsername();
+			}
+		}
+		return null;
 	}
 
 }

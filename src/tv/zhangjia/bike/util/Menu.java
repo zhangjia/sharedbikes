@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import tv.zhangjia.bike.dao.BikeDao;
+import tv.zhangjia.bike.dao.LeaseRecordDao;
 import tv.zhangjia.bike.dao.RecordDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.WalletDao;
@@ -31,7 +32,7 @@ public class Menu {
 	private User user = null;
 	private UserDao userDao = new UserDaoImpl();
 	private BikeDao bikeDao = new BikeDaoImpl();
-	private RecordDao<LeaseRecord> leaseRecordDao = new LeaseRecordDaoImpl();
+	private LeaseRecordDao leaseRecordDao = new LeaseRecordDaoImpl();
 	private WalletDao walletDao = new WalletDaoImpl();
 	private InputIsValid iiv = new InputIsValid();
 
@@ -426,17 +427,17 @@ public class Menu {
 	private void returnBike() {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要归还的单车Id");
-		int id = input.nextInt();
-		int result = bikeDao.doReturn(id);
+		int bikeId = input.nextInt();
+		int result = leaseRecordDao.returnBike(bikeId, user.getId());
 
 		if (result == 1) {
-			System.out.println("归还成功！");
+			System.out.println("归还成功");
 			userMenu();
-		} else if (result == 0) {
-			System.out.println("ID不存在");
+		} else if (result == 0 || result == 11) {
+			System.out.println("您未租借该单车");
 			userMenu();
 		} else {
-			System.out.println("该ID状态不可借");
+			System.out.println("该ID不存在");
 			userMenu();
 		}
 	}
@@ -444,16 +445,16 @@ public class Menu {
 	private void leaseBike() {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要租借的单车ID：");
-		int id = input.nextInt();
-		int result = bikeDao.doLease(id, user);
+		int bikeId = input.nextInt();
+		int result = leaseRecordDao.doInsert(user.getId(), bikeId);
 		if (result == 1) {
 			System.out.println("借出成功！");
 			userMenu();
-		} else if (result == 0) {
-			System.out.println("ID不存在");
+		} else if (result == 10 ) {
+			System.out.println("该车辆已经被租出");
 			userMenu();
 		} else {
-			System.out.println("该ID状态不可借");
+			System.out.println("该车辆ID不存在");
 			userMenu();
 		}
 	}

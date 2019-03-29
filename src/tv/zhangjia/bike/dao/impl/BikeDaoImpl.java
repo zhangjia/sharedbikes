@@ -3,11 +3,8 @@ package tv.zhangjia.bike.dao.impl;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BikeDao;
-import tv.zhangjia.bike.dao.RecordDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
-import tv.zhangjia.bike.entity.LeaseRecord;
-import tv.zhangjia.bike.entity.User;
 
 /**
  * BikeDao接口的实现类
@@ -20,8 +17,6 @@ import tv.zhangjia.bike.entity.User;
  */
 public class BikeDaoImpl implements BikeDao{
 	private List<Bike> bikes = Database.BIKES;
-//	private List<LeaseRecord> lrs = Database.LEASERECORD;
-	private RecordDao<LeaseRecord> leaseRecordDao = new LeaseRecordDaoImpl();
 	@Override
 	public boolean doInsert(Bike bike) {
 		bike.setId(Database.nextBikeId());
@@ -70,40 +65,56 @@ public class BikeDaoImpl implements BikeDao{
 		}
 		return null;
 	}
+//
+//	@Override
+//	public int doLease(int id,User user) {
+//		for (Bike bike : bikes) {
+//		
+//			if(bike.getId() == id ) {
+//				if (bike.getStatus() == 1) {
+//					
+//					bike.setStatus(0); //设置为借出状态
+//					bike.setAmount(bike.getAmount() + 1); //借出次数+1
+//					
+//					leaseRecordDao.addRecord(new LeaseRecord(id,user.getId(),user.getUsername(),"0","0","1"));
+//					
+// 					return 1; 	//如果有该ID，并且状态是可借,返回1代表可借
+//				}
+//				return -1; //-1 代表不可借
+//			} 
+//		}
+//		return 0; //0代表ID不存在
+//	}
+//
+//	@Override
+//	public int doReturn(int bikeId, int userId, int recordId) {
+//		for (Bike bike : bikes) {
+//			if(bike.getId() == id ) {
+//				if (bike.getStatus() == 0) {  //如果是借出状态
+//					bike.setStatus(1); //设置为归还状态
+//					leaseRecordDao.queryById(bike.getId()).setReturnTime("9");
+// 					return 1; 	//如果有该ID，并且状态是不可借,返回1代表归还
+//				}
+//				return -1; //-1 代表不可还
+//			} 
+//		}
+//		return 0; //0代表ID不存在
+//	}
 
 	@Override
-	public int doLease(int id,User user) {
+	public int bikeStatus(int bikeId) {
 		for (Bike bike : bikes) {
-		
-			if(bike.getId() == id ) {
-				if (bike.getStatus() == 1) {
-					
-					bike.setStatus(0); //设置为借出状态
-					bike.setAmount(bike.getAmount() + 1); //借出次数+1
-					
-					leaseRecordDao.addRecord(new LeaseRecord(id,user.getId(),user.getUsername(),"0","0","1"));
-					
- 					return 1; 	//如果有该ID，并且状态是可借,返回1代表可借
+			if(bike.getId() == bikeId) {
+				//如果状态为可借，返回11
+				if(bike.getStatus() == 1) {
+					return 11;
+					//如果状态为不可借，返回10
+				} else if(bike.getStatus() == 0) {
+					return 10;
 				}
-				return -1; //-1 代表不可借
-			} 
+			}
 		}
-		return 0; //0代表ID不存在
-	}
-
-	@Override
-	public int doReturn(int bikeId, int userId, int recordId) {
-		for (Bike bike : bikes) {
-			if(bike.getId() == id ) {
-				if (bike.getStatus() == 0) {  //如果是借出状态
-					bike.setStatus(1); //设置为归还状态
-					leaseRecordDao.queryById(bike.getId()).setReturnTime("9");
- 					return 1; 	//如果有该ID，并且状态是不可借,返回1代表归还
-				}
-				return -1; //-1 代表不可还
-			} 
-		}
-		return 0; //0代表ID不存在
+		return -1; //没有此ID
 	}
 
 }

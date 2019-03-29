@@ -45,20 +45,26 @@ public interface BikeDao {
 	  * @return
 	  */
 	 Bike queryById(int id); 
+//	 
+//	 /**
+//	  * 根据ID借单车
+//	  * @param id
+//	  * @return
+//	  */
+//	 int doLease(int id,User user);
+//	 
+//	 /**
+//	  * 根据ID还单车
+//	  * @param id
+//	  * @return
+//	  */
+//	 int doReturn(int bikeId, int userId, int recordId);
 	 
 	 /**
-	  * 根据ID借单车
-	  * @param id
-	  * @return
+	  * 根据单车ID返回该单车状态
+	  * @param bikeId
+	  * @return 1：可借  0 可还   -1 不存在此ID
 	  */
-	 int doLease(int id,User user);
-	 
-	 /**
-	  * 根据ID还单车
-	  * @param id
-	  * @return
-	  */
-	 int doReturn(int bikeId, int userId, int recordId);
-	 
+	 int bikeStatus(int bikeId);
 	 
 }
