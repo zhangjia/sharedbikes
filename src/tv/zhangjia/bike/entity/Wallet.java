@@ -9,8 +9,6 @@ public class Wallet {
 	private double coupon; // 用户优惠券余额
 	private boolean isVIP;//用户是否是VIP，用户类型
 	private Date vipDate; //VIP时间
-	private double vipPrice; //开通VIP的价格
-	private double vipRebate; //vip打几折
 	public int getId() {
 		return id;
 	}
@@ -47,18 +45,6 @@ public class Wallet {
 	public void setVipDate(Date vipDate) {
 		this.vipDate = vipDate;
 	}
-	public double getVipPrice() {
-		return vipPrice;
-	}
-	public void setVipPrice(double vipPrice) {
-		this.vipPrice = vipPrice;
-	}
-	public double getVipRebate() {
-		return vipRebate;
-	}
-	public void setVipRebate(double vipRebate) {
-		this.vipRebate = vipRebate;
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -72,10 +58,6 @@ public class Wallet {
 		result = prime * result + (isVIP ? 1231 : 1237);
 		result = prime * result + userId;
 		result = prime * result + ((vipDate == null) ? 0 : vipDate.hashCode());
-		temp = Double.doubleToLongBits(vipPrice);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(vipRebate);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 	@Override
@@ -102,19 +84,18 @@ public class Wallet {
 				return false;
 		} else if (!vipDate.equals(other.vipDate))
 			return false;
-		if (Double.doubleToLongBits(vipPrice) != Double.doubleToLongBits(other.vipPrice))
-			return false;
-		if (Double.doubleToLongBits(vipRebate) != Double.doubleToLongBits(other.vipRebate))
-			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Wallet [id=" + id + ", userId=" + userId + ", balance=" + balance + ", coupon=" + coupon + ", isVIP="
-				+ isVIP + ", vipDate=" + vipDate + ", vipPrice=" + vipPrice + ", vipRebate=" + vipRebate + "]";
+		return  userId + "\t" + balance + "\t" + coupon + "\t"
+				+ isVIP + "\t" + vipDate ;
 	}
-	public Wallet(int id, int userId, double balance, double coupon, boolean isVIP, Date vipDate, double vipPrice,
-			double vipRebate) {
+	public Wallet() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Wallet(int id, int userId, double balance, double coupon, boolean isVIP, Date vipDate) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -122,26 +103,15 @@ public class Wallet {
 		this.coupon = coupon;
 		this.isVIP = isVIP;
 		this.vipDate = vipDate;
-		this.vipPrice = vipPrice;
-		this.vipRebate = vipRebate;
 	}
-	public Wallet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Wallet(int userId, double balance, double coupon, boolean isVIP, Date vipDate, double vipPrice,
-			double vipRebate) {
+	public Wallet(int userId, double balance, double coupon, boolean isVIP, Date vipDate) {
 		super();
 		this.userId = userId;
 		this.balance = balance;
 		this.coupon = coupon;
 		this.isVIP = isVIP;
 		this.vipDate = vipDate;
-		this.vipPrice = vipPrice;
-		this.vipRebate = vipRebate;
 	}
-	
-	
-	
+
 	
 }

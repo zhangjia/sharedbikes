@@ -20,7 +20,7 @@ public class User {
 	private Date cyclingTime; // 用户总骑行时间
 	private Date registerTime;// 用户注册时间
 	private int locationID;
-	private Wallet wallet;
+	private int walletID;
 	public int getId() {
 		return id;
 	}
@@ -69,11 +69,11 @@ public class User {
 	public void setLocationID(int locationID) {
 		this.locationID = locationID;
 	}
-	public Wallet getWallet() {
-		return wallet;
+	public int getWalletID() {
+		return walletID;
 	}
-	public void setWallet(Wallet wallet) {
-		this.wallet = wallet;
+	public void setWalletID(int walletID) {
+		this.walletID = walletID;
 	}
 	@Override
 	public int hashCode() {
@@ -87,7 +87,7 @@ public class User {
 		result = prime * result + ((registerTime == null) ? 0 : registerTime.hashCode());
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		result = prime * result + ((wallet == null) ? 0 : wallet.hashCode());
+		result = prime * result + walletID;
 		return result;
 	}
 	@Override
@@ -130,10 +130,7 @@ public class User {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
-		if (wallet == null) {
-			if (other.wallet != null)
-				return false;
-		} else if (!wallet.equals(other.wallet))
+		if (walletID != other.walletID)
 			return false;
 		return true;
 	}
@@ -141,10 +138,10 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
 				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", locationID="
-				+ locationID + ", wallet=" + wallet + "]";
+				+ locationID + ", walletID=" + walletID + "]";
 	}
 	public User(int id, String username, String password, String tel, boolean isAdmin, Date cyclingTime,
-			Date registerTime, int locationID, Wallet wallet) {
+			Date registerTime, int locationID, int walletID) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -154,10 +151,14 @@ public class User {
 		this.cyclingTime = cyclingTime;
 		this.registerTime = registerTime;
 		this.locationID = locationID;
-		this.wallet = wallet;
+		this.walletID = walletID;
+	}
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	public User(String username, String password, String tel, boolean isAdmin, Date cyclingTime, Date registerTime,
-			int locationID, Wallet wallet) {
+			int locationID, int walletID) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -166,10 +167,7 @@ public class User {
 		this.cyclingTime = cyclingTime;
 		this.registerTime = registerTime;
 		this.locationID = locationID;
-		this.wallet = wallet;
-	}
-	public User() {
-		super();
+		this.walletID = walletID;
 	}
 	
 }

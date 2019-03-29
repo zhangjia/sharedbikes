@@ -26,10 +26,15 @@ public class Database {
 	public static final List<Wallet> WALLETS = new ArrayList<>();
 	static {
 		//向数据库中默认添加一个管理员
-			USERS.add(new User(1,"1","1","15628",true,new Date(),new Date(),1,new Wallet(1,100,10,true,new Date(),10,0.8)));
-		//向数据库中默认添加一个数据库
-			USERS.add(new User(1,"2","2","15629",false,new Date(),new Date(),2,new Wallet(2,100,10,true,new Date(),10,0.8)));
+			USERS.add(new User(1,"1","1","15628",true,new Date(),new Date(),1,1));
+		//向数据库中默认添加二个用户
+			USERS.add(new User(2,"2","2","15629",false,new Date(),new Date(),2,2));
+			USERS.add(new User(3,"3","3","15620",false,new Date(),new Date(),3,3));
 			
+			
+			WALLETS.add(new Wallet(1,1,1000,100,true,new Date()));
+			WALLETS.add(new Wallet(2,2,1000,200,true,new Date()));
+			WALLETS.add(new Wallet(3,3,2000,300,false,new Date()));
 			
 			BIKES.add((new Bike(1,"脚蹬车",0.1,1,1,0,"二维码")));
 			BIKES.add((new Bike(2,"助力车",0.2,2,1,0,"二维码")));
@@ -49,9 +54,9 @@ public class Database {
 			
 			//将上面的四辆车分别加入到对应的位置中
 			LOCATIONS.add((new Location(1,"创意大厦",b1,1)));
-			LOCATIONS.add((new Location(2,"绿色家园",b1,1)));
-			LOCATIONS.add((new Location(3,"青年公寓",b1,1)));
-			LOCATIONS.add((new Location(4,"万达广场",b1,1)));
+			LOCATIONS.add((new Location(2,"绿色家园",b2,1)));
+			LOCATIONS.add((new Location(3,"青年公寓",b3,1)));
+			LOCATIONS.add((new Location(4,"万达广场",b4,1)));
 	}
 	
 	/**

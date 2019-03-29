@@ -6,12 +6,15 @@ import java.util.Scanner;
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.RecordDao;
 import tv.zhangjia.bike.dao.UserDao;
+import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
+import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.Wallet;
 
 /**
  * 主菜单类
@@ -29,6 +32,7 @@ public class Menu {
 	private UserDao userdao = new UserDaoImpl();
 	private BikeDao bikedao = new BikeDaoImpl();
 	private RecordDao<LeaseRecord> leaseRecordDao = new LeaseRecordDaoImpl();
+	private WalletDao walletDao = new WalletDaoImpl();
 	private InputIsValid iiv = new InputIsValid();
 
 	/**
@@ -325,7 +329,7 @@ public class Menu {
 		System.out.println("\t2.租借单车");
 		System.out.println("\t3.归还单车");
 		System.out.println("\t4.个人信息");
-		System.out.println("\t5.充值金额");
+		System.out.println("\t5.个人钱包");
 		System.out.println("\t6.租赁记录");
 		System.out.println("\t7.个人设置"); // TODO 可以选择修改个人信息，还是其他设置
 		System.out.println("\t8.退出登录");
@@ -350,7 +354,7 @@ public class Menu {
 					personInfo();
 					break;
 				case 5:
-					recharge();
+					personWallet();
 					break;
 				case 6:
 					leaseRecord();
@@ -374,12 +378,43 @@ public class Menu {
 
 	}
 
-	private void Setting() {
-		// TODO Auto-generated method stub
-
+	private void recharge() {
+		while (true) {
+			System.out.println("请输入充值金额：");
+			String money = input.next();
+			if (iiv.isDouble(money)) {
+				double m = Double.parseDouble(money);
+				if(walletDao.recharge(user.getWalletID(), m) == 1) {
+				System.out.println("充值成功");
+				personWallet();
+				break;
+				} else {
+					System.out.println("充值失败");
+				}
+			} else {
+				System.out.print("输入不合法，");
+			}
+		}
 	}
 
-	private void recharge() {
+	private void personWallet() {
+		System.out.println("个人钱包显示界面");
+		Wallet wallet = walletDao.queryByUserId(user.getId());
+		System.out.println("用户编号\t用户余额\t优惠券余额\t用户等级\tVIP时间");
+		System.out.println(wallet);
+		System.out.println("X：消费记录\t C：充值");
+		String s = input.next();
+		if (s.equals("x")) {
+
+		} else if (s.equals("c")) {
+			recharge();
+		} else {
+
+			userMenu();
+		}
+	}
+
+	private void Setting() {
 		// TODO Auto-generated method stub
 
 	}
@@ -496,8 +531,6 @@ public class Menu {
 			exit();
 		}
 	}
-
-
 
 	public <T> T isTrueInput(T a) {
 

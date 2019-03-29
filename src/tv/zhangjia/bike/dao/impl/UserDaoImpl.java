@@ -1,14 +1,11 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.User;
-import tv.zhangjia.bike.entity.Wallet;
 
 public class UserDaoImpl implements UserDao {
 	private List<User> users = Database.USERS;
@@ -47,8 +44,9 @@ public class UserDaoImpl implements UserDao {
 				return -1; //用户名已经存在
 			}
 		}
-		String nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		users.add(new User(Database.nextUserId(),username,password,"无",false,new Date(),new Date(),1,new Wallet()));
+//		String nowDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		//TODO 更改位置ID和钱包ID的生成方式
+		users.add(new User(Database.nextUserId(),username,password,"无",false,new Date(),new Date(),1,3));
 		return 1;
 	}
 
