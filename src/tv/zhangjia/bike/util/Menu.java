@@ -6,16 +6,19 @@ import java.util.Scanner;
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.BillDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
+import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
 import tv.zhangjia.bike.dao.impl.BillDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
+import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
+import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.Wallet;
 
@@ -38,6 +41,7 @@ public class Menu {
 	private WalletDao walletDao = new WalletDaoImpl();
 	private InputIsValid iiv = new InputIsValid();
 	private BillDao billDao = new BillDaoImpl();
+	private LocationDao locationDao = new LocationDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -122,8 +126,12 @@ public class Menu {
 		System.out.println("\t4.删除单车");
 		System.out.println("\t5.用户信息");
 		System.out.println("\t6.租赁记录");
-		System.out.println("\t7.退出登录");
-		System.out.println("\t8.退出系统");
+		System.out.println("\t7.查询位置");
+		System.out.println("\t8.系统设置");
+		System.out.println("\t9.需要调度");
+		System.out.println("\t10.车辆损坏");
+		System.out.println("\t11.退出系统");
+		System.out.println("\t11.退出系统");
 		System.out.print("请选择您接下来的操作:");
 		while (true) {
 			String nextInt = input.next();
@@ -143,15 +151,27 @@ public class Menu {
 					deleteBike();
 					break;
 				case 5:
-					personInfo();
+					userInfo();
 					break;
 				case 6:
 					leaseRecord();
 					break;
 				case 7:
-					logout();// 退出登录
+					queryLocation();//
 					break;
 				case 8:
+					systemSettings();// 退出
+					break;
+				case 9:
+					dispatch();// 调度
+					break;
+				case 10:
+					damage();
+					break;
+				case 11:
+					logout();// 退出
+					break;
+				case 12:
 					exit();// 退出
 					break;
 				default:
@@ -162,6 +182,46 @@ public class Menu {
 			}
 		}
 
+	}
+
+	private void damage() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void dispatch() {
+		List<String> arr = locationDao.dispatch();
+		for (String string : arr) {
+			System.out.println(string);
+		}
+		locationDao.dispatch();
+
+	}
+
+	private void systemSettings() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void queryLocation() {
+		System.out.println("下面是所有的位置信息：");
+		List<Location> locations = locationDao.queryAll();
+		System.out.println("编号\t位置名词\t车辆总数");
+		for (Location location : locations) {
+			System.out.println(location);
+		}
+		
+		while(true) {
+		System.out.print("查询指定位置：");
+		int id = input.nextInt();
+		if(id == -1) break;
+		Location lo = locationDao.queryLocation(id);
+		System.out.println("编号\t位置名词\t车辆总数");
+		System.out.println(lo.getBikes());
+		
+		}
+		
+		adminMenu();
 	}
 
 	private void logout() {
@@ -193,12 +253,20 @@ public class Menu {
 
 	}
 
-	private void personInfo() {
-		System.out.println("下面是您的个人信息");
-		User user = userDao.queryByUserId(this.user.getId());
-		System.out.println("编号\t用户名\t用户手机号\t骑行时间\t注册时间");
-		System.out.println(user);
-		returnMenu();
+	private void userInfo() {
+		if (user.isAdmin()) {
+			System.out.println("下面是所有会员信息");
+			List<User> user = userDao.queryAll();
+			System.out.println("编号\t用户名\t用户手机号\t骑行时间\t注册时间");
+			System.out.println(user);
+			returnMenu();
+		} else {
+			System.out.println("下面是您的个人信息");
+			User user = userDao.queryByUserId(this.user.getId());
+			System.out.println("编号\t用户名\t用户手机号\t骑行时间\t注册时间");
+			System.out.println(user);
+			returnMenu();
+		}
 
 	}
 
@@ -292,6 +360,7 @@ public class Menu {
 		Bike bike = new Bike(type, price, locationId, 1, 0, qr);
 		boolean doInsert = bikeDao.doInsert(bike);
 		if (doInsert) {
+
 			System.out.println("添加成功");
 		} else {
 			System.out.println("添加失败");
@@ -359,7 +428,7 @@ public class Menu {
 					returnBike();
 					break;
 				case 4:
-					personInfo();
+					userInfo();
 					break;
 				case 5:
 					personWallet();
@@ -416,10 +485,9 @@ public class Menu {
 			billMenu();
 		} else if (s.equals("c")) {
 			recharge();
-		} else if(s.equals("v")) {
+		} else if (s.equals("v")) {
 			becomeVIPMenu();
-		}
-		else {
+		} else {
 
 			userMenu();
 		}
@@ -427,27 +495,26 @@ public class Menu {
 
 	private void becomeVIPMenu() {
 		System.out.println("请输入您要充值的月份");
-		
+
 		int month = 0;
-		while(true) {
+		while (true) {
 			String m = input.next();
-			if(iiv.isNumber(m)) {
+			if (iiv.isNumber(m)) {
 				month = Integer.parseInt(m);
 				break;
 			} else {
 				System.out.println("请重新输入：");
 			}
 		}
-		
+
 		int result = walletDao.becomeVIP(user.getId(), month);
-		if(result == -5) {
+		if (result == -5) {
 			recharge();
 		} else {
 			System.out.println("恭喜您开通成功");
 			userMenu();
 		}
-		
-		
+
 	}
 
 	private void billMenu() {

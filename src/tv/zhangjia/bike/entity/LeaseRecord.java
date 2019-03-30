@@ -9,16 +9,37 @@ public class LeaseRecord {
 	private String username;	//租赁用户名
 	private Date leaseTime;	//租借时间
 	private Date returnTime;	//归还时间
+	private String locations;
 	private double cost;		//本次租赁消费金额
 	
 	
+
+
+	public LeaseRecord(int bikeId, int userId, String username, Date leaseTime, Date returnTime, String locations,
+			double cost) {
+		super();
+		this.bikeId = bikeId;
+		this.userId = userId;
+		this.username = username;
+		this.leaseTime = leaseTime;
+		this.returnTime = returnTime;
+		this.locations = locations;
+		this.cost = cost;
+	}
+
+
+
+
 	public LeaseRecord() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 
-	public LeaseRecord(int id, int bikeId, int userId, String username, Date leaseTime, Date returnTime, double cost) {
+
+
+	public LeaseRecord(int id, int bikeId, int userId, String username, Date leaseTime, Date returnTime,
+			String locations, double cost) {
 		super();
 		this.id = id;
 		this.bikeId = bikeId;
@@ -26,8 +47,11 @@ public class LeaseRecord {
 		this.username = username;
 		this.leaseTime = leaseTime;
 		this.returnTime = returnTime;
+		this.locations = locations;
 		this.cost = cost;
 	}
+
+
 
 
 	@Override
@@ -40,11 +64,14 @@ public class LeaseRecord {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + id;
 		result = prime * result + ((leaseTime == null) ? 0 : leaseTime.hashCode());
+		result = prime * result + ((locations == null) ? 0 : locations.hashCode());
 		result = prime * result + ((returnTime == null) ? 0 : returnTime.hashCode());
 		result = prime * result + userId;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
+
+
 
 
 	@Override
@@ -67,6 +94,11 @@ public class LeaseRecord {
 				return false;
 		} else if (!leaseTime.equals(other.leaseTime))
 			return false;
+		if (locations == null) {
+			if (other.locations != null)
+				return false;
+		} else if (!locations.equals(other.locations))
+			return false;
 		if (returnTime == null) {
 			if (other.returnTime != null)
 				return false;
@@ -83,9 +115,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public int getId() {
 		return id;
 	}
+
+
 
 
 	public void setId(int id) {
@@ -93,9 +129,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public int getBikeId() {
 		return bikeId;
 	}
+
+
 
 
 	public void setBikeId(int bikeId) {
@@ -103,9 +143,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public int getUserId() {
 		return userId;
 	}
+
+
 
 
 	public void setUserId(int userId) {
@@ -113,9 +157,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public String getUsername() {
 		return username;
 	}
+
+
 
 
 	public void setUsername(String username) {
@@ -123,9 +171,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public Date getLeaseTime() {
 		return leaseTime;
 	}
+
+
 
 
 	public void setLeaseTime(Date leaseTime) {
@@ -133,9 +185,13 @@ public class LeaseRecord {
 	}
 
 
+
+
 	public Date getReturnTime() {
 		return returnTime;
 	}
+
+
 
 
 	public void setReturnTime(Date returnTime) {
@@ -143,9 +199,27 @@ public class LeaseRecord {
 	}
 
 
+
+
+	public String getLocations() {
+		return locations;
+	}
+
+
+
+
+	public void setLocations(String locations) {
+		this.locations = locations;
+	}
+
+
+
+
 	public double getCost() {
 		return cost;
 	}
+
+
 
 
 	public void setCost(double cost) {
@@ -153,10 +227,12 @@ public class LeaseRecord {
 	}
 
 
+
+
 	@Override
 	public String toString() {
 		return id + "\t"  + bikeId + "\t"  + userId + "\t"  + username
-				+ "\t" + leaseTime + "\t"  + returnTime + "\t"  + cost;
+				+ "\t" + leaseTime + "\t"  + returnTime + "\t"  + locations + "\t" +  cost;
 	}
 	
 }

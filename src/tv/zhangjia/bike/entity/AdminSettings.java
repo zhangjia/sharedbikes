@@ -5,6 +5,14 @@ public class AdminSettings {
 	double discount;
 	double aBikePrice;
 	double bBikePrice;
+	String advertising;
+	
+	public String getAdvertising() {
+		return advertising;
+	}
+	public void setAdvertising(String advertising) {
+		this.advertising = advertising;
+	}
 	public double getVipPrice() {
 		return vipPrice;
 	}

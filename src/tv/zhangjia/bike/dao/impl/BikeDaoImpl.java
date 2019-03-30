@@ -3,8 +3,10 @@ package tv.zhangjia.bike.dao.impl;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BikeDao;
+import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
+import tv.zhangjia.bike.entity.Location;
 
 /**
  * BikeDao接口的实现类
@@ -17,11 +19,18 @@ import tv.zhangjia.bike.entity.Bike;
  */
 public class BikeDaoImpl implements BikeDao{
 	private List<Bike> bikes = Database.BIKES;
+	
+	//用于添加车辆的时候，位置的车辆总数+1
+	//TODO 创建queryLocation方法
+	private LocationDao locationDao = new LocationDaoImpl();
 	@Override
 	public boolean doInsert(Bike bike) {
 		bike.setId(Database.nextBikeId());
+//		locationDao.addBikeLocation(bike.getId(), bike.getLocationId());
+		bikes.add(bike);
 		
-		return bikes.add(bike);
+		
+		return locationDao.updateLocationBikes(bike.getLocationId());
 	}
 
 	@Override

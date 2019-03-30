@@ -13,9 +13,32 @@ public class Bike {
 	private String type; 	//单车类型
 	private double price;	//单车价格
 	private int locationId;//单车位置
+	private int lastLocationId; //上一次单车位置
 	private int status;		//单车状态
 	private int amount;		//单车骑行次数
 	private String qr;		//单车二维码
+	
+	
+	
+	public Bike(String type, double price, int locationId, int status, int amount, String qr) {
+		super();
+		this.type = type;
+		this.price = price;
+		this.locationId = locationId;
+		this.status = status;
+		this.amount = amount;
+		this.qr = qr;
+	}
+	public Bike(int id, String type, double price, int locationId, int status, int amount, String qr) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.price = price;
+		this.locationId = locationId;
+		this.status = status;
+		this.amount = amount;
+		this.qr = qr;
+	}
 	public int getId() {
 		return id;
 	}
@@ -39,6 +62,12 @@ public class Bike {
 	}
 	public void setLocationId(int locationId) {
 		this.locationId = locationId;
+	}
+	public int getLastLocationId() {
+		return lastLocationId;
+	}
+	public void setLastLocationId(int lastLocationId) {
+		this.lastLocationId = lastLocationId;
 	}
 	public int getStatus() {
 		return status;
@@ -64,6 +93,7 @@ public class Bike {
 		int result = 1;
 		result = prime * result + amount;
 		result = prime * result + id;
+		result = prime * result + lastLocationId;
 		result = prime * result + locationId;
 		long temp;
 		temp = Double.doubleToLongBits(price);
@@ -86,6 +116,8 @@ public class Bike {
 			return false;
 		if (id != other.id)
 			return false;
+		if (lastLocationId != other.lastLocationId)
+			return false;
 		if (locationId != other.locationId)
 			return false;
 		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
@@ -106,24 +138,18 @@ public class Bike {
 	}
 	@Override
 	public String toString() {
-		return "Bike [id=" + id + ", type=" + type + ", price=" + price + ", locationId=" + locationId + ", status="
-				+ status + ", amount=" + amount + ", qr=" + qr + "]";
+		return "Bike [id=" + id + ", type=" + type + ", price=" + price + ", locationId=" + locationId
+				+ ", lastLocationId=" + lastLocationId + ", status=" + status + ", amount=" + amount + ", qr=" + qr
+				+ "] + \n";
 	}
-	public Bike(int id, String type, double price, int locationId, int status, int amount, String qr) {
+	public Bike(int id, String type, double price, int locationId, int lastLocationId, int status, int amount,
+			String qr) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.price = price;
 		this.locationId = locationId;
-		this.status = status;
-		this.amount = amount;
-		this.qr = qr;
-	}
-	public Bike(String type, double price, int locationId, int status, int amount, String qr) {
-		super();
-		this.type = type;
-		this.price = price;
-		this.locationId = locationId;
+		this.lastLocationId = lastLocationId;
 		this.status = status;
 		this.amount = amount;
 		this.qr = qr;
@@ -131,6 +157,16 @@ public class Bike {
 	public Bike() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public Bike(String type, double price, int locationId, int lastLocationId, int status, int amount, String qr) {
+		super();
+		this.type = type;
+		this.price = price;
+		this.locationId = locationId;
+		this.lastLocationId = lastLocationId;
+		this.status = status;
+		this.amount = amount;
+		this.qr = qr;
 	}
 	
 	

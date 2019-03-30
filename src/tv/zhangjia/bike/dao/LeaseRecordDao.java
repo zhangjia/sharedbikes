@@ -54,4 +54,6 @@ public interface LeaseRecordDao {
 	 * @return
 	 */
 	public int queryNotReturnRecordId(int bikeId);
+	
+	
 }
