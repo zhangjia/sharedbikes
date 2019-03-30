@@ -22,5 +22,15 @@ public class UserSettings {
 	public void setActp(boolean actp) {
 		this.actp = actp;
 	}
+	public UserSettings() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public UserSettings(int id, int userId, boolean actp) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.actp = actp;
+	}
 	
 }
