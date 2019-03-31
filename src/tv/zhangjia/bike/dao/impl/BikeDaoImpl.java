@@ -1,12 +1,13 @@
 package tv.zhangjia.bike.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
-import tv.zhangjia.bike.entity.Location;
+import tv.zhangjia.bike.entity.User;
 
 /**
  * BikeDao接口的实现类
@@ -132,6 +133,25 @@ public class BikeDaoImpl implements BikeDao{
 			}
 		}
 		return 5; //没有此ID
+	}
+
+	@Override
+	public int setDamage(User user, int bikeId) {
+		Bike bike = queryById(bikeId);
+		bike.setStatus(-1);
+		
+		return user.getWalletID();
+	}
+
+	@Override
+	public List<Bike> queryByDamage() {
+		List<Bike> dbike = new ArrayList<>();
+		for (Bike bike : bikes) {
+			if(bike.getStatus() == -1) {
+				dbike.add(bike);
+			}
+		}
+		return dbike;
 	}
 
 }

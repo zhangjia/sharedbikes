@@ -67,4 +67,9 @@ public interface BikeDao {
 	  */
 	 int bikeStatus(int bikeId);
 	 
+	 
+	 int setDamage(User user, int bikeId);
+	 
+	 List<Bike> queryByDamage();
+	 
 }

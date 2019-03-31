@@ -276,8 +276,13 @@ public class Menu {
 	}
 
 	private void damage() {
-		// TODO Auto-generated method stub
-
+		List<Bike> bikes = bikeDao.queryByDamage();
+		System.out.println("下面是损坏的车辆");
+		for (Bike bike : bikes) {
+			
+			System.out.println(bike);
+		}
+		
 	}
 
 	private void dispatch() {
@@ -633,7 +638,7 @@ public class Menu {
 		System.out.println("\t9.退出系统");
 		System.out.println("\t10.个人设置");
 		System.out.println("\t11.故障报修");
-		
+
 		System.out.print("请选择您接下来的操作:");
 		while (true) {
 			String nextInt = input.next();
@@ -685,8 +690,28 @@ public class Menu {
 	}
 
 	private void awardByRepairs() {
-		// TODO Auto-generated method stub
-		
+
+		System.out.println("请输入损坏的车辆");
+		String id = input.next();
+		while (true) {
+			if (iiv.isNumber(id)) {
+				int bikeId = Integer.parseInt(id);
+				int status = bikeDao.bikeStatus(bikeId);
+				if(status != 11) {
+					System.out.println("该车无法报修");
+					break;
+				}
+				
+				int walletId = bikeDao.setDamage(user, bikeId);
+				
+				billDao.awardByBike(user.getId(), walletId);
+				
+				break;
+			} else {
+				System.out.println("输入不合法，请重新输入：");
+			}
+		}
+
 	}
 
 	private void personSettings() {
@@ -696,15 +721,15 @@ public class Menu {
 		System.out.println("自动支付：" + s);
 		System.out.println("打开：t,关闭：f,任意键返回");
 		String auto = input.next();
-		if(auto.equals("t")) {
+		if (auto.equals("t")) {
 			ps.setActp(true);
-		} else if(auto.equals("f")) {
+		} else if (auto.equals("f")) {
 			ps.setActp(false);
 		} else {
 			userMenu();
-			
+
 		}
-		
+
 	}
 
 	private void recharge() {
