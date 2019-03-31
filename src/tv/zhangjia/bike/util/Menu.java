@@ -107,9 +107,9 @@ public class Menu {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			//没有手机给你发验证码，只能委屈你自己输出了
+			// 没有手机给你发验证码，只能委屈你自己输出了
 			System.out.print(codes);
-			
+
 			try {
 				Thread.sleep(500);//
 			} catch (InterruptedException e) {
@@ -633,7 +633,17 @@ public class Menu {
 	private void userRegister() {
 		System.out.println("-----------------------------------");
 		System.out.print("请输入您的用户名：");
-		String username = input.next();
+		String username;
+		while (true) {
+			username = input.next();
+			if (userDao.isTrueUserName(username) == 1) {
+				System.out.println("该用户名已经存在,建议您使用：" + userDao.adviseUsername(username));
+				
+			} else {
+				break;
+			}
+		}
+		
 		String password, password2;
 		while (true) {
 			System.out.print("请输入您的密码：");
@@ -649,19 +659,16 @@ public class Menu {
 
 		int register = userDao.register(username, password);
 
-		if (register == -1) {
-			System.out.println("注册失败，您的用户名已经存在");
-			System.out.println("是否重新注册？");
-			String againregister = input.next();
-			if (againregister.equals("y")) {
-				userRegister();
-
+		if(register == 1) {
+			System.out.println("注册成功，是否登录？");
+			String s = input.next();
+			if(s.equals("y")) {
+				userLogin();
 			} else {
 				mainMenu();
 			}
 		} else {
-			System.out.println("注册成功");
-			userLogin();
+			System.out.println("注册失败");
 		}
 	}
 
