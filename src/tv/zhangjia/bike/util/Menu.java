@@ -20,6 +20,7 @@ import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.VerificationCode;
 import tv.zhangjia.bike.entity.Wallet;
 
 /**
@@ -35,6 +36,7 @@ import tv.zhangjia.bike.entity.Wallet;
 public class Menu {
 	private Scanner input = new Scanner(System.in);
 	private User user = null;
+	private VerificationCode vc = new VerificationCode();
 	private UserDao userDao = new UserDaoImpl();
 	private BikeDao bikeDao = new BikeDaoImpl();
 	private LeaseRecordDao leaseRecordDao = new LeaseRecordDaoImpl();
@@ -97,6 +99,23 @@ public class Menu {
 					break;
 				}
 			}
+			String codes = VerificationCode.randomCode();
+			System.out.print("请输入您的验证码：");
+
+			try {
+				Thread.sleep(1500);//
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			//没有手机给你发验证码，只能委屈你自己输出了
+			System.out.print(codes);
+			
+			try {
+				Thread.sleep(500);//
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("   验证成功！");
 
 			System.out.println("请输入新密码：");
 			String newPassword = input.next();
