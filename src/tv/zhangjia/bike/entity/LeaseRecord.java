@@ -12,11 +12,13 @@ public class LeaseRecord {
 	private String locations;
 	private double cost;		//本次租赁消费金额
 	
-	
+	private long time;
+
+
 
 
 	public LeaseRecord(int bikeId, int userId, String username, Date leaseTime, Date returnTime, String locations,
-			double cost) {
+			double cost, long time) {
 		super();
 		this.bikeId = bikeId;
 		this.userId = userId;
@@ -25,6 +27,7 @@ public class LeaseRecord {
 		this.returnTime = returnTime;
 		this.locations = locations;
 		this.cost = cost;
+		this.time = time;
 	}
 
 
@@ -39,7 +42,7 @@ public class LeaseRecord {
 
 
 	public LeaseRecord(int id, int bikeId, int userId, String username, Date leaseTime, Date returnTime,
-			String locations, double cost) {
+			String locations, double cost, long time) {
 		super();
 		this.id = id;
 		this.bikeId = bikeId;
@@ -49,6 +52,7 @@ public class LeaseRecord {
 		this.returnTime = returnTime;
 		this.locations = locations;
 		this.cost = cost;
+		this.time = time;
 	}
 
 
@@ -66,6 +70,7 @@ public class LeaseRecord {
 		result = prime * result + ((leaseTime == null) ? 0 : leaseTime.hashCode());
 		result = prime * result + ((locations == null) ? 0 : locations.hashCode());
 		result = prime * result + ((returnTime == null) ? 0 : returnTime.hashCode());
+		result = prime * result + (int) (time ^ (time >>> 32));
 		result = prime * result + userId;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -103,6 +108,8 @@ public class LeaseRecord {
 			if (other.returnTime != null)
 				return false;
 		} else if (!returnTime.equals(other.returnTime))
+			return false;
+		if (time != other.time)
 			return false;
 		if (userId != other.userId)
 			return false;
@@ -229,10 +236,29 @@ public class LeaseRecord {
 
 
 
+	public long getTime() {
+		return time;
+	}
+
+
+
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+
+
+
 	@Override
 	public String toString() {
 		return id + "\t"  + bikeId + "\t"  + userId + "\t"  + username
-				+ "\t" + leaseTime + "\t"  + returnTime + "\t"  + locations + "\t" +  cost;
+				+ "\t" + leaseTime + "\t"  + returnTime + "\t"  + locations + "\t" +  time + "秒" + cost + "元" ;
 	}
-	
+
+
+
+
+
+
 }

@@ -47,16 +47,17 @@ public class BillDaoImpl implements BillDao{
 	}
 
 	@Override
-	public int awardByregister(int user1Id, int wallet1Id, int user2Id, int wallet2Id) {
-		if(!users.contains(user2Id)) {
+	public int awardByregister(int user1Id, int wallet1Id, int user2Id) {
+		if(queryUser(user2Id) == null) {
 			return -1; //不存在该用户
 		} 
-		
+		User user2 = queryUser(user2Id);
 		Wallet wallet1 = queryWallet(wallet1Id);
-		Wallet wallet2 = queryWallet(wallet2Id);
+		Wallet wallet2 = queryWallet(user2.getWalletID());
 		
-		wallet1.setCoupon(5);
-		wallet2.setCoupon(5);
+		
+		wallet1.setCoupon(wallet1.getCoupon() + 5);
+		wallet2.setCoupon(wallet2.getCoupon() + 5);
 		
 		doInsert(user1Id,"注册奖励",5);
 		doInsert(user2Id,"推广奖励",5);

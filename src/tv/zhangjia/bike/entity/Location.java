@@ -65,7 +65,7 @@ public class Location {
 	}
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", location=" + location + ", bikes=" + bikes + "]";
+		return  + id + "\t" + location + "\t" + bikes.size() + "\n";
 	}
 	public Location(int id, String location, List<Bike> bikes) {
 		super();

@@ -52,12 +52,12 @@ public class BikeDaoImpl implements BikeDao{
 		for (int i = 0; i < bikes.size(); i++) {
 			if(bikes.get(i).getId() == bike.getId()) {
 				bikes.set(i, bike);
-				return false;
+				return true;
 			}
 			
 		}
 		
-		return true;
+		return false;
 	}
 
 	@Override
@@ -112,6 +112,12 @@ public class BikeDaoImpl implements BikeDao{
 
 	@Override
 	public int bikeStatus(int bikeId) {
+		
+//		11：可借
+//		10：不可借
+//		5：没有该Id
+//		-1：损坏
+		
 		for (Bike bike : bikes) {
 			if(bike.getId() == bikeId) {
 				//如果状态为可借，返回11
@@ -120,10 +126,12 @@ public class BikeDaoImpl implements BikeDao{
 					//如果状态为不可借，返回10
 				} else if(bike.getStatus() == 0) {
 					return 10;
+				} else if(bike.getStatus() == -1) {
+					return -1; 
 				}
 			}
 		}
-		return -1; //没有此ID
+		return 5; //没有此ID
 	}
 
 }

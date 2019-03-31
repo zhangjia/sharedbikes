@@ -1,6 +1,9 @@
 package tv.zhangjia.bike.entity;
 
 import java.util.Date;
+import java.util.List;
+
+import tv.zhangjia.bike.data.Database;
 
 /**
  * 用户类
@@ -22,6 +25,21 @@ public class User {
 	private int locationID;
 	private int walletID;
 	private String payPassword;
+	
+	private List<Location> ls = Database.LOCATIONS;
+	
+	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
+			Date registerTime, int locationID) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.tel = tel;
+		this.isAdmin = isAdmin;
+		this.cyclingTime = cyclingTime;
+		this.registerTime = registerTime;
+		this.locationID = locationID;
+	}
 	public int getId() {
 		return id;
 	}
@@ -150,11 +168,25 @@ public class User {
 			return false;
 		return true;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return id + "\t" + username + ", password=" + password + ", tel=" + tel + ", isAdmin="
-				+ isAdmin + ", cyclingTime=" + cyclingTime + ", registerTime=" + registerTime + ", locationID="
-				+ locationID + ", walletID=" + walletID + "]";
+		String s = "";
+		String locationName = "";
+		if(isAdmin) {
+			s = "管理员";
+		} else {
+			s = "普通用户";
+		}
+		for (Location lo : ls) {
+			if(lo.getId() == locationID) {
+				locationName = lo.getLocation();
+			}
+		}
+		return id + "\t" + username + "\t"  + tel + "\t"
+				+ s + "\t" + cyclingTime + "\t" + registerTime + "\t"
+				+ locationName + "\t" + "\n";
 	}
 	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
 			Date registerTime, int locationID, int walletID) {

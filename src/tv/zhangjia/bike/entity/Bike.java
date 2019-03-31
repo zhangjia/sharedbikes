@@ -1,4 +1,9 @@
 package tv.zhangjia.bike.entity;
+
+import java.util.List;
+
+import tv.zhangjia.bike.data.Database;
+
 /**
  * 单车类
  * @ProjectName	SharedBikes	  
@@ -17,7 +22,7 @@ public class Bike {
 	private int status;		//单车状态
 	private int amount;		//单车骑行次数
 	private String qr;		//单车二维码
-	
+	private List<Location> ls = Database.LOCATIONS;
 	
 	
 	public Bike(String type, double price, int locationId, int status, int amount, String qr) {
@@ -136,11 +141,26 @@ public class Bike {
 			return false;
 		return true;
 	}
+	
+	
 	@Override
 	public String toString() {
-		return "Bike [id=" + id + ", type=" + type + ", price=" + price + ", locationId=" + locationId
-				+ ", lastLocationId=" + lastLocationId + ", status=" + status + ", amount=" + amount + ", qr=" + qr
-				+ "] + \n";
+		String locationName = null;
+		for (Location location : ls) {
+			if(location.getId() == locationId)
+				locationName = location.getLocation();
+		}
+		String statusName = null;
+		if(status == 1) {
+			statusName = "可借";
+		} else if(status == 0) {
+			statusName = "未归还";
+		} else {
+			statusName = "损坏";
+		}
+		return id + "\t" + type + "\t" + price + "\t" + locationName
+				+ "\t"   + statusName + "\t" + amount + "\t" + qr
+				+ "\n";
 	}
 	public Bike(int id, String type, double price, int locationId, int lastLocationId, int status, int amount,
 			String qr) {

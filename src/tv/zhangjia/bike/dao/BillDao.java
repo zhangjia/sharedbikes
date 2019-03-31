@@ -35,7 +35,7 @@ public interface BillDao {
 	List<Bill> queryUserBill(int userId);
 
 	
-	int awardByregister(int user1Id,int wallet1Id,int user2Id,int wallet2Id);
+	int awardByregister(int user1Id,int wallet1Id,int user2Id);
 	
 	int awardByBike(int userId, int walletId);
 	

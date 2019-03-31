@@ -81,12 +81,22 @@ public class WalletDaoImpl implements WalletDao {
 	@Override
 	public int pay(int userId, double money, String type) {
 		Wallet pw = queryByUserId(userId);
-		if (pw.getBalance() - money < 0) {
+		double coupon = pw.getCoupon();
+		double balance = pw.getBalance();
+		double sum = pw.getBalance() + pw.getCoupon(); //获取账户总金额
+		//如果总金额不够，返回没钱
+		if (sum - money < 0) {
 			return -5;
+			//如果红包余额不够,那么使用红包和余额一起支付
+		} else if(coupon < money){
+			double h = money - coupon;
+			pw.setCoupon(0);
+			pw.setBalance(pw.getBalance() - h);
+			billDao.doInsert(queryUserId(pw.getId()), type, money);
+			return 1;
 		} else {
-			System.out.println(pw.getBalance());
-			pw.setBalance(pw.getBalance() - money);
-			System.out.println(pw.getBalance());
+			//如果红包余额够，只扣红包的钱
+			pw.setCoupon(coupon - money);
 			billDao.doInsert(queryUserId(pw.getId()), type, money);
 			return 1;
 		}

@@ -1,6 +1,9 @@
 package tv.zhangjia.bike.entity;
 
 import java.util.Date;
+import java.util.List;
+
+import tv.zhangjia.bike.data.Database;
 
 public class Bill {
 	private int id;// 账单记录ID
@@ -8,6 +11,7 @@ public class Bill {
 	private int userId;
 	private Date billDate; //账单记录产生时间
 	private double money;
+	private List<User> users = Database.USERS;
 	public int getId() {
 		return id;
 	}
@@ -40,8 +44,15 @@ public class Bill {
 	}
 	@Override
 	public String toString() {
-		return "Bill [id=" + id + ", billName=" + billName + ", userId=" + userId + ", billDate=" + billDate
-				+ ", money=" + money + "]";
+		String username = "";
+		for (User user : users) {
+			if(user.getId() == userId) {
+				username = user.getUsername();
+			}
+			
+		}
+		return + id + "\t" + username + "\t" + billName + "\t" + billDate
+				+ "\t" + money  + "\n";
 	}
 	public Bill() {
 		super();
