@@ -53,4 +53,16 @@ public interface UserDao {
 	 */
 	String queryUserName(int id);
 	
+	int queryUserId(String username);
+	int addPayPassword(int userId,String payPassword);
+	
+	
+	int editPassword(int userId,String editPassword);
+	
+	User retrievePassword(int userId,String password);
+	
+	int isTrueUserName(String username);
+	int isTrueTel(int userId,String tel);
+	
+	String adviseUsername(String username);
 }

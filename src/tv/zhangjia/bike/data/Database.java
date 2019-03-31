@@ -59,9 +59,9 @@ public class Database {
 		}
 
 		// 向数据库中默认添加一个管理员
-		USERS.add(new User(1, "1", "1", "15628", true, 0, date, 1, 1));
+		USERS.add(new User(1, "1", "1", "15628791997", true, 0, date, 1, 1));
 		// 向数据库中默认添加二个用户
-		USERS.add(new User(2, "2", "2", "15629", false, 0, date, 2, 2));
+		USERS.add(new User(2, "2", "2", "15666335517", false, 0, date, 2, 2));
 		USERS.add(new User(3, "3", "3", "15620", false, 0, date, 3, 3));
 
 		WALLETS.add(new Wallet(1, 1, 1000, 100, true, new Date()));

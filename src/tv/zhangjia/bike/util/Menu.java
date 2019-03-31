@@ -82,34 +82,72 @@ public class Menu {
 		}
 	}
 
+	private User retrievePassword(int userId) {
+		System.out.println("密码错误，是否找回密码？");
+		String s = input.next();
+		if (s.equals("y")) {
+			System.out.println("请输入您的手机号：");
+			while (true) {
+				String tel = input.next();
+
+				int x = userDao.isTrueTel(userId, tel);
+				if (x != 1) {
+					System.out.println("该手机号和您的用户名不匹配,请重新输入：");
+				} else {
+					break;
+				}
+			}
+
+			System.out.println("请输入新密码：");
+			String newPassword = input.next();
+			return userDao.retrievePassword(userId, newPassword);
+		} else {
+			mainMenu();
+		}
+		return null;
+	}
+
 	/**
 	 * 用户登录
 	 */
 	private void userLogin() {
 		System.out.println("-----------------------------------");
 		System.out.print("请输入您的用户名：");
-		String username = input.next();
+		String username;
+		while (true) {
+			username = input.next();
+			if (userDao.isTrueUserName(username) != 1) {
+				System.out.println("没有该用户名,请重新输入");
+			} else {
+				break;
+			}
+		}
+
 		System.out.print("请输入您的密码：");
-		String password = input.next();
-		User login = userDao.login(username, password);
-
-		if (login == null) {
-			System.out.println("登录失败，您的用户名或者密码错误");
-			System.out.println("是否重新登录？y");
-			String againLogIn = input.next();
-			if (againLogIn.equals("y")) {
-				userLogin();
-
+		String password;
+		int wa = 0; // 判断输错密码几次
+		User login;
+		while (true) {
+			password = input.next();
+			login = userDao.login(username, password);
+			if (login == null) {
+				wa++;
+				if (wa == 2) {
+					login = retrievePassword(userDao.queryUserId(username));
+					userLogin();
+					break;
+				}
+				System.out.println("登录失败，您的密码错误,请重新输入：");
 			} else {
-				mainMenu();
+				break;
 			}
+		}
+
+		this.user = login;
+		if (user.isAdmin()) {
+			adminMenu();
 		} else {
-			this.user = login;
-			if (user.isAdmin()) {
-				adminMenu();
-			} else {
-				userMenu();
-			}
+			userMenu();
 		}
 
 	}
@@ -210,17 +248,18 @@ public class Menu {
 		for (Location location : locations) {
 			System.out.println(location);
 		}
-		
-		while(true) {
-		System.out.print("查询指定位置：");
-		int id = input.nextInt();
-		if(id == -1) break;
-		Location lo = locationDao.queryLocation(id);
-		System.out.println("编号\t位置名词\t车辆总数");
-		System.out.println(lo.getBikes());
-		
+
+		while (true) {
+			System.out.print("查询指定位置：");
+			int id = input.nextInt();
+			if (id == -1)
+				break;
+			Location lo = locationDao.queryLocation(id);
+			System.out.println("编号\t位置名词\t车辆总数");
+			System.out.println(lo.getBikes());
+
 		}
-		
+
 		adminMenu();
 	}
 

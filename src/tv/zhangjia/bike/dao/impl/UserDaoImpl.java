@@ -77,4 +77,72 @@ public class UserDaoImpl implements UserDao {
 		return null;
 	}
 
+	@Override
+	public int addPayPassword(int userId, String payPassword) {
+		User user = queryByUserId(userId);
+		user.setPayPassword(payPassword);
+		return 1;
+	}
+
+	@Override
+	public int editPassword(int userId, String editPassword) {
+		User user = queryByUserId(userId);
+		user.setPassword(editPassword);
+		return 1;
+	}
+
+	@Override
+	public int isTrueTel(int userId, String tel) {
+		User user = queryByUserId(userId);
+		if(user == null) {
+			return -1;
+		}
+		
+		if(user.getTel().equals(tel)) {
+			return 1;
+		}
+		return 0;
+	}
+	
+
+	@Override
+	public User retrievePassword(int userId,String password) {
+		User user = queryByUserId(userId);
+		user.setPassword(password);
+		return user;
+	}
+
+	@Override
+	public int isTrueUserName(String username) {
+		for (User user : users) {
+			if(user.getUsername().equals(username)) {
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	@Override
+	public String adviseUsername(String username) {
+		int i = 1;
+		String newUsername = username +(++i);
+		if(isTrueUserName(newUsername) == 1) {
+			newUsername = adviseUsername(newUsername);
+		}
+		return newUsername;
+	}
+
+	@Override
+	public int queryUserId(String username) {
+		for (User user : users) {
+			if(user.getUsername().equals(username)) {
+				return user.getId();
+			}
+		}
+		return -1;
+	}
+	
+	
+
+
 }

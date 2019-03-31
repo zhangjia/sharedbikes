@@ -21,6 +21,7 @@ public class User {
 	private Date registerTime;// 用户注册时间
 	private int locationID;
 	private int walletID;
+	private String payPassword;
 	public int getId() {
 		return id;
 	}
@@ -75,6 +76,18 @@ public class User {
 	public void setWalletID(int walletID) {
 		this.walletID = walletID;
 	}
+	
+	
+	public String getPayPassword() {
+		return payPassword;
+	}
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
+
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -84,6 +97,7 @@ public class User {
 		result = prime * result + (isAdmin ? 1231 : 1237);
 		result = prime * result + locationID;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((payPassword == null) ? 0 : payPassword.hashCode());
 		result = prime * result + ((registerTime == null) ? 0 : registerTime.hashCode());
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -111,6 +125,11 @@ public class User {
 			if (other.password != null)
 				return false;
 		} else if (!password.equals(other.password))
+			return false;
+		if (payPassword == null) {
+			if (other.payPassword != null)
+				return false;
+		} else if (!payPassword.equals(other.payPassword))
 			return false;
 		if (registerTime == null) {
 			if (other.registerTime != null)
