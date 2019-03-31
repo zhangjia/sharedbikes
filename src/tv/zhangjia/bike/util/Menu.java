@@ -134,7 +134,7 @@ public class Menu {
 	 * 用户登录
 	 */
 	private void userLogin() {
-		
+
 		System.out.println("-----------------------------------");
 		System.out.print("请输入您的用户名：");
 		String username;
@@ -285,15 +285,14 @@ public class Menu {
 		locationDao.dispatch();
 
 	}
-	
-	
+
 	private void advertising(User user) {
 		Wallet wt = walletDao.queryByUserId(user.getId());
-		if(wt.isVIP()) {
-			
+		if (wt.isVIP()) {
+
 		} else {
-		AdminSettings ass = as.queryAdminSettings();
-		System.out.println(ass.getAdvertising());
+			AdminSettings ass = as.queryAdminSettings();
+			System.out.println(ass.getAdvertising());
 		}
 	}
 
@@ -679,9 +678,23 @@ public class Menu {
 			String money = input.next();
 			if (iiv.isDouble(money)) {
 				double m = Double.parseDouble(money);
+
+				boolean openPayPassword = true;
+
+				while (openPayPassword) {
+					System.out.println("请输入您的支付密码：");
+					String payPassword = input.next();
+					if (isTruePayPw(user, payPassword)) {
+						break;
+					} else {
+						System.out.println("支付密码不正确");
+
+					}
+				}
+
 				if (walletDao.recharge(user.getWalletID(), m) == 1) {
 					System.out.println("充值成功");
-					personWallet();
+					// personWallet();
 					break;
 				} else {
 					System.out.println("充值失败");
@@ -727,14 +740,42 @@ public class Menu {
 			}
 		}
 
-		int result = walletDao.becomeVIP(user.getId(), month);
-		if (result == -5) {
-			recharge();
-		} else {
-			System.out.println("恭喜您开通成功");
-			userMenu();
-		}
+		boolean openPayPassword = true;
 
+		while (openPayPassword) {
+			System.out.println("请输入您的支付密码：");
+			String payPassword = input.next();
+			if (isTruePayPw(user, payPassword)) {
+				break;
+			} else {
+				System.out.println("支付密码不正确");
+
+			}
+		}
+		while (true) {
+			int result = walletDao.becomeVIP(user.getId(), month);
+			if (result == -5) {
+				recharge();
+			} else {
+				System.out.println("恭喜您开通成功");
+
+				System.out.println("hahahahahahhah");
+				break;
+			}
+		}
+		userMenu();
+
+	}
+
+	private boolean isTruePayPw(User user, String payPassword) {
+		List<User> users = userDao.queryAll();
+
+		for (User user2 : users) {
+			if (user2.getPayPassword().equals(payPassword) && user.getId() == user.getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void billMenu() {
@@ -754,6 +795,20 @@ public class Menu {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要归还的单车Id");
 		int bikeId = input.nextInt();
+
+		boolean openPayPassword = true;
+
+		while (openPayPassword) {
+			System.out.println("请输入您的支付密码：");
+			String payPassword = input.next();
+			if (isTruePayPw(user, payPassword)) {
+				break;
+			} else {
+				System.out.println("支付密码不正确");
+
+			}
+		}
+
 		int result = leaseRecordDao.returnBike(bikeId, user.getId());
 
 		if (result == 1) {
@@ -846,6 +901,9 @@ public class Menu {
 			}
 		}
 
+		System.out.println("请输入您的支付密码：");
+		String payPassword = input.next();
+
 		String tel;
 		while (true) {
 			System.out.print("请输入您的手机号：");
@@ -857,7 +915,7 @@ public class Menu {
 			}
 		}
 
-		int register = userDao.register(username, password, tel);
+		int register = userDao.register(username, password, tel, payPassword);
 
 		if (register == 1) {
 			int uid = userDao.queryUserId(username);

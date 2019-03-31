@@ -36,7 +36,7 @@ public interface UserDao {
 	 *            用户密码
 	 * @return
 	 */
-	int register(String username, String password, String tel);
+	int register(String username, String password, String tel,String payPassword);
 
 	/**
 	 * 查询指定用户的信息
@@ -75,4 +75,6 @@ public interface UserDao {
 	String adviseUsername(String username);
 	
 	boolean isTelExist(String tel);
+	
+	boolean isTruePayPassword(int userId, String payPassword);
 }

@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
 	 *      java.lang.String)
 	 */
 	@Override
-	public int register(String username, String password, String tel) {
+	public int register(String username, String password, String tel,String payPassword) {
 
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao {
 		// TODO 更改位置ID和钱包ID的生成方式
 		int locationId = randomLocation();
 		// 先创建Usre对象
-		User user = new User(Database.nextUserId(), username, password, tel, false, 0, new Date(), locationId);
+		User user = new User(Database.nextUserId(), username, password, tel, false, 0, new Date(), locationId,payPassword);
 		users.add(user);
 		// 创建钱包，并把user的Id添加进去
 		Wallet wallet = new Wallet(user.getId(), 0, 0, false, null);
@@ -180,6 +180,16 @@ public class UserDaoImpl implements UserDao {
 		Random random = new Random();
 		int index = random.nextInt(locations.size());
 		return index;
+	}
+
+	@Override
+	public boolean isTruePayPassword(int userId, String payPassword) {
+		for (User user : users) {
+			if(user.getPassword().equals(payPassword)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

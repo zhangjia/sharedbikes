@@ -29,7 +29,7 @@ public class User {
 	private List<Location> ls = Database.LOCATIONS;
 	
 	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
-			Date registerTime, int locationID) {
+			Date registerTime, int locationID,String payPassword) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -39,6 +39,7 @@ public class User {
 		this.cyclingTime = cyclingTime;
 		this.registerTime = registerTime;
 		this.locationID = locationID;
+		this.payPassword = payPassword;
 	}
 	public int getId() {
 		return id;
@@ -189,7 +190,7 @@ public class User {
 				+ locationName + "\t" + "\n";
 	}
 	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
-			Date registerTime, int locationID, int walletID) {
+			Date registerTime, int locationID, int walletID,String payPassword) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -200,6 +201,7 @@ public class User {
 		this.registerTime = registerTime;
 		this.locationID = locationID;
 		this.walletID = walletID;
+		this.payPassword = payPassword;
 	}
 	public User() {
 		super();
