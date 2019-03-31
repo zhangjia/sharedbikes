@@ -5,16 +5,19 @@ import java.util.List;
 import java.util.Random;
 
 import tv.zhangjia.bike.dao.UserDao;
+import tv.zhangjia.bike.dao.UserSettingsDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
 
 public class UserDaoImpl implements UserDao {
 	private List<User> users = Database.USERS;
 	private List<Location> locations = Database.LOCATIONS;
 	private WalletDao walletDao = new WalletDaoImpl();
+	private UserSettingsDao usd = new UserSettingsDaoImpl();
 
 	/**
 	 * 重写登录方法
@@ -71,6 +74,10 @@ public class UserDaoImpl implements UserDao {
 		// 将User和钱包关联
 		user.setWalletID(wallet.getId());
 		// System.out.println("wa" + wallet.getId());
+		
+		//创建用户设置
+		UserSettings us = new UserSettings(user.getId(),false);
+		usd.doInsert(us);
 		return 1;
 	}
 

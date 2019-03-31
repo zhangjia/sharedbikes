@@ -63,6 +63,9 @@ public class Database {
 		// 向数据库中默认添加二个用户
 		USERS.add(new User(2, "2", "2", "15666335517", false, 0, date, 2, 2,"zhangjia"));
 		USERS.add(new User(3, "3", "3", "15620", false, 0, date, 3, 3,"zhangjia"));
+		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),1,false));
+		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),2,true));
+		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),3,false));
 
 		WALLETS.add(new Wallet(1, 1, 1000, 100, true, new Date()));
 		WALLETS.add(new Wallet(2, 2, 1000, 200, true, new Date()));

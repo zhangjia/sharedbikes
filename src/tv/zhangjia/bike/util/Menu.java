@@ -9,6 +9,7 @@ import tv.zhangjia.bike.dao.BillDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.UserDao;
+import tv.zhangjia.bike.dao.UserSettingsDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.dao.impl.AdminSettinsDaoImpl;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
@@ -16,6 +17,7 @@ import tv.zhangjia.bike.dao.impl.BillDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
+import tv.zhangjia.bike.dao.impl.UserSettingsDaoImpl;
 import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
 import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bike;
@@ -23,6 +25,7 @@ import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.VerificationCode;
 import tv.zhangjia.bike.entity.Wallet;
 
@@ -39,7 +42,6 @@ import tv.zhangjia.bike.entity.Wallet;
 public class Menu {
 	private Scanner input = new Scanner(System.in);
 	private User user = null;
-	private VerificationCode vc = new VerificationCode();
 	private UserDao userDao = new UserDaoImpl();
 	private BikeDao bikeDao = new BikeDaoImpl();
 	private LeaseRecordDao leaseRecordDao = new LeaseRecordDaoImpl();
@@ -48,6 +50,7 @@ public class Menu {
 	private BillDao billDao = new BillDaoImpl();
 	private LocationDao locationDao = new LocationDaoImpl();
 	private AdminSettingsDao as = new AdminSettinsDaoImpl();
+	private UserSettingsDao us = new UserSettingsDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -628,6 +631,9 @@ public class Menu {
 		System.out.println("\t7.个人设置"); // TODO 可以选择修改个人信息，还是其他设置
 		System.out.println("\t8.退出登录");
 		System.out.println("\t9.退出系统");
+		System.out.println("\t10.个人设置");
+		System.out.println("\t11.故障报修");
+		
 		System.out.print("请选择您接下来的操作:");
 		while (true) {
 			String nextInt = input.next();
@@ -662,6 +668,12 @@ public class Menu {
 				case 9:
 					exit();// 退出
 					break;
+				case 10:
+					personSettings();// 退出
+					break;
+				case 11:
+					awardByRepairs();// 报修奖励
+					break;
 				default:
 					System.out.print("没有该选项，请重新输入：");
 				}
@@ -672,16 +684,40 @@ public class Menu {
 
 	}
 
+	private void awardByRepairs() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void personSettings() {
+		System.out.println("下面是您的设置：");
+		UserSettings ps = us.queryUserSetting(user.getId());
+		String s = ps.isActp() ? "开" : "关";
+		System.out.println("自动支付：" + s);
+		System.out.println("打开：t,关闭：f,任意键返回");
+		String auto = input.next();
+		if(auto.equals("t")) {
+			ps.setActp(true);
+		} else if(auto.equals("f")) {
+			ps.setActp(false);
+		} else {
+			userMenu();
+			
+		}
+		
+	}
+
 	private void recharge() {
+		UserSettings ps = us.queryUserSetting(user.getId());
 		while (true) {
 			System.out.println("请输入充值金额：");
 			String money = input.next();
 			if (iiv.isDouble(money)) {
 				double m = Double.parseDouble(money);
 
-				boolean openPayPassword = true;
-
-				while (openPayPassword) {
+				boolean openPayPassword = ps.isActp() ? true : false;
+				System.out.println("shifou" + openPayPassword);
+				while (!openPayPassword) {
 					System.out.println("请输入您的支付密码：");
 					String payPassword = input.next();
 					if (isTruePayPw(user, payPassword)) {
@@ -740,9 +776,10 @@ public class Menu {
 			}
 		}
 
-		boolean openPayPassword = true;
+		UserSettings ps = us.queryUserSetting(user.getId());
+		boolean openPayPassword = ps.isActp() ? true : false;
 
-		while (openPayPassword) {
+		while (!openPayPassword) {
 			System.out.println("请输入您的支付密码：");
 			String payPassword = input.next();
 			if (isTruePayPw(user, payPassword)) {
@@ -795,10 +832,10 @@ public class Menu {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要归还的单车Id");
 		int bikeId = input.nextInt();
+		UserSettings ps = us.queryUserSetting(user.getId());
+		boolean openPayPassword = ps.isActp() ? true : false;
 
-		boolean openPayPassword = true;
-
-		while (openPayPassword) {
+		while (!openPayPassword) {
 			System.out.println("请输入您的支付密码：");
 			String payPassword = input.next();
 			if (isTruePayPw(user, payPassword)) {

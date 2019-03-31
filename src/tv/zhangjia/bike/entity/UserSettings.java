@@ -32,5 +32,10 @@ public class UserSettings {
 		this.userId = userId;
 		this.actp = actp;
 	}
+	public UserSettings(int userId, boolean actp) {
+		super();
+		this.userId = userId;
+		this.actp = actp;
+	}
 	
 }

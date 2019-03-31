@@ -18,10 +18,10 @@ public class UserSettingsDaoImpl implements UserSettingsDao {
 		return false;
 	}
 	@Override
-	public int doInsert(int userId) {
-		UserSettings s = new UserSettings(Database.nextUserSettingsId(),userId,false);
-		userSettings.add(s);
-		return s.getId();
+	public int doInsert(UserSettings us) {
+		us.setId(Database.nextUserSettingsId());
+		userSettings.add(us);
+		return us.getId();
 	}
 	@Override
 	public UserSettings queryUserSetting(int id) {
