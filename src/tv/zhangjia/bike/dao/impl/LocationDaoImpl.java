@@ -119,10 +119,20 @@ public class LocationDaoImpl implements LocationDao {
 		
 		System.out.println(big);
 		System.out.println(small);*/
+		double size = 0;
+		for (Bike bike : bikes) {
+			if(bike.getStatus() != 0) {
+				size++;
+			}
+		}
+		System.out.println("一共有" + size);
+	
+		double  a = size / queryAll().size(); //自行车个数除以位置总数
+		System.out.println("size =" + size);
+		System.out.println("a = " +a);
+		int  average = (int) (Math.ceil(a));
 		
-		
-		
-		int  average = bikes.size() / queryAll().size();
+		System.out.println("平均数" + average);
 		Map<Integer, Integer> small = new TreeMap<>();
 		Map<Integer, Integer> big = new TreeMap<>();
 		for (Location lo : locations) {
@@ -156,40 +166,60 @@ public class LocationDaoImpl implements LocationDao {
 
 		});
 		
-		System.out.println(bigs);
-		System.out.println(smalls);
+		System.out.println("s = " + bigs);
+		System.out.println("s = " + smalls);
 		
-		for (int i = bigs.size() - 1; i >= 0; i--) {
-			for (int j = 0; j < smalls.size(); j++) {
-				int more = bigs.get(i).getValue() - average;
-				System.out.println("more = " + more);
+		
+		//多的位置车辆总数：A  
+		//少的位置车辆总数：B
+		int x  = 0;
+		for (int i = bigs.size() - 1; i >= 0; i--,x++) {
+			
+			for (int j = x; j < smalls.size(); j++) {
+				int more = bigs.get(i).getValue() - average; //A比平均数多出来多少辆
+//				System.out.println("more = " + more);
 //				int more = big.get(i) - average;
-				int need = average - smalls.get(j).getValue();
-				System.out.println("need = " + need);
-				int cost = more - need;
-				System.out.println("cost = " + cost);
+				int need = average - smalls.get(j).getValue(); // B比平均数少多少辆
+//				System.out.println("need = " + need);
+				int cost = more - need; // A 需要给B 多少辆
+//				System.out.println("cost = " + cost);
+				
+				if(more == 0) {
+					break;
+				}
+				
+				//如果B需要的车辆 < A
 				if(cost >= 0) {
-					bigs.get(i).setValue(bigs.get(i).getValue() - need);
-					smalls.get(j).setValue(smalls.get(j).getValue() + need);
+					System.out.println(">0");
+					bigs.get(i).setValue(bigs.get(i).getValue() - need);  //A给B所需要的所有车辆
+					smalls.get(j).setValue(smalls.get(j).getValue() + need); //B加上A给的的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
 					String smallname = queryLocationName(smalls.get(j).getKey());
 					arr.add("从" + bigname + "拿出" + need + "辆单车送往" + smallname);
 					
+				//如果A中还有剩余车辆，但是无法满足B的所有需求
 				} else {
-					bigs.get(i).setValue(bigs.get(i).getValue() - more);
-					smalls.get(j).setValue(smalls.get(j).getValue() + more);
+	
+					System.out.println("<0");
+					bigs.get(i).setValue(bigs.get(i).getValue() - more); //A把能给的都给B
+					smalls.get(j).setValue(smalls.get(j).getValue() + more); //B加上A给的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
 					String smallname = queryLocationName(smalls.get(j).getKey());
-					arr.add("从" + bigname + "拿出" + need + "辆单车送往" + smallname);
+					arr.add("从" + bigname + "拿出" + more + "辆单车送往" + smallname);
 					break;
 				}
+				System.out.println("内循环");
 				
 			}
+			
+			System.out.println("ing = " + bigs);
+			System.out.println("ing = " + smalls);
+			
 		}		
 		
-
-		System.out.println(bigs);
-		System.out.println(smalls);
+//
+		System.out.println("end = " + bigs);
+		System.out.println("end = " + smalls);
 		
 		
 		

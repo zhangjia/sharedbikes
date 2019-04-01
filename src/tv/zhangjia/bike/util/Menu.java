@@ -294,11 +294,20 @@ public class Menu {
 	}
 
 	private void dispatch() {
+		System.out.println("---------下面是最新的位置信息---------");
+		List<Location> locations = locationDao.queryAll();
+		System.out.println("编号\t位置名词\t车辆总数");
+		for (Location location : locations) {
+			System.out.print(location);
+		}
+		System.out.println("根据上面的位置信息，人工智障建议您：");
+		System.out.println();
 		List<String> arr = locationDao.dispatch();
 		for (String string : arr) {
 			System.out.println(string);
 		}
-		locationDao.dispatch();
+		returnMenu();
+//		locationDao.dispatch();
 
 	}
 
@@ -418,6 +427,8 @@ public class Menu {
 		for (Location location : locations) {
 			System.out.println(location);
 		}
+		
+	
 		System.out.println("输入位置ID查询位置信息，输入其他返回");
 
 		int locationID = -1;
@@ -457,9 +468,9 @@ public class Menu {
 	}
 
 	private void leaseRecord() {
-		System.out.println("-----------------------------------");
+		printBoundary();
 		if (user.isAdmin()) {
-			System.out.println("下面是所有的单车租赁记录");
+			System.out.println("----------下面是所有用户的单车租赁记录-----------");
 			List<LeaseRecord> bike = leaseRecordDao.queryAll();
 			System.out.println("编号\t自行车ID\t用户ID\t租赁用户\t租借时间\t归还时间\t消费金额");
 			for (LeaseRecord leaseRecord : bike) {
@@ -470,6 +481,9 @@ public class Menu {
 			System.out.println("下面是您的单车租赁记录");
 			List<LeaseRecord> bike = leaseRecordDao.queryByUserId(user.getId());
 			System.out.println("编号\t自行车ID\t用户ID\t租赁用户\t租借时间\t归还时间\t消费金额");
+			if(bike.isEmpty()) {
+				System.out.println("您没有租借任何单车");
+			}
 			for (LeaseRecord leaseRecord : bike) {
 				System.out.println(leaseRecord);
 			}
@@ -479,6 +493,7 @@ public class Menu {
 	}
 
 	private void userInfo() {
+		printBoundary();
 		if (user.isAdmin()) {
 			System.out.println("下面是所有会员信息");
 			List<User> user = userDao.queryAll();
@@ -558,7 +573,7 @@ public class Menu {
 				bike = bikeDao.queryById(bikeId);
 
 				if (bike == null) {
-					System.out.println("没有该ID");
+					System.out.println("没有该ID,请重新输入ID：");
 				} else if (bike.getStatus() != 1) {
 					System.out.println("此车不允许修改，请重新输入ID：");
 
@@ -636,6 +651,7 @@ public class Menu {
 		Bike bike2 = new Bike(bikeId, type, price, locationId, status, amount, qr);
 		boolean doUpdate = bikeDao.doUpdate(bike2);
 		if (doUpdate) {
+			locationDao.updateLocationBikes(bike2.getLocationId());
 			System.out.println("修改成功");
 		} else {
 			System.out.println("修改失败");

@@ -82,7 +82,7 @@ public class Database {
 		BIKES.add((new Bike(4, "助力车", as.getbBikePrice(), 4, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(5, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(6, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
-		BIKES.add((new Bike(7, "助力车", as.getbBikePrice(), 4, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(7, "助力车", as.getbBikePrice(), 2, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(8, "脚蹬车", as.getaBikePrice(), 3, 3, 1, 0, "二维码")));
 		BIKES.add((new Bike(9, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(10, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
@@ -90,12 +90,12 @@ public class Database {
 		BIKES.add((new Bike(12, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(13, "助力车", as.getbBikePrice(), 3, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(14, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(15, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(15, "助力车", as.getbBikePrice(), 2, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(16, "脚蹬车", as.getaBikePrice(), 4, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(17, "助力车", as.getbBikePrice(), 3, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(18, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(19, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(20, "脚蹬车", as.getaBikePrice(), 4, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(19, "助力车", as.getbBikePrice(), 2, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(20, "脚蹬车", as.getaBikePrice(), 2, 4, 1, 0, "二维码")));
 		
 		
 		for (Bike bike : BIKES) {
