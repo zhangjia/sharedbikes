@@ -234,10 +234,10 @@ public class Menu {
 					userInfo();
 					break;
 				case 10:
-					UsersWallet();//
+					usersWallet();//
 					break;
 				case 11:
-					UsersBill();//
+					usersBill();//
 					break;
 				case 12:
 					systemSettings();//
@@ -258,9 +258,9 @@ public class Menu {
 
 	}
 
-	private void UsersBill() {
-		printBoundary();
-		System.out.println("下面是用户的钱包信息");
+	private void usersBill() {
+		System.out.println("-------------下面是所有用户的账单信息-----------");
+		System.out.println("编号\t用户名\t账单名称\t余额变化\t产生时间");
 		List<Bill> bills = billDao.queryAll();
 		for (Bill bill : bills) {
 			System.out.println(bill);
@@ -268,8 +268,8 @@ public class Menu {
 
 	}
 
-	private void UsersWallet() {
-		System.out.println("--------下面是用户的钱包信息--------");
+	private void usersWallet() {
+		System.out.println("--------下面是所有用户的钱包信息--------");
 		System.out.println("编号\t用户名\t账户余额\t红包余额\t是否是VIP\t  VIP时间");
 		List<Wallet> wallets = walletDao.queryAll();
 		for (Wallet wallet : wallets) {

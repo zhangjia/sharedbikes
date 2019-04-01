@@ -49,7 +49,7 @@ public class WalletDaoImpl implements WalletDao {
 			if (w.getId() == walletId) {
 				// 增加账户余额
 				w.setBalance(w.getBalance() + money);
-				billDao.doInsert(queryUserId(walletId), "充值", money);
+				billDao.doInsert(queryUserId(walletId), "充值余额", money);
 				return 1;
 			}
 
@@ -68,7 +68,7 @@ public class WalletDaoImpl implements WalletDao {
 		c.setTime(date);
 		c.add(Calendar.MONTH, month);
 
-		if(pay(userId, month * as.getVipPrice(),"充值会员" )!= 1) {
+		if(pay(userId, month * as.getVipPrice(),"开通会员" )!= 1) {
 			return -5;
 		} else {
 			w.setVIP(true);
@@ -94,12 +94,12 @@ public class WalletDaoImpl implements WalletDao {
 			double h = money - coupon;
 			pw.setCoupon(0);
 			pw.setBalance(pw.getBalance() - h);
-			billDao.doInsert(queryUserId(pw.getId()), type, money);
+			billDao.doInsert(queryUserId(pw.getId()), type, -money);
 			return 1;
 		} else {
 			//如果红包余额够，只扣红包的钱
 			pw.setCoupon(coupon - money);
-			billDao.doInsert(queryUserId(pw.getId()), type, money);
+			billDao.doInsert(queryUserId(pw.getId()), type, -money);
 			return 1;
 		}
 	}

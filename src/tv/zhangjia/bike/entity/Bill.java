@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -44,15 +45,23 @@ public class Bill {
 	}
 	@Override
 	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String username = "";
+		String sm = "";
 		for (User user : users) {
 			if(user.getId() == userId) {
 				username = user.getUsername();
 			}
 			
 		}
-		return + id + "\t" + username + "\t" + billName + "\t" + billDate
-				+ "\t" + money  + "\n";
+		if(money >= 0) {
+			sm = "+" + money;
+		} else {
+			sm = "" + money;
+		}
+		
+		return + id + "\t" + username + "\t" + billName +  "\t" + sm  
+				+ "\t" + sdf.format(billDate) + "\n";
 	}
 	public Bill() {
 		super();
