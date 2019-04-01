@@ -25,6 +25,15 @@ public class Bike {
 	private List<Location> ls = Database.LOCATIONS;
 	
 	
+	public Bike(int id, String type, double price, int locationId, int status, int amount) {
+		super();
+		this.id = id;
+		this.type = type;
+		this.price = price;
+		this.locationId = locationId;
+		this.status = status;
+		this.amount = amount;
+	}
 	public Bike(String type, double price, int locationId, int status, int amount, String qr) {
 		super();
 		this.type = type;
@@ -147,8 +156,14 @@ public class Bike {
 	public String toString() {
 		String locationName = null;
 		for (Location location : ls) {
-			if(location.getId() == locationId)
+			
+			if(location.getId() == locationId) {
 				locationName = location.getLocation();
+			} 
+		}
+		
+		if(locationId == -1) {
+				locationName = "ÆïÐÐÖÐ";
 		}
 		String statusName = null;
 		if(status == 1) {

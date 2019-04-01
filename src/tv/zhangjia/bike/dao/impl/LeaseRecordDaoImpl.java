@@ -48,6 +48,7 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 			bike.setAmount(bike.getAmount() + 1); // 借出次数+1
 			bike.setLastLocationId(bike.getLocationId());
 			bike.setLocationId(-1); //-1为骑行状态
+			System.out.println(bike.getLocationId());
 			locationDao.updateLocationBikes(bike.getLastLocationId());
 			//生成借车记录
 			LeaseRecord lr = new LeaseRecord(Database.nextLeaseRecordId(), bikeId, userId,

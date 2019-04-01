@@ -29,6 +29,7 @@ public class BikeDaoImpl implements BikeDao{
 	public boolean doInsert(Bike bike) {
 		bike.setId(Database.nextBikeId());
 //		locationDao.addBikeLocation(bike.getId(), bike.getLocationId());
+		bike.setLastLocationId(bike.getLocationId());
 		bikes.add(bike);
 		
 		try {

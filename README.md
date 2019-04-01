@@ -10,6 +10,7 @@
 - 支付密码作为一个方法
 - forech检查
 - while 里面有switch
+- Bike借走后，位置就是null
 
 ## 钱包系统
 - 个人余额
