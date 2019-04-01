@@ -64,31 +64,37 @@ public class Menu {
 		System.out.println("-------你看到我的底线了-------");
 		System.out.println();
 		System.out.print("请选择您接下来的操作:");
-
+		int index = 1;
 		// 用while循环实现如果选项不存在，重新输入
 		while (true) {
 			String choose = input.next();
 			// 判断输入的内容是否为整数
 			if (iiv.isNumber(choose)) {
-				int index = Integer.parseInt(choose);
-				switch (index) {
-				case 1:
-					userLogin();
+				index = Integer.parseInt(choose);
+				if (index > 3) {
+					System.out.println("不存在此选项");
+				} else {
 					break;
-				case 2:
-					userRegister();
-					break;
-				case 33:
-					exit();
-					break;
-				default:
-					System.out.print("没有该选项，请重新输入：");
 				}
 			} else {
 				System.out.print("输入不合法,，请重新输入：");
 			}
-
 		}
+
+		switch (index) {
+		case 1:
+			userLogin();
+			break;
+		case 2:
+			userRegister();
+			break;
+		case 3:
+			exit();
+			break;
+		default:
+			System.out.print("没有该选项，请重新输入：");
+		}
+
 	}
 
 	private User retrievePassword(int userId) {
@@ -201,59 +207,67 @@ public class Menu {
 		System.out.println("\t14.退出系统");
 		printBoundary();
 		System.out.print("请选择您接下来的操作:");
+		int index = 1;
 		while (true) {
 			String nextInt = input.next();
 			if (iiv.isNumber(nextInt)) {
-				int index = Integer.parseInt(nextInt);
-				switch (index) {
-				case 1:
-					queryBike();
+				index = Integer.parseInt(nextInt);
+				if (index > 14) {
+					System.out.println("不存在此选项,请重新输入：");
+				} else {
 					break;
-				case 2:
-					saveBike();
-					break;
-				case 3:
-					editBike();
-					break;
-				case 4:
-					deleteBike();
-					break;
-				case 5:
-					damage();
-					break;
-				case 6:
-					Location();//
-					break;
-				case 7:
-					dispatch();// 调度
-					break;
-				case 8:
-					leaseRecord();
-					break;
-				case 9:
-					userInfo();
-					break;
-				case 10:
-					usersWallet();//
-					break;
-				case 11:
-					usersBill();//
-					break;
-				case 12:
-					systemSettings();//
-					break;
-				case 13:
-					logout();//
-					break;
-				case 14:
-					exit();//
-					break;
-				default:
-					System.out.print("没有该选项，请重新输入：");
 				}
+
 			} else {
 				System.out.println("输入不合法，请重新输入：");
 			}
+		}
+
+		switch (index) {
+		case 1:
+			queryBike();
+			break;
+		case 2:
+			saveBike();
+			break;
+		case 3:
+			editBike();
+			break;
+		case 4:
+			deleteBike();
+			break;
+		case 5:
+			damage();
+			break;
+		case 6:
+			Location();//
+			break;
+		case 7:
+			dispatch();// 调度
+			break;
+		case 8:
+			leaseRecord();
+			break;
+		case 9:
+			userInfo();
+			break;
+		case 10:
+			usersWallet();//
+			break;
+		case 11:
+			usersBill();//
+			break;
+		case 12:
+			systemSettings();//
+			break;
+		case 13:
+			logout();//
+			break;
+		case 14:
+			exit();//
+			break;
+		default:
+			System.out.print("没有该选项，请重新输入：");
 		}
 
 	}
@@ -265,6 +279,7 @@ public class Menu {
 		for (Bill bill : bills) {
 			System.out.println(bill);
 		}
+		returnMenu();
 
 	}
 
@@ -275,7 +290,7 @@ public class Menu {
 		for (Wallet wallet : wallets) {
 			System.out.println(wallet);
 		}
-		
+
 		returnMenu();
 
 	}
@@ -309,7 +324,7 @@ public class Menu {
 			System.out.println(string);
 		}
 		returnMenu();
-//		locationDao.dispatch();
+		// locationDao.dispatch();
 
 	}
 
@@ -325,90 +340,98 @@ public class Menu {
 
 	private void systemSettings() {
 		AdminSettings ass = as.queryAdminSettings();
-		System.out.println("下面是管理员设置");
+		System.out.println("-----------下面是管理员设置-----------");
 		System.out.println("1. 设置脚蹬车价格");
 		System.out.println("2. 设置助力车价格");
 		System.out.println("3. 设置开会员价格");
 		System.out.println("4. 设置会员的折扣");
 		System.out.println("5. 设置站内的广告");
 		System.out.println("请选择设置：");
+		int index = -1;
 		while (true) {
-			String index = input.next();
-			if (iiv.isNumber(index)) {
-				switch (Integer.parseInt(index)) {
-				case 1:
-					System.out.println("请输入脚蹬车价格：");
-					while (true) {
-						String price = input.next();
-						if (iiv.isDouble(price)) {
-							double dprice = Double.parseDouble(price);
-							ass.setaBikePrice(dprice);
-							System.out.println("设置成功");
-							break;
-						} else {
-							System.out.println("输入不合法，请重新输入：");
-
-						}
-					}
+			String s = input.next();
+			if (iiv.isNumber(s)) {
+				index = Integer.parseInt(s);
+				if (index >= 5) {
+					System.out.println("不存在此选项,请重新输入：");
+				} else {
 					break;
-				case 2:
-					System.out.println("请输入助力车价格：");
-					while (true) {
-						String price = input.next();
-						if (iiv.isDouble(price)) {
-							double dprice = Double.parseDouble(price);
-							ass.setbBikePrice(dprice);
-							System.out.println("设置成功");
-							break;
-						} else {
-							System.out.println("输入不合法，请重新输入：");
-
-						}
-					}
-					break;
-				case 3:
-					System.out.println("请输入会员/月价格：");
-					while (true) {
-						String price = input.next();
-						if (iiv.isDouble(price)) {
-							double dprice = Double.parseDouble(price);
-							ass.setVipPrice(dprice);
-							System.out.println("设置成功");
-							break;
-						} else {
-							System.out.println("输入不合法，请重新输入：");
-
-						}
-					}
-					break;
-				case 4:
-					while (true) {
-						String discount = input.next();
-						if (iiv.isDouble(discount)) {
-							double ddiscount = Double.parseDouble(discount);
-							ass.setDiscount(ddiscount);
-							System.out.println("设置成功");
-							break;
-						} else {
-							System.out.println("输入不合法，请重新输入：");
-
-						}
-					}
-					break;
-				case 5:
-					System.out.println("请输入广告内容：");
-					String advertising = input.next();
-					ass.setAdvertising(advertising);
-					System.out.println("设置成功");
-					break;
-				default:
-					System.out.println("没有该选项，请重新选择：");
 				}
+
 			} else {
 				System.out.println("输入不合法，请重新选择：");
 			}
 
-			adminMenu();
+		}
+
+		switch (index) {
+		case 1:
+			System.out.println("请输入脚蹬车价格：");
+			while (true) {
+				String price = input.next();
+				if (iiv.isDouble(price)) {
+					double dprice = Double.parseDouble(price);
+					ass.setaBikePrice(dprice);
+					System.out.println("设置成功");
+					break;
+				} else {
+					System.out.println("输入不合法，请重新输入：");
+
+				}
+			}
+			break;
+		case 2:
+			System.out.println("请输入助力车价格：");
+			while (true) {
+				String price = input.next();
+				if (iiv.isDouble(price)) {
+					double dprice = Double.parseDouble(price);
+					ass.setbBikePrice(dprice);
+					System.out.println("设置成功");
+					break;
+				} else {
+					System.out.println("输入不合法，请重新输入：");
+
+				}
+			}
+			break;
+		case 3:
+			System.out.println("请输入会员/月价格：");
+			while (true) {
+				String price = input.next();
+				if (iiv.isDouble(price)) {
+					double dprice = Double.parseDouble(price);
+					ass.setVipPrice(dprice);
+					System.out.println("设置成功");
+					break;
+				} else {
+					System.out.println("输入不合法，请重新输入：");
+
+				}
+			}
+			break;
+		case 4:
+			while (true) {
+				String discount = input.next();
+				if (iiv.isDouble(discount)) {
+					double ddiscount = Double.parseDouble(discount);
+					ass.setDiscount(ddiscount);
+					System.out.println("设置成功");
+					break;
+				} else {
+					System.out.println("输入不合法，请重新输入：");
+
+				}
+			}
+			break;
+		case 5:
+			System.out.println("请输入广告内容：");
+			String advertising = input.next();
+			ass.setAdvertising(advertising);
+			System.out.println("设置成功");
+			break;
+		default:
+			System.out.println("没有该选项，请重新选择：");
 		}
 
 	}
@@ -429,8 +452,7 @@ public class Menu {
 		for (Location location : locations) {
 			System.out.println(location);
 		}
-		
-	
+
 		System.out.println("输入位置ID查询位置信息，输入其他返回");
 
 		int locationID = -1;
@@ -450,7 +472,7 @@ public class Menu {
 			}
 
 		}
-		
+
 		printBoundary();
 		Location lo = locationDao.queryLocation(locationID);
 		System.out.println("编号\t位置名词\t车辆总数");
@@ -483,7 +505,7 @@ public class Menu {
 			System.out.println("下面是您的单车租赁记录");
 			List<LeaseRecord> bike = leaseRecordDao.queryByUserId(user.getId());
 			System.out.println("编号\t自行车ID\t用户ID\t租赁用户\t租借时间\t归还时间\t消费金额");
-			if(bike.isEmpty()) {
+			if (bike.isEmpty()) {
 				System.out.println("您没有租借任何单车");
 			}
 			for (LeaseRecord leaseRecord : bike) {
@@ -763,51 +785,59 @@ public class Menu {
 		System.out.println("\t11.故障报修");
 
 		System.out.print("请选择您接下来的操作:");
+		int index = 1;
 		while (true) {
 			String nextInt = input.next();
 
 			if (iiv.isNumber(nextInt)) {
-				int index = Integer.parseInt(nextInt);
-				switch (index) {
-				case 1:
-					queryBike();
+				index = Integer.parseInt(nextInt);
+				if (index > 11) {
+					System.out.println("没有该选项，请重新输入:");
+				} else {
 					break;
-				case 2:
-					leaseBike();
-					break;
-				case 3:
-					returnBike();
-					break;
-				case 4:
-					userInfo();
-					break;
-				case 5:
-					personWallet();
-					break;
-				case 6:
-					leaseRecord();
-					break;
-				case 7:
-					Setting();
-					break;
-				case 8:
-					logout();// 退出登录
-					break;
-				case 9:
-					exit();// 退出
-					break;
-				case 10:
-					personSettings();// 退出
-					break;
-				case 11:
-					awardByRepairs();// 报修奖励
-					break;
-				default:
-					System.out.print("没有该选项，请重新输入：");
 				}
+
 			} else {
 				System.out.println("输入不合法，请重新输入：");
 			}
+		}
+
+		switch (index) {
+		case 1:
+			queryBike();
+			break;
+		case 2:
+			leaseBike();
+			break;
+		case 3:
+			returnBike();
+			break;
+		case 4:
+			userInfo();
+			break;
+		case 5:
+			personWallet();
+			break;
+		case 6:
+			leaseRecord();
+			break;
+		case 7:
+			// Setting();
+			break;
+		case 8:
+			logout();// 退出登录
+			break;
+		case 9:
+			exit();// 退出
+			break;
+		case 10:
+			personSettings();// 退出
+			break;
+		case 11:
+			awardByRepairs();// 报修奖励
+			break;
+		default:
+			System.out.print("没有该选项，请重新输入：");
 		}
 
 	}
@@ -969,11 +999,6 @@ public class Menu {
 		List<Bill> userBills = billDao.queryUserBill(user.getId());
 		System.out.println("用户编号\t用户余额\t优惠券余额\t用户等级\tVIP时间");
 		System.out.println(userBills);
-	}
-
-	private void Setting() {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void returnBike() {

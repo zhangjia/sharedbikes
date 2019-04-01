@@ -9,6 +9,7 @@
 - 实体类中不出现Database
 - 支付密码作为一个方法
 - forech检查
+- while 里面有switch
 
 ## 钱包系统
 - 个人余额
