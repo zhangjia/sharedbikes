@@ -259,6 +259,7 @@ public class Menu {
 	}
 
 	private void queryUsersBill() {
+		printBoundary();
 		System.out.println("下面是用户的钱包信息");
 		List<Bill> bills = billDao.queryAll();
 		for (Bill bill : bills) {
@@ -268,6 +269,7 @@ public class Menu {
 	}
 
 	private void queryUsersWallet() {
+		printBoundary();
 		System.out.println("下面是用户的钱包信息");
 		List<Wallet> wallets = walletDao.queryAll();
 		for (Wallet wallet : wallets) {
@@ -278,11 +280,16 @@ public class Menu {
 
 	private void damage() {
 		List<Bike> bikes = bikeDao.queryByDamage();
-		System.out.println("下面是损坏的车辆");
-		for (Bike bike : bikes) {
+		System.out.println("----------下面是损坏的车辆----------");
+		if (bikes.isEmpty()) {
+			System.out.println("太好了，目前没有车辆损坏！");
 
-			System.out.println(bike);
+		} else {
+			for (Bike bike : bikes) {
+				System.out.println(bike);
+			}
 		}
+		returnMenu();
 
 	}
 
@@ -507,7 +514,7 @@ public class Menu {
 
 		int locationId = bike.getLocationId();
 		if (bikeDao.doDelete(bikeId)) {
-//			locationDao.deleteLocationBikes(locationId,bikeId);
+			// locationDao.deleteLocationBikes(locationId,bikeId);
 			locationDao.updateLocationBikes(locationId);
 			System.out.println("删除成功");
 		} else {
