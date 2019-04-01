@@ -412,29 +412,41 @@ public class Menu {
 	}
 
 	private void queryLocation() {
-		System.out.println("下面是所有的位置信息：");
+		System.out.println("----------下面是所有的位置信息----------");
 		List<Location> locations = locationDao.queryAll();
 		System.out.println("编号\t位置名词\t车辆总数");
 		for (Location location : locations) {
 			System.out.println(location);
 		}
+		System.out.println("输入位置ID查询位置信息，输入其他返回");
 
+		int locationID = -1;
 		while (true) {
-			System.out.print("查询指定位置：");
-			int id = input.nextInt();
-			if (id == -1)
-				break;
-			Location lo = locationDao.queryLocation(id);
-			System.out.println("编号\t位置名词\t车辆总数");
-			List<Bike> bs = lo.getBikes();
-			for (Bike bike : bs) {
+			String str = input.next();
+			if (iiv.isNumber(str)) {
+				locationID = Integer.parseInt(str);
+				Location lo = locationDao.queryLocation(locationID);
+				if (lo == null) {
+					System.out.println("此位置不存在，请重新输入：");
+				} else {
+					break;
+				}
 
-				System.out.println(bike);
+			} else {
+				adminMenu();
 			}
 
 		}
+		
+		printBoundary();
+		Location lo = locationDao.queryLocation(locationID);
+		System.out.println("编号\t位置名词\t车辆总数");
+		List<Bike> bs = lo.getBikes();
+		for (Bike bike : bs) {
 
-		adminMenu();
+			System.out.println(bike);
+		}
+		returnMenu();
 	}
 
 	private void logout() {
