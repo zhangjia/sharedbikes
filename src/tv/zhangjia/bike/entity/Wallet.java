@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -108,6 +109,7 @@ public class Wallet {
 
 	@Override
 	public String toString() {
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String username = "";
 		for (User user : users) {
 			if (user.getId() == userId) {
@@ -116,7 +118,7 @@ public class Wallet {
 		}
 		
 		
-		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + isVIP + "\t" + (vipDate == null ? "未开通" : vipDate);
+		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + (isVIP ? "是" : "否" )+ "\t" + (vipDate == null ? "未开通" : sdf.format(vipDate));
 	}
 
 	public Wallet() {

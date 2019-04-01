@@ -222,7 +222,7 @@ public class Menu {
 					damage();
 					break;
 				case 6:
-					queryLocation();//
+					Location();//
 					break;
 				case 7:
 					dispatch();// 调度
@@ -234,10 +234,10 @@ public class Menu {
 					userInfo();
 					break;
 				case 10:
-					queryUsersWallet();//
+					UsersWallet();//
 					break;
 				case 11:
-					queryUsersBill();//
+					UsersBill();//
 					break;
 				case 12:
 					systemSettings();//
@@ -258,7 +258,7 @@ public class Menu {
 
 	}
 
-	private void queryUsersBill() {
+	private void UsersBill() {
 		printBoundary();
 		System.out.println("下面是用户的钱包信息");
 		List<Bill> bills = billDao.queryAll();
@@ -268,13 +268,15 @@ public class Menu {
 
 	}
 
-	private void queryUsersWallet() {
-		printBoundary();
-		System.out.println("下面是用户的钱包信息");
+	private void UsersWallet() {
+		System.out.println("--------下面是用户的钱包信息--------");
+		System.out.println("编号\t用户名\t账户余额\t红包余额\t是否是VIP\t  VIP时间");
 		List<Wallet> wallets = walletDao.queryAll();
 		for (Wallet wallet : wallets) {
 			System.out.println(wallet);
 		}
+		
+		returnMenu();
 
 	}
 
@@ -420,7 +422,7 @@ public class Menu {
 		}
 	}
 
-	private void queryLocation() {
+	private void Location() {
 		System.out.println("----------下面是所有的位置信息----------");
 		List<Location> locations = locationDao.queryAll();
 		System.out.println("编号\t位置名词\t车辆总数");
