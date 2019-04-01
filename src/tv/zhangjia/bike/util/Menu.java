@@ -62,6 +62,7 @@ public class Menu {
 		System.out.println("\t2.注册");
 		System.out.println("\t3.退出 ");
 		System.out.println("-------你看到我的底线了-------");
+		System.out.println();
 		System.out.print("请选择您接下来的操作:");
 
 		// 用while循环实现如果选项不存在，重新输入
@@ -198,6 +199,7 @@ public class Menu {
 		System.out.println("\t12.系统设置");
 		System.out.println("\t13.退出登录");
 		System.out.println("\t14.退出系统");
+		printBoundary();
 		System.out.print("请选择您接下来的操作:");
 		while (true) {
 			String nextInt = input.next();
@@ -567,9 +569,9 @@ public class Menu {
 	 * 添加单车
 	 */
 	private void saveBike() {
-		System.out.println("-----------------------------------");
-		System.out.println("添加单车");
-		System.out.println("请输入单车类型：");
+		printBoundary();
+//		System.out.println("添加单车");
+		System.out.print("请输入单车类型（脚蹬车/助力车）：");
 		String type;
 		double price;
 		while (true) {
@@ -604,9 +606,7 @@ public class Menu {
 			}
 			System.out.println("请重新选择位置ID：");
 		}
-		// TODO ：验证码
 		String qr = "验证码";
-
 		Bike bike = new Bike(type, price, locationId, 1, 0, qr);
 		boolean doInsert = bikeDao.doInsert(bike);
 		if (doInsert) {
@@ -629,15 +629,16 @@ public class Menu {
 	 * 查询所有的单车
 	 */
 	private void queryBike() {
-		System.out.println("-----------------------------------");
 		/*
 		 * System.out.println("下面是所有的单车"); List<LeaseRecord> leaseRecordDaos =
 		 * leaseRecordDao.queryAll(); System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		 * for (LeaseRecord record : leaseRecordDaos) { System.out.println(record); }
 		 * returnMenu();
 		 */
+		
+		printBoundary();
 
-		System.out.println("下面是所有的单车");
+		System.out.println("下面是系统内所有的单车相关信息");
 		List<Bike> bike = bikeDao.queryAll();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
@@ -650,7 +651,6 @@ public class Menu {
 	 * 普通用户主界面
 	 */
 	private void userMenu() {
-		System.out.println("-----------------------------------");
 		advertising(user);
 		System.out.println("尊敬的" + user.getUsername() + "用户，您好！");
 		System.out.println("\t1.查询单车");
@@ -880,7 +880,6 @@ public class Menu {
 	}
 
 	private void returnBike() {
-		System.out.println("-----------------------------------");
 		System.out.println("请输入您要归还的单车Id");
 		int bikeId = input.nextInt();
 		UserSettings ps = us.queryUserSetting(user.getId());
@@ -914,7 +913,6 @@ public class Menu {
 	}
 
 	private void leaseBike() {
-		System.out.println("-----------------------------------");
 		System.out.println("请输入您要租借的单车ID：");
 		int bikeId = input.nextInt();
 		int result = leaseRecordDao.doInsert(user.getId(), bikeId);
@@ -963,7 +961,6 @@ public class Menu {
 	 * @Title userRegister
 	 */
 	private void userRegister() {
-		System.out.println("-----------------------------------");
 		System.out.print("请输入您的用户名：");
 		String username;
 		while (true) {
@@ -1027,7 +1024,6 @@ public class Menu {
 	 * @Title exit
 	 */
 	private void exit() {
-		System.out.println("-----------------------------------");
 		input.close();
 		System.out.println("您已经退出系统，没有后悔的余地了");
 		System.exit(0);
@@ -1059,9 +1055,8 @@ public class Menu {
 		}
 	}
 
-	public <T> T isTrueInput(T a) {
-
-		return a;
-
+	private void printBoundary() {
+		System.out.println("----------------------------------");
 	}
+	
 }
