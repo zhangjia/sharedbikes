@@ -188,16 +188,16 @@ public class Menu {
 		System.out.println("\t2.添加单车");
 		System.out.println("\t3.修改单车");
 		System.out.println("\t4.删除单车");
-		System.out.println("\t5.用户信息");
-		System.out.println("\t6.租赁记录");
-		System.out.println("\t7.查询位置");
-		System.out.println("\t8.系统设置");
-		System.out.println("\t9.需要调度");
-		System.out.println("\t10.车辆损坏");
-		System.out.println("\t11.退出系统");
-		System.out.println("\t12.退出系统");
-		System.out.println("\t13.用户钱包");
-		System.out.println("\t14.用户账单");
+		System.out.println("\t5.已坏单车");
+		System.out.println("\t6.查看位置");
+		System.out.println("\t7.调度建议");
+		System.out.println("\t8.租赁记录");
+		System.out.println("\t9.用户信息");
+		System.out.println("\t10.用户钱包");
+		System.out.println("\t11.用户账单");
+		System.out.println("\t12.系统设置");
+		System.out.println("\t13.退出登录");
+		System.out.println("\t14.退出系统");
 		System.out.print("请选择您接下来的操作:");
 		while (true) {
 			String nextInt = input.next();
@@ -217,34 +217,34 @@ public class Menu {
 					deleteBike();
 					break;
 				case 5:
-					userInfo();
-					break;
-				case 6:
-					leaseRecord();
-					break;
-				case 7:
-					queryLocation();//
-					break;
-				case 8:
-					systemSettings();// 退出
-					break;
-				case 9:
-					dispatch();// 调度
-					break;
-				case 10:
 					damage();
 					break;
+				case 6:
+					queryLocation();//
+					break;
+				case 7:
+					dispatch();// 调度
+					break;
+				case 8:
+					leaseRecord();
+					break;
+				case 9:
+					userInfo();
+					break;
+				case 10:
+					queryUsersWallet();//
+					break;
 				case 11:
-					logout();// 退出
+					queryUsersBill();// 
 					break;
 				case 12:
-					exit();// 退出
+					systemSettings();//
 					break;
 				case 13:
-					queryUsersWallet();// 退出
+					logout();// 
 					break;
 				case 14:
-					queryUsersBill();// 退出
+					exit();// 
 					break;
 				default:
 					System.out.print("没有该选项，请重新输入：");
@@ -393,6 +393,15 @@ public class Menu {
 
 	}
 
+	private void addBikequeryLocation() {
+		System.out.println("下面是所有的位置信息：");
+		List<Location> locations = locationDao.queryAll();
+		System.out.println("编号\t位置名词\t车辆总数");
+		for (Location location : locations) {
+			System.out.println(location);
+		}
+	}
+	
 	private void queryLocation() {
 		System.out.println("下面是所有的位置信息：");
 		List<Location> locations = locationDao.queryAll();
@@ -575,8 +584,26 @@ public class Menu {
 				System.out.println("没有该车型，请重新输入：");
 			}
 		}
-		System.out.println("请输入位置：");
-		int locationId = input.nextInt();
+		
+		addBikequeryLocation();
+		System.out.println("您要将该车添加到哪个位置？(ID)：");
+		
+		int locationId = -1;
+		while(true) {
+			String str = input.next();
+			if(iiv.isNumber(str)) {
+				 locationId = Integer.parseInt(str);
+				if(locationDao.queryLocation(locationId) == null) {
+					System.out.println("没有该位置");
+				} else {
+					break;
+				}
+				
+			} else {
+				System.out.print("输入不合法，");
+			}
+			System.out.println("请重新选择位置ID：");
+		}
 		// TODO ：验证码
 		String qr = "验证码";
 
