@@ -67,4 +67,7 @@ public interface LocationDao {
 	int addBikeLocation(int bikeId, int locationId);*/
 	
 	boolean updateLocationBikes(int locationId);
+	
+	
+	public boolean deleteLocationBikes(int locationId,int bikeID);
 }

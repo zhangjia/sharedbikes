@@ -9,7 +9,7 @@ public class InputIsValid {
 			System.out.print("请输入：");
 			String str = input.next();
 			
-			if(str.matches("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[1-9]\\d*$")) {
+			if(str.matches("^-?[0-9]\\d*$")) {
 				System.out.println("合法");
 			} else {
 				System.out.println("不合法");
@@ -18,7 +18,7 @@ public class InputIsValid {
 		}
 	}
 	/**
-	 * 输入是否是数字
+	 * 输入是否是正整数
 	 * @param str
 	 * @return
 	 */
@@ -30,6 +30,18 @@ public class InputIsValid {
 		}
 	}
 	
+	/**
+	 * 输入是否是整数
+	 * @param str
+	 * @return
+	 */
+	public boolean isInt(String str) {
+		if(str.matches("^-?[0-9]\\d*$")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * 输入的是否是正整数或者正double

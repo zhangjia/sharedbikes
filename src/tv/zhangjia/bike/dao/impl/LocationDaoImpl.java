@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 
+import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
@@ -233,10 +234,22 @@ public class LocationDaoImpl implements LocationDao {
 		for (Bike bike : bikes) {
 			if(bike.getLocationId() == locationId) {
 				b.add(bike);
-			}
+			} 
 		}
 		
 		queryLocation(locationId).setBikes(b);
+		return true;
+	}
+	
+	
+	@Override
+	public boolean deleteLocationBikes(int locationId,int bikeID) {
+		BikeDao bikeDao = new BikeDaoImpl();
+		//获取该位置的信息
+		Location lo = queryLocation(locationId);
+		Bike bike = bikeDao.queryById(bikeID);
+		
+		lo.getBikes().remove(bike);
 		return true;
 	}
 

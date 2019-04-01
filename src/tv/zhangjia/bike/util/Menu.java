@@ -484,20 +484,34 @@ public class Menu {
 	private void deleteBike() {
 		System.out.println("-----------------------------------");
 		System.out.println("请输入您要删除的单车ID：");
-		int id = input.nextInt();
-
-		if (bikeDao.queryById(id) == null) {
-			System.out.println("不存在此id");
-
-		} else {
-			Bike bike = bikeDao.queryById(id);
-			int bid = bike.getId();
-			if (bikeDao.doDelete(id)) {
-				locationDao.updateLocationBikes(bid);
-				System.out.println("删除成功");
+		Bike bike = null;
+		int bikeId = -1;
+		while (true) {
+			String str = input.next();
+			if (iiv.isNumber(str)) {
+				bikeId = Integer.parseInt(str);
+				bike = bikeDao.queryById(bikeId);
+				if (bike == null) {
+					System.out.println("不存在此id");
+				} else if (bike.getStatus() == 0) {
+					System.out.println("此单车不能被删除");
+				} else {
+					break;
+				}
 			} else {
-				System.out.println("删除失败");
+				System.out.print("输入不合法，");
 			}
+
+			System.out.println("请重新输入要删除的ID");
+		}
+
+		int locationId = bike.getLocationId();
+		if (bikeDao.doDelete(bikeId)) {
+//			locationDao.deleteLocationBikes(locationId,bikeId);
+			locationDao.updateLocationBikes(locationId);
+			System.out.println("删除成功");
+		} else {
+			System.out.println("删除失败");
 		}
 
 		System.out.println("是否继续删除？");
@@ -576,7 +590,7 @@ public class Menu {
 		int status = 1;
 		while (true) {
 			String str = input.next();
-			if (iiv.isNumber(str)) {
+			if (iiv.isInt(str)) {
 				status = Integer.parseInt(str);
 				if (status != 1 && status != 0 && status != -1) {
 					System.out.println("没有此状态，请重新输入：");
