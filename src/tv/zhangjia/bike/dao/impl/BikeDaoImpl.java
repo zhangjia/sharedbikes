@@ -1,13 +1,17 @@
 package tv.zhangjia.bike.dao.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.util.Zxing;
 
 /**
  * BikeDao接口的实现类
@@ -30,7 +34,15 @@ public class BikeDaoImpl implements BikeDao{
 //		locationDao.addBikeLocation(bike.getId(), bike.getLocationId());
 		bikes.add(bike);
 		
-		
+		try {
+			Zxing.generateQR(bike);
+		} catch (WriterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return locationDao.updateLocationBikes(bike.getLocationId());
 	}
 

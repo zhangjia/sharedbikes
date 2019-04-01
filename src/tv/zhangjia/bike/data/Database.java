@@ -1,10 +1,13 @@
 package tv.zhangjia.bike.data;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
@@ -16,6 +19,7 @@ import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
+import tv.zhangjia.bike.util.Zxing;
 
 /**
  * 模拟数据库
@@ -92,6 +96,16 @@ public class Database {
 		BIKES.add((new Bike(18, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(19, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(20, "脚蹬车", as.getaBikePrice(), 4, 4, 1, 0, "二维码")));
+		
+		
+		for (Bike bike : BIKES) {
+			try {
+				Zxing.generateQR(bike);
+			} catch (WriterException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 
 

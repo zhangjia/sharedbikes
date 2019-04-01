@@ -1,4 +1,4 @@
-package tv.zhangjia.bike.entity;
+package tv.zhangjia.bike.util;
 
 import java.util.Random;
 
