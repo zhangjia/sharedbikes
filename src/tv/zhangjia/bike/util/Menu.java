@@ -486,7 +486,7 @@ public class Menu {
 
 	private void logout() {
 		System.out.println("-----------------------------------");
-		// user = null;
+		System.out.println("期待您再次登录！");
 		mainMenu();
 
 	}
@@ -1146,9 +1146,25 @@ public class Menu {
 	 * @Title exit
 	 */
 	private void exit() {
-		input.close();
-		System.out.println("您已经退出系统，没有后悔的余地了");
-		System.exit(0);
+		printBoundary();
+		System.out.println("确认退出？不是手抖？y退出，任意键返回");
+		String s = input.next();
+		if (!s.equals("y")) {
+			if (user == null) {
+				mainMenu();
+				return;
+			}
+			if (user.isAdmin()) {
+				adminMenu();// 管理员菜单
+			} else {
+				userMenu();// 普通用户菜单
+			}
+		} else {
+			printBoundary();
+			System.out.println("您已经退出系统，没有后悔的余地了,期待您再次使用！");
+			input.close();
+			System.exit(0);
+		}
 	}
 
 	/**
