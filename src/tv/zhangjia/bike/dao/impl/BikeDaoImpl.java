@@ -24,10 +24,7 @@ import tv.zhangjia.bike.util.Zxing;
  */
 public class BikeDaoImpl implements BikeDao{
 	private List<Bike> bikes = Database.BIKES;
-	
-	//用于添加车辆的时候，位置的车辆总数+1
-	//TODO 创建queryLocation方法
-	private LocationDao locationDao = new LocationDaoImpl();
+
 	@Override
 	public boolean doInsert(Bike bike) {
 		bike.setId(Database.nextBikeId());
@@ -43,6 +40,10 @@ public class BikeDaoImpl implements BikeDao{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		//用于添加车辆的时候，位置的车辆总数+1
+		//TODO 创建queryLocation方法
+		LocationDao locationDao = new LocationDaoImpl();
 		return locationDao.updateLocationBikes(bike.getLocationId());
 	}
 
@@ -87,41 +88,7 @@ public class BikeDaoImpl implements BikeDao{
 		}
 		return null;
 	}
-//
-//	@Override
-//	public int doLease(int id,User user) {
-//		for (Bike bike : bikes) {
-//		
-//			if(bike.getId() == id ) {
-//				if (bike.getStatus() == 1) {
-//					
-//					bike.setStatus(0); //设置为借出状态
-//					bike.setAmount(bike.getAmount() + 1); //借出次数+1
-//					
-//					leaseRecordDao.addRecord(new LeaseRecord(id,user.getId(),user.getUsername(),"0","0","1"));
-//					
-// 					return 1; 	//如果有该ID，并且状态是可借,返回1代表可借
-//				}
-//				return -1; //-1 代表不可借
-//			} 
-//		}
-//		return 0; //0代表ID不存在
-//	}
-//
-//	@Override
-//	public int doReturn(int bikeId, int userId, int recordId) {
-//		for (Bike bike : bikes) {
-//			if(bike.getId() == id ) {
-//				if (bike.getStatus() == 0) {  //如果是借出状态
-//					bike.setStatus(1); //设置为归还状态
-//					leaseRecordDao.queryById(bike.getId()).setReturnTime("9");
-// 					return 1; 	//如果有该ID，并且状态是不可借,返回1代表归还
-//				}
-//				return -1; //-1 代表不可还
-//			} 
-//		}
-//		return 0; //0代表ID不存在
-//	}
+
 
 	@Override
 	public int bikeStatus(int bikeId) {

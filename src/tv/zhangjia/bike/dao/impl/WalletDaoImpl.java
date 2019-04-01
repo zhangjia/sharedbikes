@@ -14,7 +14,7 @@ import tv.zhangjia.bike.entity.Wallet;
 public class WalletDaoImpl implements WalletDao {
 	private List<Wallet> wallets = Database.WALLETS;
 	private List<Bill> bills = Database.BILLS;
-	private BillDao billDao = new BillDaoImpl();
+//	private BillDao billDao = new BillDaoImpl();
 	private AdminSettings as = Database.as;
 
 	@Override
@@ -41,6 +41,7 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public int recharge(int walletId, double money) {
+		BillDao billDao = new BillDaoImpl();
 		for (int i = 0; i < wallets.size(); i++) {
 			Wallet w = wallets.get(i);
 			// System.out.println("waID" + w.getId());
@@ -80,6 +81,7 @@ public class WalletDaoImpl implements WalletDao {
 
 	@Override
 	public int pay(int userId, double money, String type) {
+		BillDao billDao = new BillDaoImpl();
 		Wallet pw = queryByUserId(userId);
 		double coupon = pw.getCoupon();
 		double balance = pw.getBalance();

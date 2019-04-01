@@ -16,8 +16,8 @@ import tv.zhangjia.bike.entity.Wallet;
 public class UserDaoImpl implements UserDao {
 	private List<User> users = Database.USERS;
 	private List<Location> locations = Database.LOCATIONS;
-	private WalletDao walletDao = new WalletDaoImpl();
-	private UserSettingsDao usd = new UserSettingsDaoImpl();
+//	private WalletDao walletDao = new WalletDaoImpl();
+//	private UserSettingsDao usd = new UserSettingsDaoImpl();
 
 	/**
 	 * 重写登录方法
@@ -54,7 +54,8 @@ public class UserDaoImpl implements UserDao {
 	 */
 	@Override
 	public int register(String username, String password, String tel,String payPassword) {
-
+		WalletDao walletDao = new WalletDaoImpl();
+		UserSettingsDao usd = new UserSettingsDaoImpl();
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
 				return -1; // 用户名已经存在

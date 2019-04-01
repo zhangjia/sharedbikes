@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BillDao;
+import tv.zhangjia.bike.dao.UserDao;
+import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.User;
@@ -48,12 +50,17 @@ public class BillDaoImpl implements BillDao{
 
 	@Override
 	public int awardByregister(int user1Id, int wallet1Id, int user2Id) {
-		if(queryUser(user2Id) == null) {
+		UserDao userDao = new UserDaoImpl();
+		WalletDao walletDao = new WalletDaoImpl();
+		User user2 = userDao.queryByUserId(user2Id);
+		if(user2 == null) {
+//		G:	if(queryUser(user2Id) == null) {
 			return -1; //不存在该用户
 		} 
-		User user2 = queryUser(user2Id);
-		Wallet wallet1 = queryWallet(wallet1Id);
-		Wallet wallet2 = queryWallet(user2.getWalletID());
+//	G:	Wallet wallet1 = queryWallet(wallet1Id);
+//	G:	Wallet wallet2 = queryWallet(user2.getWalletID());
+		Wallet wallet1 = walletDao.queryByUserId(user1Id);
+		Wallet wallet2 = walletDao.queryByUserId(user2Id);
 		
 		
 		wallet1.setCoupon(wallet1.getCoupon() + 5);
@@ -67,11 +74,14 @@ public class BillDaoImpl implements BillDao{
 
 	@Override
 	public int awardByBike(int userId, int walletId) {
-		if(queryUser(userId) == null) {
+		UserDao userDao = new UserDaoImpl();
+		if(userDao.queryByUserId(userId) == null) {
+//		G:	if(queryUser(userId) == null) {
 			return -1; //不存在该用户
 		} 
-		
-		Wallet wallet = queryWallet(walletId);
+		WalletDao walletDao = new WalletDaoImpl();
+		Wallet wallet = walletDao.queryByUserId(userId);
+//	G:	Wallet wallet = queryWallet(walletId);
 
 		
 		wallet.setCoupon(5);
@@ -81,21 +91,21 @@ public class BillDaoImpl implements BillDao{
 	}
 	
 	
-	private User queryUser(int userId) {
-		for (User user : users) {
-			if(user.getId() == userId) {
-				return user;
-			}
-		}
-		return null;
-	}
-	
-	private Wallet queryWallet(int walletId) {
-		for (Wallet wallet : wallets) {
-			if(wallet.getId() == walletId) {
-				return wallet;
-			}
-		}
-		return null;
-	}
+//	private User queryUser(int userId) {
+//		for (User user : users) {
+//			if(user.getId() == userId) {
+//				return user;
+//			}
+//		}
+//		return null;
+//	}
+//	
+//	private Wallet queryWallet(int walletId) {
+//		for (Wallet wallet : wallets) {
+//			if(wallet.getId() == walletId) {
+//				return wallet;
+//			}
+//		}
+//		return null;
+//	}
 }

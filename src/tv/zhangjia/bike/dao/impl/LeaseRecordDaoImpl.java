@@ -23,19 +23,22 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 	private List<User> users = Database.USERS;
 	// 借车的时候，生成借车记录时传入用户名
 	//TODO 创建根据用户ID返回用户名的方法
-	private UserDao userDao = new UserDaoImpl();
+//	private UserDao userDao = new UserDaoImpl();
 	
 	// 借车的时候，查看车的状态，根据Id返回该车
-	private BikeDao bikeDao = new BikeDaoImpl();
+//	private BikeDao bikeDao = new BikeDaoImpl();
 	
 	//根据id返回钱包
-	private WalletDao walletDao = new WalletDaoImpl();
+//	private WalletDao walletDao = new WalletDaoImpl();
 	
 	//根据locationId返回location
-	private LocationDao locationDao = new LocationDaoImpl();
+//	private LocationDao locationDao = new LocationDaoImpl();
 
 	@Override
 	public int doInsert(int userId, int bikeId) {
+		 UserDao userDao = new UserDaoImpl();
+		 BikeDao bikeDao = new BikeDaoImpl();
+		 LocationDao locationDao = new LocationDaoImpl();
 		int s = bikeDao.bikeStatus(bikeId);
 		//如果是11,说明状态可借
 		if (s == 11) {
@@ -100,7 +103,10 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 
 	@Override
 	public int returnBike(int bikeId, int userId) {
-
+		UserDao userDao = new UserDaoImpl();
+		BikeDao bikeDao = new BikeDaoImpl();
+		WalletDao walletDao = new WalletDaoImpl();
+		 LocationDao locationDao = new LocationDaoImpl();
 		int s = bikeDao.bikeStatus(bikeId);
 		Wallet w = walletDao.queryByUserId(userId);
 		if (s == 10) {
@@ -135,7 +141,8 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 				lr.setReturnTime(returnTime);
 				//添加骑行时间
 				lr.setTime(second);
-				User user  = queryUserByUserId(userId);
+//		G:		User user  = queryUserByUserId(userId);
+				User user  = userDao.queryByUserId(userId);
 				user.setCyclingTime(user.getCyclingTime() + second);
 				
 				
@@ -190,13 +197,13 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 		return -1;// 没找到返回-1
 	}
 
-	private User queryUserByUserId(int userId) {
+/*	private User queryUserByUserId(int userId) {
 		for (User user : users) {
 			if(user.getId() == userId) {
 				return user;
 			}
 		}
 		return null;
-	}
+	}*/
 	
 }
