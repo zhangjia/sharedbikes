@@ -379,7 +379,7 @@ public class Menu {
 			String s = input.next();
 			if (iiv.isNumber(s)) {
 				index = Integer.parseInt(s);
-				if (index >= 5) {
+				if (index > 5) {
 					System.out.println("不存在此选项,请重新输入：");
 				} else {
 					break;
@@ -438,6 +438,7 @@ public class Menu {
 			}
 			break;
 		case 4:
+			System.out.println("请输入会员享受的折扣：");
 			while (true) {
 				String discount = input.next();
 				if (iiv.isDouble(discount)) {
@@ -460,6 +461,8 @@ public class Menu {
 		default:
 			System.out.println("没有该选项，请重新选择：");
 		}
+
+		returnMenu();
 
 	}
 
@@ -1218,14 +1221,19 @@ public class Menu {
 		String payPassword = input.next();
 
 		String tel;
+		System.out.print("请输入您的手机号：");
 		while (true) {
-			System.out.print("请输入您的手机号：");
 			tel = input.next();
-			if (userDao.isTelExist(tel)) {
-				break;
+			if (iiv.isTrueTel(tel)) {
+				if (userDao.isTelExist(tel)) {
+					break;
+				} else {
+					System.out.println("该手机号已经存在，请重新输入手机号：");
+				}
 			} else {
-				System.out.println("该手机号已经存在");
+				System.out.println("手机号不合法，哪有这种手机号啊，请重新输入手机号：");
 			}
+
 		}
 
 		int register = userDao.register(username, password, tel, payPassword);
