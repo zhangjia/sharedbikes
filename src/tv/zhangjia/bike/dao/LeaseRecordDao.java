@@ -11,34 +11,34 @@ public interface LeaseRecordDao {
 	 * @param lr
 	 * @return
 	 */
-	public int doInsert(int userId, int bikeId);
+	 int doInsert(int userId, int bikeId);
 
 	/**
 	 * 查询所有租车记录
 	 * @return
 	 */
-	public List<LeaseRecord> queryAll();
+	 List<LeaseRecord> queryAll();
 
 	/**
 	 * 根据用户ID查询该用户的全部租车记录
 	 * @param id
 	 * @return
 	 */
-	public List<LeaseRecord> queryByUserId(int id);
+	 List<LeaseRecord> queryByUserId(int id);
 
 	/**
 	 * 根据记录ID，查询某条记录
 	 * @param id
 	 * @return
 	 */
-	public LeaseRecord queryById(int id);
+	 LeaseRecord queryById(int id);
 
 	/**
 	 * 根据用户的ID查询用户所有未归还的租车记录
 	 * @param userid
 	 * @return
 	 */
-	public List<LeaseRecord> queryNotReturnByUserId(int userid);
+	 List<LeaseRecord> queryNotReturnByUserId(int userid);
 	
 	/**
 	 * 归还单车
@@ -46,14 +46,18 @@ public interface LeaseRecordDao {
 	 * @param userId
 	 * @return
 	 */
-	public int returnBike(int bikeId, int userId);
+	 int returnBike(int bikeId, int userId);
 	
 	/**
 	 * 根据单车的ID返回该车辆未归还的记录ID
 	 * @param bikeId
 	 * @return
 	 */
-	public int queryNotReturnRecordId(int bikeId);
+	 LeaseRecord queryNotReturnRecordId(int bikeId);
+	
+	 
+	 boolean isCurrentUserLease(int userId,int bikeId);
+	
 	
 	
 }

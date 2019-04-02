@@ -48,12 +48,17 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 			bike.setAmount(bike.getAmount() + 1); // 借出次数+1
 			bike.setLastLocationId(bike.getLocationId());
 			bike.setLocationId(-1); // -1为骑行状态
-			System.out.println(bike.getLocationId());
-			locationDao.updateLocationBikes(bike.getLastLocationId());
-			// 生成借车记录
+			// System.out.println(bike.getLocationId());
 
+			// 更新当前位置的信息
+			locationDao.updateLocationBikes(bike.getLastLocationId());
+
+			// 获取当前位置的名称
 			Location lo = locationDao.queryLocation(bike.getLastLocationId());
+
+			// 设置路程名
 			String loName = lo.getLocation() + " ---> " + "骑行中\t";
+			// 生成借车记录
 			LeaseRecord lr = new LeaseRecord(Database.nextLeaseRecordId(), bikeId, userId,
 					userDao.queryUserName(userId), new Date(), null, loName, 0, 0);
 			lrs.add(lr);
@@ -113,23 +118,24 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 		int s = bikeDao.bikeStatus(bikeId);
 		Wallet w = walletDao.queryByUserId(userId);
 		if (s == 10) {
+			// 获取要归还的单车
 			Bike bike = bikeDao.queryById(bikeId);
-			// 找到需要变更的记录ID
-			int recordId = queryNotReturnRecordId(bikeId);
-			// 返回该记录
-			LeaseRecord lr = queryById(recordId);
+			// 根据BikeID找到这辆车的骑行记录的ID
+
+			// 根据骑行记录的ID返回这条记录信息
+			LeaseRecord lr = queryNotReturnRecordId(bikeId);
 			if (lr.getUserId() == userId) {
 				Date returnTime = new Date();
-				// 计算租赁时长（秒）
+				// 计算骑行时间（秒）
 				Date lendTime = lr.getLeaseTime();
 				long second = (returnTime.getTime() - lendTime.getTime()) / 1000;
 				// 根据单车类型查找售价
 				double price = bike.getType().equals("助力车") ? as.getbBikePrice() : as.getaBikePrice();
 
 				double discount = w.isVIP() ? as.getDiscount() : 1;
-
+				// 计算消费金额
 				double cost = second * price * discount;
-				// 计算消费金额并支付
+				// 支付
 				int i = walletDao.pay(userId, cost, "租车");
 
 				// 如果没钱，返回-5
@@ -154,7 +160,7 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 				// 获取单车当前位置的名字
 				String start = locationDao.queryLocationName(startLocationId);
 
-				// 获取新的位置
+				// 获取归还的时候新的位置
 				Location nowLocation = locationDao.randomLocation(bike.getLastLocationId(), bikeId, lr.getId());
 				// 获取新的位置名字
 				String end = nowLocation.getLocation();
@@ -162,10 +168,10 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 
 				bike.setLocationId(nowLocation.getId());
 
-				// 2. 修改租赁记录的位置
+				// 2. 修改骑行记录中的行程
 
 				lr.setLocations(start + " ---> " + end);
-
+				// 更新位置
 				locationDao.updateLocationBikes(bike.getLocationId());
 				// locationDao.updateLocationBikes(bike.getLastLocationId());
 
@@ -186,14 +192,26 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 	}
 
 	@Override
-	public int queryNotReturnRecordId(int bikeId) {
+	public LeaseRecord queryNotReturnRecordId(int bikeId) {
 		for (LeaseRecord lr : lrs) {
 			// 因为一个车子可能产生多条记录，但是未归还的记录只有一条，所以通过这两个条件可以返回唯一的记录ID
 			if (lr.getBikeId() == bikeId && lr.getReturnTime() == null) {
-				return lr.getId();
+				return lr;
 			}
 		}
-		return -1;// 没找到返回-1
+		return null;
+	}
+
+	@Override
+	public boolean isCurrentUserLease(int userId, int bikeId) {
+		// 根据骑行记录的ID返回这条记录信息
+		LeaseRecord lr = queryNotReturnRecordId(bikeId);
+		
+		//如果该车是该用户借的，并且不是未还状态
+		if ( lr != null && lr.getUserId() == userId ) {
+			return true;
+		}
+		return false;
 	}
 
 	/*

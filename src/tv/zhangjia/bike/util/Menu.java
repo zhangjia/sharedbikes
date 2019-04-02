@@ -278,16 +278,26 @@ public class Menu {
 			System.out.println("-------------下面是所有用户的账单信息-----------");
 			System.out.println("编号\t用户名\t账单名称\t余额变化\t产生时间");
 			List<Bill> bills = billDao.queryAll();
-			for (Bill bill : bills) {
-				System.out.println(bill);
+			if (bills.isEmpty()) {
+				printBoundary();
+				System.out.println("目前没有任何账单记录！");
+			} else {
+				for (Bill bill : bills) {
+					System.out.println(bill);
+				}
 			}
 			returnMenu();
 		} else {
 			System.out.println("-------------下面是您的所有账单信息-------------");
 			List<Bill> userBills = billDao.queryUserBill(user.getId());
 			System.out.println("用户编号\t用户余额\t优惠券余额\t用户等级\tVIP时间");
-			for (Bill bill : userBills) {
-				System.out.println(bill);
+			if (userBills.isEmpty()) {
+				printBoundary();
+				System.out.println("您目前没有任何账单记录！");
+			} else {
+				for (Bill bill : userBills) {
+					System.out.println(bill);
+				}
 			}
 			returnMenu();
 		}
@@ -518,11 +528,12 @@ public class Menu {
 
 	private void leaseRecord() {
 		if (user.isAdmin()) {
-			System.out.println("----------下面是所有用户的单车骑行记录-----------");
+			System.out.println("----------下面是所有用户的单车租赁记录-----------");
 			List<LeaseRecord> bike = leaseRecordDao.queryAll();
 
 			System.out.println("编号\t自行车ID\t租赁用户        \t租借时间      \t归还时间\t 起始位置  \t 消费金额");
 			if (bike.isEmpty()) {
+				printBoundary();
 				System.out.println("你的生意惨淡，没有任何人借车");
 			}
 			for (LeaseRecord leaseRecord : bike) {
@@ -818,7 +829,7 @@ public class Menu {
 		System.out.println("\t3.归还单车");
 		System.out.println("\t4.个人信息");
 		System.out.println("\t5.个人钱包");
-		System.out.println("\t6.骑行记录");
+		System.out.println("\t6.租赁记录");
 		System.out.println("\t7.故障报修");
 		System.out.println("\t8.充值金额");
 		System.out.println("\t9.消费记录");
@@ -869,7 +880,7 @@ public class Menu {
 			awardByRepairs();// 报修奖励
 			break;
 		case 8:
-			recharge();
+			recharge(true);
 			break;
 		case 9:
 			usersBill();
@@ -984,7 +995,7 @@ public class Menu {
 
 	}
 
-	private void recharge() {
+	private void recharge(boolean b) {
 		UserSettings ps = us.queryUserSetting(user.getId());
 		double m = 0;
 		while (true) {
@@ -1013,10 +1024,12 @@ public class Menu {
 
 		if (walletDao.recharge(user.getWalletID(), m) == 1) {
 			System.out.println("充值成功");
-			// personWallet();
-			returnMenu();
 		} else {
 			System.out.println("充值失败");
+
+		}
+
+		if (b) {
 			returnMenu();
 		}
 	}
@@ -1062,7 +1075,7 @@ public class Menu {
 			int result = walletDao.becomeVIP(user.getId(), month);
 			if (result == -5) {
 				System.out.print("余额不足，请充值：");
-				recharge();
+				recharge(false);
 			} else {
 				System.out.println("恭喜您开通成功");
 				break;
@@ -1088,38 +1101,52 @@ public class Menu {
 		printBoundary();
 		if (usr.isEmpty()) {
 			System.out.println("您还没有租借过单车~");
+			returnMenu();
 		} else {
-			System.out.println("请输入您要归还的单车Id");
-			int bikeId = -1;
-			while (true) {
+			List<LeaseRecord> ld = leaseRecordDao.queryNotReturnByUserId(user.getId());
+			System.out.println("--------------------您有以下车辆未归还----------------------");
+			System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
+			for (LeaseRecord leaseRecord : ld) {
+				System.out.println(leaseRecord);
+			}
+		}
+		System.out.println("请输入您要归还的单车Id");
+		int bikeId = -1;
+		while (true) {
+			String str = input.next();
+			if (iiv.isNumber(str)) {
+				bikeId = Integer.parseInt(str);
+				if (bikeDao.bikeStatus(bikeId) != 10 || (!leaseRecordDao.isCurrentUserLease(user.getId(), bikeId))) {
+					System.out.print("您没有租借该车,请重新输入：");
+				} else {
+					while (true) {
+						UserSettings ps = us.queryUserSetting(user.getId());
+						boolean openPayPassword = ps.isActp() ? true : false;
 
-				String str = input.next();
-				if (iiv.isNumber(str)) {
-					bikeId = Integer.parseInt(str);
-					Bike bike = bikeDao.queryById(bikeId);
+						while (!openPayPassword) {
+							System.out.print("请输入您的支付密码：");
+							String payPassword = input.next();
+							if (isTruePayPw(user, payPassword)) {
+								break;
+							} else {
+								System.out.print("支付密码不正确，");
 
-					if (bike == null) {
-						System.out.print("此ID不存在，请重新输入单车Id");
-					} else {
-						
-						
-						int result = leaseRecordDao.returnBike(bikeId, user.getId());
-
-						if (result == 1) {
+							}
+						}
+						int i = leaseRecordDao.returnBike(bikeId, user.getId());
+						if (i == -5) {
+							System.out.println("余额不足，请充值：");
+							recharge(false);
+						} else {
 							System.out.println("归还成功");
-							userMenu();
-						} else if (result == 0 || result == 11) {
-							System.out.println("您未租借该单车");
-							userMenu();
-						} else if (result == -5) {
-							recharge();
+							break;
 						}
 					}
-				} else {
-					System.out.println("输入不合法,请重新输入：");
+					break;
 				}
+			} else {
+				System.out.print("输入不合法,请重新输入：");
 			}
-
 		}
 		returnMenu();
 
