@@ -96,45 +96,41 @@ public class Menu {
 
 	}
 
-	private User retrievePassword(int userId, boolean b) {
+	private User retrievePassword(int userId) {
 
-		if (b) {
-			System.out.print("请输入您的手机号：");
-			while (true) {
-				String tel = input.next();
+		System.out.print("请输入您的手机号：");
+		while (true) {
+			String tel = input.next();
 
-				int x = userDao.isTrueTel(userId, tel);
-				if (x != 1) {
-					System.out.print("该手机号和您的用户名不匹配,请重新输入：");
-				} else {
-					break;
-				}
+			int x = userDao.isTrueTel(userId, tel);
+			if (x != 1) {
+				System.out.print("该手机号和您的用户名不匹配,请重新输入：");
+			} else {
+				break;
 			}
-			String codes = VerificationCode.randomCode();
-			System.out.print("请输入您的验证码：");
-
-			try {
-				Thread.sleep(1500);//
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			// 没有手机给你发验证码，只能委屈你自己输出了
-			System.out.print(codes);
-
-			try {
-				Thread.sleep(500);//
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("   验证成功！");
-
-			System.out.print("请输入新密码：");
-			String newPassword = input.next();
-			return userDao.retrievePassword(userId, newPassword);
-		} else {
-			mainMenu();
 		}
-		return null;
+		String codes = VerificationCode.randomCode();
+		System.out.print("请输入您的验证码：");
+
+		try {
+			Thread.sleep(1500);//
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		// 没有手机给你发验证码，只能委屈你自己输出了
+		System.out.print(codes);
+
+		try {
+			Thread.sleep(500);//
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("   验证成功！");
+
+		System.out.print("请输入新密码：");
+		String newPassword = input.next();
+		return userDao.retrievePassword(userId, newPassword);
+
 	}
 
 	/**
@@ -166,7 +162,7 @@ public class Menu {
 					System.out.print("密码错误，是否找回密码？(找回 ：Y | 返回主菜单：R) : ");
 					String s = input.next();
 					if (s.equalsIgnoreCase("y")) {
-						login = retrievePassword(userDao.queryUserId(username), true);
+						login = retrievePassword(userDao.queryUserId(username));
 						System.out.println("找回成功！,请重新登录：");
 						userLogin(); // TODO :调用自己了
 					} else {
@@ -358,6 +354,8 @@ public class Menu {
 
 		} else {
 			AdminSettings ass = as.queryAdminSettings();
+			System.out.print("您不是会员，所以我要给你看广告：\t");
+
 			System.out.println(ass.getAdvertising());
 		}
 	}
@@ -815,19 +813,19 @@ public class Menu {
 		printBoundary();
 		advertising(user);
 		System.out.println("尊敬的" + user.getUsername() + "用户，您好！");
-		System.out.println("\t\t\t\t\t      1.查询单车");
-		System.out.println("\t\t\t\t\t      2.租借单车");
-		System.out.println("\t\t\t\t\t      3.归还单车");
-		System.out.println("\t\t\t\t\t      4.个人信息");
-		System.out.println("\t\t\t\t\t      5.个人钱包");
-		System.out.println("\t\t\t\t\t      6.骑行记录");
-		System.out.println("\t\t\t\t\t      7.故障报修");
-		System.out.println("\t\t\t\t\t      8.充值金额");
-		System.out.println("\t\t\t\t\t      9.消费记录");
-		System.out.println("\t\t\t\t\t      10.开通会员");
-		System.out.println("\t\t\t\t\t      11.个人设置");
-		System.out.println("\t\t\t\t\t      12.退出登录");
-		System.out.println("\t\t\t\t\t      13.退出系统");
+		System.out.println("\t1.查询单车");
+		System.out.println("\t2.租借单车");
+		System.out.println("\t3.归还单车");
+		System.out.println("\t4.个人信息");
+		System.out.println("\t5.个人钱包");
+		System.out.println("\t6.骑行记录");
+		System.out.println("\t7.故障报修");
+		System.out.println("\t8.充值金额");
+		System.out.println("\t9.消费记录");
+		System.out.println("\t10.开通会员");
+		System.out.println("\t11.个人设置");
+		System.out.println("\t12.退出登录");
+		System.out.println("\t13.退出系统");
 
 		System.out.print("请选择您接下来的操作:");
 		int index = 1;
@@ -880,7 +878,7 @@ public class Menu {
 			becomeVIPMenu();
 			break;
 		case 11:
-			personSettings();// 退出
+			userSettings();// 退出
 			break;
 		case 12:
 			logout();// 退出登录
@@ -897,8 +895,8 @@ public class Menu {
 	private void userBikes() {
 		printBoundary();
 		Location lo = locationDao.queryLocation(user.getLocationID());
-		System.out.println("您的当前位置是" + lo.getLocation());
-		System.out.println("下面是该位置下的所有的单车信息");
+		System.out.print("您的当前位置是" + lo.getLocation());
+		System.out.println("    下面是该位置下的所有的单车信息");
 		List<Bike> bike = lo.getBikes();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
@@ -926,14 +924,14 @@ public class Menu {
 
 				break;
 			} else {
-				System.out.println("输入不合法，请重新输入：");
+				System.out.print("输入不合法，请重新输入：");
 			}
 		}
-		userMenu();
+		returnMenu();
 
 	}
 
-	private void personSettings() {
+	private void userSettings() {
 		UserSettings ps = us.queryUserSetting(user.getId());
 		System.out.println("-----------下面是您的设置-----------");
 		System.out.println("1.自动支付");
@@ -945,13 +943,13 @@ public class Menu {
 			if (iiv.isNumber(s)) {
 				index = Integer.parseInt(s);
 				if (index > 2) {
-					System.out.println("不存在此选项,请重新输入：");
+					System.out.print("不存在此选项,请重新输入：");
 				} else {
 					break;
 				}
 
 			} else {
-				System.out.println("输入不合法，请重新选择：");
+				System.out.print("输入不合法，请重新选择：");
 			}
 
 		}
@@ -961,13 +959,16 @@ public class Menu {
 			System.out.println("------自动支付设置-------：");
 			String s = ps.isActp() ? "开" : "关";
 			System.out.println("您目前自动支付设置为：" + s);
-			System.out.println("打开：t,关闭：f,任意键返回");
+			System.out.println("打开：T | 关闭 F | 返回 R");
+			// System.out.println("打开：t,关闭：f,任意键返回");
 			String auto = input.next();
-			if (auto.equals("t")) {
+			if (auto.equalsIgnoreCase("t")) {
 				ps.setActp(true);
+				System.out.print("设置成功！");
 				returnMenu();
 
-			} else if (auto.equals("f")) {
+			} else if (auto.equalsIgnoreCase("f")) {
+				System.out.print("设置成功！");
 				ps.setActp(false);
 				returnMenu();
 			} else {
@@ -975,7 +976,7 @@ public class Menu {
 			}
 			break;
 		case 2:
-			retrievePassword(user.getId(), true);
+			retrievePassword(user.getId());
 			System.out.println("修改成功，请重新登录：");
 			userLogin();
 			break;
@@ -999,14 +1000,14 @@ public class Menu {
 		}
 
 		boolean openPayPassword = (ps.isActp() ? true : false);
-		System.out.println("shifou" + openPayPassword);
+		// System.out.println("shifou" + openPayPassword);
 		while (!openPayPassword) {
 			System.out.println("请输入您的支付密码：");
 			String payPassword = input.next();
 			if (isTruePayPw(user, payPassword)) {
 				break;
 			} else {
-				System.out.println("支付密码不正确,请重新输入：");
+				System.out.print("支付密码不正确,请重新输入：");
 			}
 		}
 
@@ -1031,7 +1032,7 @@ public class Menu {
 	// }
 
 	private void becomeVIPMenu() {
-		System.out.println("请输入您要充值的月份");
+		System.out.println("请输入您要开通的月份");
 
 		int month = 0;
 		while (true) {
@@ -1040,7 +1041,7 @@ public class Menu {
 				month = Integer.parseInt(m);
 				break;
 			} else {
-				System.out.println("请重新输入：");
+				System.out.print("输入不合法，请重新输入：");
 			}
 		}
 
@@ -1048,27 +1049,26 @@ public class Menu {
 		boolean openPayPassword = ps.isActp() ? true : false;
 
 		while (!openPayPassword) {
-			System.out.println("请输入您的支付密码：");
+			System.out.print("请输入您的支付密码：");
 			String payPassword = input.next();
 			if (isTruePayPw(user, payPassword)) {
 				break;
 			} else {
-				System.out.println("支付密码不正确");
+				System.out.print("支付密码不正确，请重新开通");
 
 			}
 		}
 		while (true) {
 			int result = walletDao.becomeVIP(user.getId(), month);
 			if (result == -5) {
+				System.out.print("余额不足，请充值：");
 				recharge();
 			} else {
 				System.out.println("恭喜您开通成功");
-
-				System.out.println("hahahahahahhah");
 				break;
 			}
 		}
-		userMenu();
+		returnMenu();
 
 	}
 
@@ -1084,41 +1084,50 @@ public class Menu {
 	}
 
 	private void returnBike() {
-		System.out.println("----------请输入您要归还的单车Id----------");
-		int bikeId = input.nextInt();
-		UserSettings ps = us.queryUserSetting(user.getId());
-		boolean openPayPassword = ps.isActp() ? true : false;
-
-		while (!openPayPassword) {
-			System.out.println("请输入您的支付密码：");
-			String payPassword = input.next();
-			if (isTruePayPw(user, payPassword)) {
-				break;
-			} else {
-				System.out.println("支付密码不正确");
-
-			}
-		}
-
-		int result = leaseRecordDao.returnBike(bikeId, user.getId());
-
-		if (result == 1) {
-			System.out.println("归还成功");
-			userMenu();
-		} else if (result == 0 || result == 11) {
-			System.out.println("您未租借该单车");
-			userMenu();
-		} else if (result == -5) {
-			recharge();
+		List<LeaseRecord> usr = leaseRecordDao.queryNotReturnByUserId(user.getId());
+		printBoundary();
+		if (usr.isEmpty()) {
+			System.out.println("您还没有租借过单车~");
 		} else {
-			System.out.println("该ID不存在");
-			userMenu();
+			System.out.println("请输入您要归还的单车Id");
+			int bikeId = -1;
+			while (true) {
+
+				String str = input.next();
+				if (iiv.isNumber(str)) {
+					bikeId = Integer.parseInt(str);
+					Bike bike = bikeDao.queryById(bikeId);
+
+					if (bike == null) {
+						System.out.print("此ID不存在，请重新输入单车Id");
+					} else {
+						
+						
+						int result = leaseRecordDao.returnBike(bikeId, user.getId());
+
+						if (result == 1) {
+							System.out.println("归还成功");
+							userMenu();
+						} else if (result == 0 || result == 11) {
+							System.out.println("您未租借该单车");
+							userMenu();
+						} else if (result == -5) {
+							recharge();
+						}
+					}
+				} else {
+					System.out.println("输入不合法,请重新输入：");
+				}
+			}
+
 		}
+		returnMenu();
+
 	}
 
 	private void leaseBike() {
 		userBikes();
-		System.out.println("请输入您要租借的单车ID：");
+		System.out.print("请输入您要租借的单车ID：");
 		int bikeId = -1;
 		while (true) {
 
@@ -1127,25 +1136,25 @@ public class Menu {
 				bikeId = Integer.parseInt(str);
 				Bike bike = bikeDao.queryById(bikeId);
 				if (bike == null) {
-					System.out.println("此ID不存在，请重新输入单车Id");
+					System.out.print("此ID不存在，请重新输入单车Id");
 				} else if (bike.getLocationId() != user.getLocationID()) {
-					System.out.println("该车辆不在当前位置中，请重新输入单车Id：");
+					System.out.print("该车辆不在当前位置中，请重新输入单车Id：");
 				} else {
 					int result = leaseRecordDao.doInsert(user.getId(), bikeId);
 					if (result == 1) {
 						System.out.println("借出成功！");
 						break;
 					} else if (result == 10) {
-						System.out.println("该车辆已经被租出,请重新输入单车Id：");
+						System.out.print("该车辆已经被租出,请重新输入单车Id："); // 其实执行不到你
 					} else if (result == -1) {
-						System.out.println("该车辆已经损坏,请重新输入单车Id：");
+						System.out.print("该车辆已经损坏,请重新输入单车Id：");
 					}
 				}
 			} else {
 				System.out.println("输入不合法,请重新输入：");
 			}
 		}
-		userMenu();
+		returnMenu();
 	}
 
 	private void awardRe(int user1Id, int wallet1Id) {
