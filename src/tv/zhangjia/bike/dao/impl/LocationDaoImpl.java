@@ -68,6 +68,19 @@ public class LocationDaoImpl implements LocationDao {
 		return queryLocation(endId);
 
 	}
+	
+	@Override
+	public Location randomUserLocation() {
+		Random ran = new Random();
+		int index = ran.nextInt(locations.size());
+		// 随机选择一个位置
+		Location lo = locations.get(index);
+		// 如果这个位置和当前位置相同，那么重新选择
+
+		return lo;
+
+	}
+	
 
 	@Override
 	public String queryLocationName(int locationId) {

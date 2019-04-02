@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.UserSettingsDao;
 import tv.zhangjia.bike.dao.WalletDao;
@@ -56,6 +57,7 @@ public class UserDaoImpl implements UserDao {
 	public int register(String username, String password, String tel,String payPassword) {
 		WalletDao walletDao = new WalletDaoImpl();
 		UserSettingsDao usd = new UserSettingsDaoImpl();
+		LocationDao locationDao = new LocationDaoImpl();
 		for (User user : users) {
 			if (user.getUsername().equals(username)) {
 				return -1; // 用户名已经存在
@@ -64,7 +66,7 @@ public class UserDaoImpl implements UserDao {
 
 		// System.out.println("+++" + queryUserId(username));
 		// TODO 更改位置ID和钱包ID的生成方式
-		int locationId = randomLocation();
+		int locationId = locationDao.randomUserLocation().getId();
 		// 先创建Usre对象
 		User user = new User(Database.nextUserId(), username, password, tel, false, 0, new Date(), locationId,payPassword);
 		users.add(user);
@@ -75,6 +77,11 @@ public class UserDaoImpl implements UserDao {
 		// 将User和钱包关联
 		user.setWalletID(wallet.getId());
 		// System.out.println("wa" + wallet.getId());
+		
+		Location lo = locationDao.randomUserLocation();
+		
+	
+		
 		
 		//创建用户设置
 		UserSettings us = new UserSettings(user.getId(),false);
@@ -184,11 +191,7 @@ public class UserDaoImpl implements UserDao {
 		return true;
 	}
 
-	public int randomLocation() {
-		Random random = new Random();
-		int index = random.nextInt(locations.size());
-		return index;
-	}
+	
 
 	@Override
 	public boolean isTruePayPassword(int userId, String payPassword) {
