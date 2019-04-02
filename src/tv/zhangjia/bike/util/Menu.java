@@ -164,7 +164,7 @@ public class Menu {
 			if (login == null) {
 				wa++;
 				if (wa == 2) {
-					System.out.print("密码错误，是否找回密码？(找回 ：y | 返回主菜单：r) : ");
+					System.out.print("密码错误，是否找回密码？[ 找回 ：y | 返回主菜单：r ] : ");
 					printBoundary();
 					String s = input.next();
 					if (s.equalsIgnoreCase("y")) {
@@ -292,7 +292,7 @@ public class Menu {
 					System.out.println(bill);
 				}
 				printBoundary();
-				System.out.print("是否导出到本地？(是：y | 否：n)：");
+				System.out.print("是否导出到本地？[ 是：y | 否：n ] ：");
 				String s = input.next();
 				if (s.equalsIgnoreCase("y")) {
 					try {
@@ -509,7 +509,7 @@ public class Menu {
 			System.out.println(location);
 		}
 
-		System.out.print("查询指定位置：ID | 返回：r | ：");
+		System.out.print("查询指定位置：[指定： ID | 返回：r ]  ：");
 
 		int locationID = -1;
 		while (true) {
@@ -632,7 +632,7 @@ public class Menu {
 			System.out.println("删除失败");
 		}
 
-		System.out.print("是否继续删除？(继续 ：y | 返回：r) : ");
+		System.out.print("是否继续删除？[ 继续 ：y | 返回：r ]  : ");
 		String againEdit = input.next();
 		if (againEdit.equalsIgnoreCase("y")) {
 			deleteBike();
@@ -669,7 +669,7 @@ public class Menu {
 			}
 		}
 
-		System.out.print("请输入单车类型（脚蹬车：1 | 助力车： 2）：");
+		System.out.print("请输入单车类型 [ 脚蹬车：1 | 助力车： 2 ] ：");
 		String type;
 		double price;
 		while (true) {
@@ -704,7 +704,7 @@ public class Menu {
 			System.out.print("请重新选择位置ID：");
 		}
 
-		System.out.print("请输入单车状态(可借：1 | 借出：0 | 损坏 ：-1)：");
+		System.out.print("请输入单车状态[ 可借：1 | 借出：0 | 损坏 ：-1 ] ：");
 		int status = 1;
 		while (true) {
 			String str = input.next();
@@ -757,7 +757,7 @@ public class Menu {
 			System.out.print("修改失败！");
 
 		}
-		System.out.print("是否继续修改？(继续 ：y | 返回：r) : ");
+		System.out.print("是否继续修改？[ 继续 ：y | 返回：r ]  : ");
 		String againEdit = input.next();
 		if (againEdit.equalsIgnoreCase("y")) {
 			editBike();
@@ -773,7 +773,7 @@ public class Menu {
 	 */
 	private void saveBike() {
 		printBoundary();
-		System.out.print("请输入单车类型(脚蹬车：1 | 助力车： 2)：");
+		System.out.print("请输入单车类型[ 脚蹬车：1 | 助力车： 2 ] ：");
 		String type;
 		double price;
 		while (true) {
@@ -819,7 +819,7 @@ public class Menu {
 		} else {
 			System.out.println("添加失败");
 		}
-		System.out.print("是否继续添加？(继续 ：Y | 返回：R):");
+		System.out.print("是否继续添加？[ 继续 ：Y | 返回：R ] :");
 		String againAdd = input.next();
 		if (againAdd.equalsIgnoreCase("y")) {
 			saveBike(); // TODO 调用自身了
@@ -996,7 +996,7 @@ public class Menu {
 			System.out.println("----------自动支付设置----------");
 			String s = ps.isActp() ? "开" : "关";
 			System.out.println("您目前自动支付设置为：" + s);
-			System.out.print("请更改您的设置：（打开：t | 关闭 f | 返回 r）：");
+			System.out.print("请更改您的设置 ： [ 打开：t | 关闭 f | 返回 r ] ：");
 			// System.out.println("打开：t,关闭：f,任意键返回");
 			String auto = input.next();
 			if (auto.equalsIgnoreCase("t")) {
@@ -1184,7 +1184,7 @@ public class Menu {
 
 	private void leaseBike() {
 		userBikes();
-		System.out.print("请输入您要租借的单车ID ( 租借：ID | 返回 ：r )：");
+		System.out.print("请输入您要租借的单车ID [ 租借：ID | 返回 ：r ] ：");
 		int bikeId = -1;
 		while (true) {
 
@@ -1222,7 +1222,7 @@ public class Menu {
 
 	private void awardRe(int user1Id, int wallet1Id) {
 		int user2Id;
-		System.out.print("是否有推荐人？(有：y | 没有 n):");
+		System.out.print("是否有推荐人？[ 有：y | 没有 n ] :");
 		String y = input.next();
 		if (y.equalsIgnoreCase("y")) {
 			System.out.print("请输入推荐人ID:");
@@ -1309,7 +1309,7 @@ public class Menu {
 			int uid = userDao.queryUserId(username);
 			User u = userDao.queryByUserId(uid);
 			awardRe(uid, u.getWalletID());
-			System.out.print("注册成功，是否登录？(是：y | 否： n)：");
+			System.out.print("注册成功，是否登录？[ 是：y | 否： n ] ：");
 			String s = input.next();
 			if (s.equalsIgnoreCase("y")) {
 				userLogin();
@@ -1328,7 +1328,7 @@ public class Menu {
 	 */
 	private void exit() {
 		printBoundary();
-		System.out.println("确认退出？不是手抖？(确认：y | 手抖：n)");
+		System.out.println("确认退出？不是手抖？[ 确认：y | 手抖：n ] ");
 		String s = input.next();
 		if (!s.equalsIgnoreCase("y")) {
 			if (user == null) {
@@ -1355,7 +1355,7 @@ public class Menu {
 	 */
 	private void returnMenu() {
 
-		System.out.print("返回：y | 退出 ：e | :");
+		System.out.print(" [ 返回：y | 退出 ：e ] :");
 		String next = input.next();
 
 		if (next.equalsIgnoreCase("y")) {
