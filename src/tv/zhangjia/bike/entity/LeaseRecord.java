@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LeaseRecord {
@@ -252,8 +253,11 @@ public class LeaseRecord {
 
 	@Override
 	public String toString() {
-		return id + "\t"  + bikeId + "\t"  + userId + "\t"  + username
-				+ "\t" + leaseTime + "\t"  + returnTime + "\t"  + locations + "\t" +  time + "秒" + cost + "元" ;
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		String lt = (leaseTime == null ? "骑行中\t" : sdf.format(leaseTime));
+		String rt = (returnTime == null ? "骑行中\t" : sdf.format(returnTime));
+		return id + "\t"  + bikeId + "\t"  + username
+				+ "\t" + lt + "\t"  + rt + "\t"  + locations + "\t" +  time + "秒\t" + cost + "元" ;
 	}
 
 

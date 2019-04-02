@@ -34,7 +34,7 @@ public class UserDaoImpl implements UserDao {
 	public User login(String username, String password) {
 		for (User user : users) {
 			// 如果用户名和密码匹配，则返回该用户
-			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+			if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
 				return user;
 			}
 		}
@@ -59,7 +59,7 @@ public class UserDaoImpl implements UserDao {
 		UserSettingsDao usd = new UserSettingsDaoImpl();
 		LocationDao locationDao = new LocationDaoImpl();
 		for (User user : users) {
-			if (user.getUsername().equals(username)) {
+			if (user.getUsername().equalsIgnoreCase(username)) {
 				return -1; // 用户名已经存在
 			}
 		}
@@ -153,7 +153,7 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public int isTrueUserName(String username) {
 		for (User user : users) {
-			if (user.getUsername().equals(username)) {
+			if (user.getUsername().equalsIgnoreCase(username)) {
 				return 1;
 			}
 		}
@@ -162,7 +162,7 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public String adviseUsername(String username) {
-		int i = 1;
+		int i = 0;
 		String newUsername = username + (++i);
 		if (isTrueUserName(newUsername) == 1) {
 			newUsername = adviseUsername(newUsername);

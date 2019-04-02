@@ -51,8 +51,11 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 			System.out.println(bike.getLocationId());
 			locationDao.updateLocationBikes(bike.getLastLocationId());
 			//生成借车记录
+			
+			Location lo = locationDao.queryLocation(bike.getLastLocationId());
+			String loName = lo.getLocation()+  " ---> " + "骑行中\t";
 			LeaseRecord lr = new LeaseRecord(Database.nextLeaseRecordId(), bikeId, userId,
-					userDao.queryUserName(userId), new Date(), null, "骑行中",0,0);
+					userDao.queryUserName(userId), new Date(), null, loName,0,0);
 			lrs.add(lr);
 			
 			

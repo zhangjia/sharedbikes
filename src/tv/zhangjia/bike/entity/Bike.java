@@ -155,6 +155,7 @@ public class Bike {
 	@Override
 	public String toString() {
 		String locationName = null;
+		
 		for (Location location : ls) {
 			
 			if(location.getId() == locationId) {
