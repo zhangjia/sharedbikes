@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -173,21 +174,13 @@ public class User {
 	
 	@Override
 	public String toString() {
-		String s = "";
-		String locationName = "";
-		if(isAdmin) {
-			s = "管理员";
-		} else {
-			s = "普通用户";
-		}
-		for (Location lo : ls) {
-			if(lo.getId() == locationID) {
-				locationName = lo.getLocation();
-			}
-		}
+		
+		
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		 String st = sdf.format(registerTime);
+		
 		return id + "\t" + username + "\t"  + tel + "\t"
-				+ s + "\t" + cyclingTime + "\t" + registerTime + "\t"
-				+ locationName + "\t" + "\n";
+				 + cyclingTime + "秒" + "\t" + st ;
 	}
 	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
 			Date registerTime, int locationID, int walletID,String payPassword) {

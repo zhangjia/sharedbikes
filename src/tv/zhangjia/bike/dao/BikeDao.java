@@ -71,5 +71,5 @@ public interface BikeDao {
 	 int setDamage(User user, int bikeId);
 	 
 	 List<Bike> queryByDamage();
-	 
+	 void updatePrice();
 }

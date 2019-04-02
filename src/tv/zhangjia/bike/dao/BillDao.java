@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 import tv.zhangjia.bike.entity.Bill;
@@ -38,6 +39,7 @@ public interface BillDao {
 	int awardByregister(int user1Id,int wallet1Id,int user2Id);
 	
 	int awardByBike(int userId, int walletId);
+	boolean export() throws IOException;
 	
 
 }

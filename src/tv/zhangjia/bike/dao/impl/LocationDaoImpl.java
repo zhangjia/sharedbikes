@@ -138,14 +138,10 @@ public class LocationDaoImpl implements LocationDao {
 				size++;
 			}
 		}
-		System.out.println("一共有" + size);
 	
 		double  a = size / queryAll().size(); //自行车个数除以位置总数
-		System.out.println("size =" + size);
-		System.out.println("a = " +a);
 		int  average = (int) (Math.ceil(a));
 		
-		System.out.println("平均数" + average);
 		Map<Integer, Integer> small = new TreeMap<>();
 		Map<Integer, Integer> big = new TreeMap<>();
 		for (Location lo : locations) {
@@ -179,8 +175,6 @@ public class LocationDaoImpl implements LocationDao {
 
 		});
 		
-		System.out.println("s = " + bigs);
-		System.out.println("s = " + smalls);
 		
 		
 		//多的位置车辆总数：A  
@@ -203,7 +197,6 @@ public class LocationDaoImpl implements LocationDao {
 				
 				//如果B需要的车辆 < A
 				if(cost >= 0) {
-					System.out.println(">0");
 					bigs.get(i).setValue(bigs.get(i).getValue() - need);  //A给B所需要的所有车辆
 					smalls.get(j).setValue(smalls.get(j).getValue() + need); //B加上A给的的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
@@ -213,7 +206,6 @@ public class LocationDaoImpl implements LocationDao {
 				//如果A中还有剩余车辆，但是无法满足B的所有需求
 				} else {
 	
-					System.out.println("<0");
 					bigs.get(i).setValue(bigs.get(i).getValue() - more); //A把能给的都给B
 					smalls.get(j).setValue(smalls.get(j).getValue() + more); //B加上A给的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
@@ -221,18 +213,13 @@ public class LocationDaoImpl implements LocationDao {
 					arr.add("从" + bigname + "拿出" + more + "辆单车送往" + smallname);
 					break;
 				}
-				System.out.println("内循环");
 				
 			}
 			
-			System.out.println("ing = " + bigs);
-			System.out.println("ing = " + smalls);
 			
 		}		
 		
 //
-		System.out.println("end = " + bigs);
-		System.out.println("end = " + smalls);
 		
 		
 		

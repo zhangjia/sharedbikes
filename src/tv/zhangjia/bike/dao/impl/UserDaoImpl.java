@@ -174,7 +174,7 @@ public class UserDaoImpl implements UserDao {
 	public int queryUserId(String username) {
 		for (User user : users) {
 			// System.out.println("yon" + username);
-			if (user.getUsername().equals(username)) {
+			if (user.getUsername().equalsIgnoreCase(username)) {
 				return user.getId();
 			}
 		}

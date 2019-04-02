@@ -118,7 +118,7 @@ public class Wallet {
 		}
 		
 		
-		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + (isVIP ? "是" : "否" )+ "\t" + (vipDate == null ? "未开通" : sdf.format(vipDate));
+		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + (isVIP ? "VIP用户" : "普通用户" )+ "\t" + (vipDate == null ? "未开通" : sdf.format(vipDate));
 	}
 
 	public Wallet() {

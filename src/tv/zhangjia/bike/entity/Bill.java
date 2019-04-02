@@ -61,7 +61,7 @@ public class Bill {
 		}
 		
 		return + id + "\t" + username + "\t" + billName +  "\t" + sm  
-				+ "\t" + sdf.format(billDate) + "\n";
+				+ "\t\t" + sdf.format(billDate) + "\n";
 	}
 	public Bill() {
 		super();

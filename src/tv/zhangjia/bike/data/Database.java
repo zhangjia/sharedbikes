@@ -63,17 +63,17 @@ public class Database {
 		}
 
 		// 向数据库中默认添加一个管理员
-		USERS.add(new User(1, "admin", "1", "15628791997", true, 0, date, 1, 1,"zhangjia"));
+		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, 1,"zhangjia"));
 		// 向数据库中默认添加二个用户
 		USERS.add(new User(2, "Luffy", "2", "15666335517", false, 0, date, 2, 2,"zhangjia"));
-		USERS.add(new User(3, "zoro", "3", "15620", false, 0, date, 3, 3,"zhangjia"));
+		USERS.add(new User(3, "zoro", "3", "15666252257", false, 0, date, 3, 3,"zhangjia"));
 		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),1,false));
 		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),2,true));
 		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),3,false));
 
-		WALLETS.add(new Wallet(1, 1, 1000, 100, true, new Date()));
-		WALLETS.add(new Wallet(2, 2, 1000, 200, true, new Date()));
-		WALLETS.add(new Wallet(3, 3, 2000, 300, false, new Date()));
+		WALLETS.add(new Wallet(1, 1, 1000, 0, true, new Date()));
+		WALLETS.add(new Wallet(2, 2, 1000, 0, true, new Date()));
+		WALLETS.add(new Wallet(3, 3, 2000, 0, false, new Date()));
 		
 		
 		BIKES.add((new Bike(1, "脚蹬车", as.getaBikePrice(), 1, 1, 1, 0, "二维码")));

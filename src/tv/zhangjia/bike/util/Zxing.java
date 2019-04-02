@@ -2,7 +2,9 @@ package tv.zhangjia.bike.util;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +38,18 @@ public class Zxing {
 		String bikeInformation = bike.toString().replaceAll("\\t", "   ");
 		BitMatrix bt = encode(bikeInformation);
 		String bikeName = bike.getId() + "";
-		File outputFile = new File("d:" + File.separator + bikeName + ".png");
-		String address = outputFile.toString();
+		File file = new File("E:" + File.separator + "bike" + File.separator + "img"   + File.separator + bikeName + ".png");
+		
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		Writer writer = new FileWriter(file, true);
+		String address = file.toString();
 		bike.setQr(address);
-		writeToFile(bt, "png", outputFile);
+		writeToFile(bt, "png", file);
 	}
 
 	
