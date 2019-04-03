@@ -543,6 +543,7 @@ public class Menu {
 
 	private void logout() {
 		printBoundary();
+		user = null;
 		System.out.println("您已退出，期待您再次登录！");
 		mainMenu();
 
@@ -1086,6 +1087,9 @@ public class Menu {
 	// }
 
 	private void becomeVIPMenu() {
+		double vipPrice = as.queryAdminSettings().getVipPrice();
+		double zc = as.queryAdminSettings().getDiscount();
+		System.out.println("现在开通会员只需要" + vipPrice + "元/月，您可以享受免广告和租单车" + (int)(zc * 10) + "折优惠");
 		System.out.print("请输入您要开通的月份：");
 
 		int month = 0;
