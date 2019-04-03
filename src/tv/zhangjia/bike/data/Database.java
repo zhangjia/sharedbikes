@@ -44,8 +44,8 @@ public class Database {
 	static {
 		as.setDiscount(0.5);
 		as.setVipPrice(10);
-		as.setaBikePrice(100);
-		as.setbBikePrice(200);
+		as.setaBikePrice(10);
+		as.setbBikePrice(20);
 		as.setAdvertising("甲骨文欢迎您");
 		
 		
@@ -65,15 +65,15 @@ public class Database {
 		// 向数据库中默认添加一个管理员
 		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, 1,"zhangjia"));
 		// 向数据库中默认添加二个用户
-		USERS.add(new User(2, "Luffy", "2", "15666335517", false, 0, date, 2, 2,"zhangjia"));
-		USERS.add(new User(3, "zoro", "3", "15666252257", false, 0, date, 3, 3,"zhangjia"));
+		USERS.add(new User(2, "Luffy", "3", "15666335517", false, 0, date, 2, 2,"3"));
+		USERS.add(new User(3, "zoro", "3", "15666252257", false, 0, date, 3, 3,"3"));
 		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),1,false));
-		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),2,true));
+		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),2,false));
 		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),3,false));
 
 		WALLETS.add(new Wallet(1, 1, 1000, 0, true, new Date()));
-		WALLETS.add(new Wallet(2, 2, 1000, 0, true, new Date()));
-		WALLETS.add(new Wallet(3, 3, 2000, 0, false, new Date()));
+		WALLETS.add(new Wallet(2, 2, 0, 0, false, null));
+		WALLETS.add(new Wallet(3, 3, 0, 0, false, null));
 		
 		
 		BIKES.add((new Bike(1, "脚蹬车", as.getaBikePrice(), 1, 1, 1, 0, "二维码")));
@@ -96,6 +96,7 @@ public class Database {
 		BIKES.add((new Bike(18, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
 		BIKES.add((new Bike(19, "助力车", as.getbBikePrice(), 2, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(20, "脚蹬车", as.getaBikePrice(), 2, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(21, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
 		
 		
 		for (Bike bike : BIKES) {
@@ -110,7 +111,6 @@ public class Database {
 
 
 		
-		// 将上面的四辆车分别加入到对应的位置中
 		LOCATIONS.add((new Location(1, "创意大厦")));
 		
 		LOCATIONS.add((new Location(2, "绿色家园")));

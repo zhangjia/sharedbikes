@@ -164,9 +164,9 @@ public class Menu {
 			if (login == null) {
 				wa++;
 				if (wa == 2) {
-					System.out.print("密码错误，是否找回密码？[ 找回 ：y | 返回主菜单：r ] : ");
-					printBoundary();
+					System.out.println("密码错误，是否找回密码？[ 找回 ：y | 返回主菜单：r ] : ");
 					String s = input.next();
+					printBoundary();
 					if (s.equalsIgnoreCase("y")) {
 						login = retrievePassword(userDao.queryUserId(username));
 						System.out.println("找回成功！请重新登录：");
@@ -352,6 +352,7 @@ public class Menu {
 			System.out.println("太好了，目前没有车辆损坏！");
 
 		} else {
+			System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 			for (Bike bike : bikes) {
 				System.out.println(bike);
 			}
@@ -841,6 +842,20 @@ public class Menu {
 		}
 		returnMenu();
 	}
+	
+	
+	private void queryUserBikes() {
+		System.out.println("---------------------下面是系统内所有的单车相关信息-----------------------");
+		List<Bike> bike = bikeDao.queryAll();
+		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
+		for (Bike bike2 : bike) {
+			if(bike2.getStatus() != 1) {
+				continue;
+			}
+			System.out.println(bike2);
+		}
+		returnMenu();
+	}
 
 	/**
 	 * 普通用户主界面
@@ -883,7 +898,7 @@ public class Menu {
 
 		switch (index) {
 		case 1:
-			queryBikes();
+			queryUserBikes();
 			break;
 		case 2:
 			leaseBike();
@@ -949,7 +964,7 @@ public class Menu {
 			if (iiv.isNumber(id)) {
 				int bikeId = Integer.parseInt(id);
 				int status = bikeDao.bikeStatus(bikeId);
-				if (status != -1) {
+				if (status == -1) {
 					System.out.println("该车已经损坏");
 					break;
 				}
@@ -971,7 +986,7 @@ public class Menu {
 	private void userSettings() {
 		UserSettings ps = us.queryUserSetting(user.getId());
 		System.out.println("-----------下面是您的设置-----------");
-		System.out.println("1.自动支付");
+		System.out.println("1.免密支付");
 		System.out.println("2.修改密码");
 		System.out.print("请选择设置：");
 		int index = -1;
@@ -993,9 +1008,9 @@ public class Menu {
 
 		switch (index) {
 		case 1:
-			System.out.println("----------自动支付设置----------");
+			System.out.println("----------免密支付设置----------");
 			String s = ps.isActp() ? "开" : "关";
-			System.out.println("您目前自动支付设置为：" + s);
+			System.out.println("您目前免密支付设置为：" + s);
 			System.out.print("请更改您的设置 ： [ 打开：t | 关闭 f | 返回 r ] ：");
 			// System.out.println("打开：t,关闭：f,任意键返回");
 			String auto = input.next();
@@ -1093,7 +1108,7 @@ public class Menu {
 			if (isTruePayPw(user, payPassword)) {
 				break;
 			} else {
-				System.out.print("支付密码不正确，请重新开通");
+				System.out.print("支付密码不正确，");
 
 			}
 		}
@@ -1147,7 +1162,7 @@ public class Menu {
 			if (iiv.isNumber(str)) {
 				bikeId = Integer.parseInt(str);
 				if (bikeDao.bikeStatus(bikeId) != 10 || (!leaseRecordDao.isCurrentUserLease(user.getId(), bikeId))) {
-					System.out.print("您没有租借该车,请重新输入：");
+					System.out.print("您没有租借该单车,请重新输入：");
 				} else {
 					while (true) {
 						UserSettings ps = us.queryUserSetting(user.getId());
@@ -1184,7 +1199,7 @@ public class Menu {
 
 	private void leaseBike() {
 		userBikes();
-		System.out.print("请输入您要租借的单车ID [ 租借：ID | 返回 ：r ] ：");
+		System.out.print("请输入您要租借的单车ID\t[ 租借：ID | 返回 ：r ] ：");
 		int bikeId = -1;
 		while (true) {
 
@@ -1270,7 +1285,7 @@ public class Menu {
 			System.out.print("再次输入您的密码：");
 			password2 = input.next();
 			if (!password.equals(password2)) {
-				System.out.print("两次密码不一致，请再次输入：");
+				System.out.println("两次密码不一致，请再次输入：");
 				printBoundary();
 			} else {
 				break;
