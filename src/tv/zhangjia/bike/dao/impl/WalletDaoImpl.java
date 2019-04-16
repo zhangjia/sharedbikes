@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BillDao;
+import tv.zhangjia.bike.dao.OptionDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.data.Database;
-import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.Wallet;
 
@@ -15,7 +15,8 @@ public class WalletDaoImpl implements WalletDao {
 	private List<Wallet> wallets = Database.WALLETS;
 	private List<Bill> bills = Database.BILLS;
 //	private BillDao billDao = new BillDaoImpl();
-	private AdminSettings as = Database.as;
+//	private AdminSettings as = Database.as;
+	private OptionDao as = new OptionDaoImpl();
 
 	@Override
 	public boolean doInsert(Wallet wt) {
@@ -68,7 +69,7 @@ public class WalletDaoImpl implements WalletDao {
 		c.setTime(date);
 		c.add(Calendar.MONTH, month);
 
-		if(pay(userId, month * as.getVipPrice(),"开通会员" )!= 1) {
+		if(pay(userId, month * Double.parseDouble(as.queryValue("会员价格")),"开通会员" )!= 1) {
 			return -5;
 		} else {
 			w.setVIP(true);

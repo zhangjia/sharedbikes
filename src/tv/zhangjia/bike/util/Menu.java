@@ -5,28 +5,28 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
-import tv.zhangjia.bike.dao.AdminSettingsDao;
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.BillDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
 import tv.zhangjia.bike.dao.LocationDao;
+import tv.zhangjia.bike.dao.OptionDao;
 import tv.zhangjia.bike.dao.UserDao;
-import tv.zhangjia.bike.dao.UserSettingsDao;
+import tv.zhangjia.bike.dao.UserOptionsDao;
 import tv.zhangjia.bike.dao.WalletDao;
-import tv.zhangjia.bike.dao.impl.AdminSettinsDaoImpl;
 import tv.zhangjia.bike.dao.impl.BikeDaoImpl;
 import tv.zhangjia.bike.dao.impl.BillDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
+import tv.zhangjia.bike.dao.impl.OptionDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
-import tv.zhangjia.bike.dao.impl.UserSettingsDaoImpl;
+import tv.zhangjia.bike.dao.impl.UserOptionsDaoImpl;
 import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
-import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.UserOptions;
 import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
 
@@ -50,8 +50,10 @@ public class Menu {
 	private InputIsValid iiv = new InputIsValid();
 	private BillDao billDao = new BillDaoImpl();
 	private LocationDao locationDao = new LocationDaoImpl();
-	private AdminSettingsDao as = new AdminSettinsDaoImpl();
-	private UserSettingsDao us = new UserSettingsDaoImpl();
+//	private AdminSettingsDao as = new AdminSettinsDaoImpl();
+	private OptionDao as = new OptionDaoImpl();
+	private UserOptionsDao us = new UserOptionsDaoImpl();
+//	private UserSettingsDao us = new UserSettingsDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -383,15 +385,16 @@ public class Menu {
 		if (wt.isVIP()) {
 
 		} else {
-			AdminSettings ass = as.queryAdminSettings();
+//			AdminSettings ass = as.queryAdminSettings();
+			
 			System.out.print("您不是会员，所以我要给你看广告：\t");
 
-			System.out.println(ass.getAdvertising());
+			System.out.println(as.queryValue("广告"));
 		}
 	}
 
 	private void systemSettings() {
-		AdminSettings ass = as.queryAdminSettings();
+//		AdminSettings ass = as.queryAdminSettings();
 		System.out.println("-----------下面是管理员设置-----------");
 		System.out.println("1. 设置脚蹬车价格");
 		System.out.println("2. 设置助力车价格");
@@ -423,8 +426,9 @@ public class Menu {
 				String price = input.next();
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
-					ass.setaBikePrice(dprice);
-					bikeDao.updatePrice();
+//					ass.setaBikePrice(dprice);
+					as.queryAlloptions().get(2).setValue(price);
+//					bikeDao.updatePrice();
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -438,7 +442,8 @@ public class Menu {
 				String price = input.next();
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
-					ass.setbBikePrice(dprice);
+//					ass.setbBikePrice(dprice);
+					as.queryAlloptions().get(3).setValue(price);
 					bikeDao.updatePrice();
 					System.out.println("设置成功");
 					break;
@@ -454,7 +459,8 @@ public class Menu {
 				String price = input.next();
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
-					ass.setVipPrice(dprice);
+//					ass.setVipPrice(dprice);
+					as.queryAlloptions().get(1).setValue(price);
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -469,7 +475,8 @@ public class Menu {
 				String discount = input.next();
 				if (iiv.isDouble(discount)) {
 					double ddiscount = Double.parseDouble(discount);
-					ass.setDiscount(ddiscount);
+//					ass.setDiscount(ddiscount);
+					as.queryAlloptions().get(0).setValue(discount);
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -481,7 +488,8 @@ public class Menu {
 		case 5:
 			System.out.print("请输入广告内容：");
 			String advertising = input.next();
-			ass.setAdvertising(advertising);
+//			ass.setAdvertising(advertising);
+			as.queryAlloptions().get(4).setValue(advertising);
 			System.out.println("设置成功");
 			break;
 		default:
@@ -677,10 +685,12 @@ public class Menu {
 		while (true) {
 			type = input.next();
 			if (type.equals("1")) {
-				price = as.queryAdminSettings().getaBikePrice();
+//				price = as.queryAdminSettings().getaBikePrice();
+				price = Double.parseDouble(as.queryValue("脚蹬车"));
 				break;
 			} else if (type.equals("2")) {
-				price = as.queryAdminSettings().getbBikePrice();
+//				price = as.queryAdminSettings().getbBikePrice();
+				price = Double.parseDouble(as.queryValue("助力车"));
 				break;
 			} else {
 				System.out.print("没有该车型，请重新输入：");
@@ -781,10 +791,13 @@ public class Menu {
 		while (true) {
 			type = input.next();
 			if (type.equals("1")) {
-				price = as.queryAdminSettings().getaBikePrice();
+//				price = as.queryAdminSettings().getaBikePrice();
+				System.out.println(as.queryValue("脚蹬车"));
+				price = Double.parseDouble(as.queryValue("脚蹬车"));
 				break;
 			} else if (type.equals("2")) {
-				price = as.queryAdminSettings().getbBikePrice();
+				price = Double.parseDouble(as.queryValue("助力车"));
+//				price = as.queryAdminSettings().getbBikePrice();
 				break;
 			} else {
 				System.out.print("没有该车型，请重新输入：");
@@ -985,8 +998,8 @@ public class Menu {
 	}
 
 	private void userSettings() {
-		UserSettings ps = us.queryUserSetting(user.getId());
-		System.out.println("-----------下面是您的设置-----------");
+//		UserSettings ps = us.queryUserSetting(user.getId());
+;		System.out.println("-----------下面是您的设置-----------");
 		System.out.println("1.免密支付");
 		System.out.println("2.修改密码");
 		System.out.print("请选择设置：");
@@ -1010,19 +1023,21 @@ public class Menu {
 		switch (index) {
 		case 1:
 			System.out.println("----------免密支付设置----------");
-			String s = ps.isActp() ? "开" : "关";
+			String s = us.queryUserSetting(user.getId(), "免密支付");
 			System.out.println("您目前免密支付设置为：" + s);
 			System.out.print("请更改您的设置 ： [ 打开：t | 关闭 f | 返回 r ] ：");
 			// System.out.println("打开：t,关闭：f,任意键返回");
 			String auto = input.next();
 			if (auto.equalsIgnoreCase("t")) {
-				ps.setActp(true);
+//				ps.setActp(true);
+				us.sestValues(user.getId(), "免密支付", "1");
 				System.out.print("设置成功！");
 				returnMenu();
 
 			} else if (auto.equalsIgnoreCase("f")) {
 				System.out.println("设置成功！");
-				ps.setActp(false);
+//				ps.setActp(false);
+				us.sestValues(user.getId(), "免密支付", "0");
 				returnMenu();
 			} else {
 				userMenu();
@@ -1038,7 +1053,7 @@ public class Menu {
 	}
 
 	private void recharge(boolean b) {
-		UserSettings ps = us.queryUserSetting(user.getId());
+//		UserSettings ps = us.queryUserSetting(user.getId());
 		double m = 0;
 		System.out.print("请输入充值金额：");
 		while (true) {
@@ -1052,7 +1067,9 @@ public class Menu {
 			}
 		}
 
-		boolean openPayPassword = (ps.isActp() ? true : false);
+		
+		
+		boolean openPayPassword = (us.queryUserSetting(user.getId(), "免密支付").equals("1") ? true : false);
 		// System.out.println("shifou" + openPayPassword);
 		while (!openPayPassword) {
 			System.out.print("请输入您的支付密码：");
@@ -1087,8 +1104,10 @@ public class Menu {
 	// }
 
 	private void becomeVIPMenu() {
-		double vipPrice = as.queryAdminSettings().getVipPrice();
-		double zc = as.queryAdminSettings().getDiscount();
+//		double vipPrice = as.queryAdminSettings().getVipPrice();
+		double vipPrice = Double.parseDouble(as.queryValue("会员价格"));
+//		double zc = as.queryAdminSettings().getDiscount();
+		double zc = Double.parseDouble(as.queryValue("折扣"));
 		System.out.println("现在开通会员只需要" + vipPrice + "元/月，您可以享受免广告和租单车" + (int)(zc * 10) + "折优惠");
 		System.out.print("请输入您要开通的月份：");
 
@@ -1103,8 +1122,8 @@ public class Menu {
 			}
 		}
 
-		UserSettings ps = us.queryUserSetting(user.getId());
-		boolean openPayPassword = ps.isActp() ? true : false;
+//		UserSettings ps = us.queryUserSetting(user.getId());
+		boolean openPayPassword = (us.queryUserSetting(user.getId(), "免密支付").equals("1") ? true : false);
 
 		while (!openPayPassword) {
 			System.out.print("请输入您的支付密码：");
@@ -1169,8 +1188,8 @@ public class Menu {
 					System.out.print("您没有租借该单车,请重新输入：");
 				} else {
 					while (true) {
-						UserSettings ps = us.queryUserSetting(user.getId());
-						boolean openPayPassword = ps.isActp() ? true : false;
+//						UserSettings ps = us.queryUserSetting(user.getId());
+						boolean openPayPassword = (us.queryUserSetting(user.getId(), "免密支付").equals("1") ? true : false);
 
 						while (!openPayPassword) {
 							System.out.print("请输入您的支付密码：");

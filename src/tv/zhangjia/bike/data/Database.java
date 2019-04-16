@@ -11,12 +11,13 @@ import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
-import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
+import tv.zhangjia.bike.entity.Options;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.UserOptions;
 import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
 import tv.zhangjia.bike.util.Zxing;
@@ -38,19 +39,16 @@ public class Database {
 	public static final List<LeaseRecord> LEASERECORDS = new ArrayList<>();
 	public static final List<Wallet> WALLETS = new ArrayList<>();
 	public static final List<Bill> BILLS = new ArrayList<>();
-	public static final List<UserSettings> USERSETTINGS = new ArrayList<>();
-	public static AdminSettings as = new AdminSettings();
+	public static List<Options> OPTIONS = new ArrayList<>();
+	public static List<UserOptions> USEROPTIONS = new ArrayList<>();
 	private static LocationDao locationDao = new LocationDaoImpl();
 	static {
-		as.setDiscount(0.5);
-		as.setVipPrice(10);
-		as.setaBikePrice(10);
-		as.setbBikePrice(20);
-		as.setAdvertising("甲骨文欢迎您");
-		
-		
-		
-		
+		OPTIONS.add(new Options(nextOptionsId(), "折扣", "0.5"));
+		OPTIONS.add(new Options(nextOptionsId(), "会员价格", "10"));
+		OPTIONS.add(new Options(nextOptionsId(), "脚蹬车", "10"));
+		OPTIONS.add(new Options(nextOptionsId(), "助力车", "20"));
+		OPTIONS.add(new Options(nextOptionsId(), "广告", "甲骨文欢迎您"));
+
 		String str = "2019-03-28";
 		// 将String转换为Date
 		Date date = null;
@@ -63,42 +61,39 @@ public class Database {
 		}
 
 		// 向数据库中默认添加一个管理员
-		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, 1,"zhangjia"));
+		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, 1, "zhangjia"));
 		// 向数据库中默认添加二个用户
-		USERS.add(new User(2, "Luffy", "3", "15666335517", false, 0, date, 2, 2,"3"));
-		USERS.add(new User(3, "zoro", "3", "15666252257", false, 0, date, 3, 3,"3"));
-		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),1,false));
-		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),2,false));
-		USERSETTINGS.add(new UserSettings(nextUserSettingsId(),3,false));
+		USERS.add(new User(2, "Luffy", "3", "15666335517", false, 0, date, 2, 2, "3"));
+
+		USEROPTIONS.add(new UserOptions(nextUserOptionsId(), 1,"免密支付", "0"));
+		USEROPTIONS.add(new UserOptions(nextUserOptionsId(), 2,"免密支付", "0"));
 
 		WALLETS.add(new Wallet(1, 1, 1000, 0, true, new Date()));
 		WALLETS.add(new Wallet(2, 2, 0, 0, false, null));
 		WALLETS.add(new Wallet(3, 3, 0, 0, false, null));
-		
-		
-		BIKES.add((new Bike(1, "脚蹬车", as.getaBikePrice(), 1, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(2, "助力车", as.getbBikePrice(), 2, 2, 1, 0, "二维码")));
-		BIKES.add((new Bike(3, "脚蹬车", as.getaBikePrice(), 3, 3, 1, 0, "二维码")));
-		BIKES.add((new Bike(4, "助力车", as.getbBikePrice(), 4, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(5, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(6, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
-		BIKES.add((new Bike(7, "助力车", as.getbBikePrice(), 2, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(8, "脚蹬车", as.getaBikePrice(), 3, 3, 1, 0, "二维码")));
-		BIKES.add((new Bike(9, "助力车", as.getbBikePrice(), 1, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(10, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
-		BIKES.add((new Bike(11, "助力车", as.getbBikePrice(), 3, 3, 1, 0, "二维码")));
-		BIKES.add((new Bike(12, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(13, "助力车", as.getbBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(14, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(15, "助力车", as.getbBikePrice(), 2, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(16, "脚蹬车", as.getaBikePrice(), 4, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(17, "助力车", as.getbBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(18, "脚蹬车", as.getaBikePrice(), 3, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(19, "助力车", as.getbBikePrice(), 2, 1, 1, 0, "二维码")));
-		BIKES.add((new Bike(20, "脚蹬车", as.getaBikePrice(), 2, 4, 1, 0, "二维码")));
-		BIKES.add((new Bike(21, "脚蹬车", as.getaBikePrice(), 2, 2, 1, 0, "二维码")));
-		
-		
+
+		BIKES.add((new Bike(1, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 1, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(2, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 2, 2, 1, 0, "二维码")));
+		BIKES.add((new Bike(3, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 3, 3, 1, 0, "二维码")));
+		BIKES.add((new Bike(4, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 4, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(5, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 1, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(6, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 2, 2, 1, 0, "二维码")));
+		BIKES.add((new Bike(7, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 2, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(8, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 3, 3, 1, 0, "二维码")));
+		BIKES.add((new Bike(9, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 1, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(10, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 2, 2, 1, 0, "二维码")));
+		BIKES.add((new Bike(11, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 3, 3, 1, 0, "二维码")));
+		BIKES.add((new Bike(12, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 3, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(13, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 3, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(14, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 3, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(15, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 2, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(16, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 4, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(17, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 3, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(18, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 3, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(19, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 2, 1, 1, 0, "二维码")));
+		BIKES.add((new Bike(20, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 2, 4, 1, 0, "二维码")));
+		BIKES.add((new Bike(21, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 2, 2, 1, 0, "二维码")));
+
 		for (Bike bike : BIKES) {
 			try {
 				Zxing.generateQR(bike);
@@ -107,22 +102,18 @@ public class Database {
 				e.printStackTrace();
 			}
 		}
-		
 
-
-		
 		LOCATIONS.add((new Location(1, "创意大厦")));
-		
+
 		LOCATIONS.add((new Location(2, "绿色家园")));
 		LOCATIONS.add((new Location(3, "青年公寓")));
 		LOCATIONS.add((new Location(4, "万达广场")));
-		
+
 		locationDao.updateLocationBikes(1);
 		locationDao.updateLocationBikes(2);
 		locationDao.updateLocationBikes(3);
 		locationDao.updateLocationBikes(4);
 
-		
 	}
 
 	/**
@@ -197,17 +188,28 @@ public class Database {
 		return BILLS.get(BILLS.size() - 1).getId() + 1;
 	}
 
+	/**
+	 * 生成下一个用户设置的Id
+	 * 
+	 * @return 下一个Bike的ID
+	 */
+	public static int nextOptionsId() {
+		if (OPTIONS.isEmpty()) {
+			return 1;
+		}
+		return OPTIONS.get(OPTIONS.size() - 1).getId() + 1;
+	}
 	
 	/**
 	 * 生成下一个用户设置的Id
 	 * 
 	 * @return 下一个Bike的ID
 	 */
-	public static int nextUserSettingsId() {
-		if (USERSETTINGS.isEmpty()) {
+	public static int nextUserOptionsId() {
+		if (USEROPTIONS.isEmpty()) {
 			return 1;
 		}
-		return USERSETTINGS.get(USERSETTINGS.size() - 1).getId() + 1;
+		return USEROPTIONS.get(USEROPTIONS.size() - 1).getId() + 1;
 	}
 
 }

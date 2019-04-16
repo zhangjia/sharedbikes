@@ -8,8 +8,8 @@ import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LocationDao;
+import tv.zhangjia.bike.dao.OptionDao;
 import tv.zhangjia.bike.data.Database;
-import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.util.Zxing;
@@ -136,12 +136,12 @@ public class BikeDaoImpl implements BikeDao {
 	}
 	@Override
 	public void updatePrice() {
-		AdminSettings as = Database.as;
+		OptionDao as = new OptionDaoImpl();
 		for (Bike bike : bikes) {
 			if (bike.getType().equals("脚蹬车")) {
-				bike.setPrice(as.getaBikePrice());
+				bike.setPrice(Double.parseDouble(as.queryValue("脚蹬车")));
 			} else {
-				bike.setPrice(as.getbBikePrice());
+				bike.setPrice(Double.parseDouble(as.queryValue("助力车")));
 			}
 		}
 	}

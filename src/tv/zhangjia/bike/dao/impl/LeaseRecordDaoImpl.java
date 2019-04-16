@@ -7,10 +7,10 @@ import java.util.List;
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
 import tv.zhangjia.bike.dao.LocationDao;
+import tv.zhangjia.bike.dao.OptionDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.data.Database;
-import tv.zhangjia.bike.entity.AdminSettings;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
@@ -18,7 +18,8 @@ import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.Wallet;
 
 public class LeaseRecordDaoImpl implements LeaseRecordDao {
-	private AdminSettings as = Database.as;
+//	private AdminSettings as = Database.as;
+	private OptionDao as = new OptionDaoImpl();
 	private List<LeaseRecord> lrs = Database.LEASERECORDS;
 	private List<User> users = Database.USERS;
 	// 借车的时候，生成借车记录时传入用户名
@@ -130,9 +131,11 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 				Date lendTime = lr.getLeaseTime();
 				long second = (returnTime.getTime() - lendTime.getTime()) / 1000;
 				// 根据单车类型查找售价
-				double price = bike.getType().equals("助力车") ? as.getbBikePrice() : as.getaBikePrice();
+//				double price = bike.getType().equals("助力车") ? as.getbBikePrice() : as.getaBikePrice();
+				double price = bike.getType().equals("助力车") ? Double.parseDouble(as.queryValue("助力车")) : Double.parseDouble(as.queryValue("脚蹬车"));
 
-				double discount = w.isVIP() ? as.getDiscount() : 1;
+//				double discount = w.isVIP() ? as.getDiscount() : 1;
+				double discount = w.isVIP() ? Double.parseDouble(as.queryValue("折扣")): 1;
 				// 计算消费金额
 				double cost = second * price * discount;
 				// 支付

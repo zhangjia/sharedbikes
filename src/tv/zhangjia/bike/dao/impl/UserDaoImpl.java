@@ -2,15 +2,15 @@ package tv.zhangjia.bike.dao.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.UserDao;
-import tv.zhangjia.bike.dao.UserSettingsDao;
+import tv.zhangjia.bike.dao.UserOptionsDao;
 import tv.zhangjia.bike.dao.WalletDao;
 import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
+import tv.zhangjia.bike.entity.UserOptions;
 import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
 
@@ -56,7 +56,8 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public int register(String username, String password, String tel,String payPassword) {
 		WalletDao walletDao = new WalletDaoImpl();
-		UserSettingsDao usd = new UserSettingsDaoImpl();
+//		UserSettingsDao usd = new UserSettingsDaoImpl();
+		UserOptionsDao usd2 = new UserOptionsDaoImpl();
 		LocationDao locationDao = new LocationDaoImpl();
 		for (User user : users) {
 			if (user.getUsername().equalsIgnoreCase(username)) {
@@ -83,9 +84,10 @@ public class UserDaoImpl implements UserDao {
 	
 		
 		
-		//创建用户设置
-		UserSettings us = new UserSettings(user.getId(),false);
-		usd.doInsert(us);
+		//创建默认用户设置
+//		UserSettings us = new UserSettings(user.getId(),false);
+		UserOptions us = new UserOptions(user.getId(),"免密支付","0");
+		usd2.doInsert(us);
 		return 1;
 	}
 
