@@ -634,7 +634,7 @@ public class Menu {
 		}
 
 		int locationId = bike.getLocationId();
-		if (bikeDao.doDelete(bikeId)) {
+		if (bikeDao.doDelete(bikeId) == 1) {
 			// locationDao.deleteLocationBikes(locationId,bikeId);
 			locationDao.updateLocationBikes(locationId);
 			System.out.println("删除成功");
@@ -753,8 +753,8 @@ public class Menu {
 		bike.setStatus(status);
 		bike.setAmount(amount);
 
-		boolean doUpdate = bikeDao.doUpdate(bike);
-		if (doUpdate) {
+		int doUpdate = bikeDao.doUpdate(bike);
+		if (doUpdate == 1) {
 			if (status == 0) {
 				locationDao.updateLocationBikes(bike.getLastLocationId());
 			} else if (status == 1){
@@ -827,8 +827,8 @@ public class Menu {
 
 		String types = (type.equals("1") ? "脚蹬车" : "助力车");
 		Bike bike = new Bike(types, price, locationId, 1, 0, qr);
-		boolean doInsert = bikeDao.doInsert(bike);
-		if (doInsert) {
+		int  doInsert = bikeDao.doInsert(bike);
+		if (doInsert == 1) {
 
 			System.out.println("添加成功");
 		} else {

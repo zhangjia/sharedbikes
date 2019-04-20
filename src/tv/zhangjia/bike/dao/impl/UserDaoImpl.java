@@ -1,5 +1,7 @@
 package tv.zhangjia.bike.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +13,10 @@ import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.UserOptions;
-import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
+import tv.zhangjia.bike.util.CommonDao;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends CommonDao<User> implements UserDao {
 	private List<User> users = Database.USERS;
 	private List<Location> locations = Database.LOCATIONS;
 //	private WalletDao walletDao = new WalletDaoImpl();
@@ -30,16 +32,23 @@ public class UserDaoImpl implements UserDao {
 	 * @return 用户
 	 * @see tv.zhangjia.bike.dao.UserDao#login(java.lang.String, java.lang.String)
 	 */
+//	@Override
+//	public User login(String username, String password) {
+//		for (User user : users) {
+//			// 如果用户名和密码匹配，则返回该用户
+//			if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
+//				return user;
+//			}
+//		}
+//		// 如果用户名和密码不匹配，则返回null
+//		return null;
+//	}
 	@Override
 	public User login(String username, String password) {
-		for (User user : users) {
-			// 如果用户名和密码匹配，则返回该用户
-			if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
-				return user;
-			}
-		}
-		// 如果用户名和密码不匹配，则返回null
-		return null;
+		String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+		
+		return query
+		
 	}
 
 	/**
@@ -203,6 +212,12 @@ public class UserDaoImpl implements UserDao {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public User getBeanFromResultSet(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

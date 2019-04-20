@@ -19,57 +19,58 @@ public interface BikeDao {
 	 * @param bike
 	 * @return 
 	 */
-	 boolean doInsert(Bike bike);
+	 int doInsert(Bike bike);
 	 
 	 /**
-	  * 根据单车ID删除ID
+	  * 根据单车ID删除单车
 	  * @param bikeId
 	  * @return
 	  */
-	 boolean doDelete(int id);
+	 int doDelete(int id);
 	 
 	 /**
 	  * 修改单车
 	  * @param bike
 	  * @return
 	  */
-	 boolean doUpdate(Bike bike);
+	 int doUpdate(Bike bike);
 	 /**
 	  * 查询所有单车
 	  * @return
 	  */
 	 List<Bike> queryAll();
 	 /**
-	  * 根据ID查询单车
+	  * 根据单车ID查询单车
 	  * @param bikeid
 	  * @return
 	  */
 	 Bike queryById(int id); 
-//	 
-//	 /**
-//	  * 根据ID借单车
-//	  * @param id
-//	  * @return
-//	  */
-//	 int doLease(int id,User user);
-//	 
-//	 /**
-//	  * 根据ID还单车
-//	  * @param id
-//	  * @return
-//	  */
-//	 int doReturn(int bikeId, int userId, int recordId);
-	 
+
 	 /**
-	  * 根据单车ID返回该单车状态
+	  * 根据单车id查询单车的状态
 	  * @param bikeId
-	  * @return 1：可借  0 可还   -1 不存在此ID
+	  * @return
 	  */
 	 int bikeStatus(int bikeId);
 	 
-	 
+	 /**
+	  * 根据单车ID修改单车的状态为损坏
+	  * @param user
+	  * @param bikeId
+	  * @return
+	  */
 	 int setDamage(User user, int bikeId);
 	 
+	 /**
+	  * 查询已经损坏的单车
+	  * @return
+	  */
 	 List<Bike> queryByDamage();
+	 
+	 /**
+	  * 更新单车价格
+	  */
 	 void updatePrice();
+	 
+	 double queryBikePrice(int bikeId);
 }

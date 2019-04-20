@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class Zxing {
 		String bikeInformation = bike.toString().replaceAll("\\t", "   ");
 		BitMatrix bt = encode(bikeInformation);
 		String bikeName = bike.getId() + "";
-		File file = new File("E:" + File.separator + "bike" + File.separator + "img"   + File.separator + bikeName + ".png");
+		File file = new File("E:" + File.separator + "bike" + File.separator + "img"   + File.separator + new Date().getTime() + ".png");
 		
 		if (!file.getParentFile().exists()) {
 			file.getParentFile().mkdirs();

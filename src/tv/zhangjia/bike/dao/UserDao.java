@@ -39,7 +39,7 @@ public interface UserDao {
 	int register(String username, String password, String tel,String payPassword);
 
 	/**
-	 * 查询指定用户的信息
+	 * 根据用户ID返回指定用户
 	 * 
 	 * @param userID
 	 * @return
@@ -60,16 +60,47 @@ public interface UserDao {
 	 */
 	String queryUserName(int id);
 
+	/**
+	 * 根据用户名返回用户ID
+	 * @param username
+	 * @return
+	 */
 	int queryUserId(String username);
 
+	/**
+	 * 添加支付密码
+	 * @param userId
+	 * @param payPassword
+	 * @return
+	 */
 	int addPayPassword(int userId, String payPassword);
 
+	/**
+	 * 修改密码
+	 * @param userId
+	 * @param editPassword
+	 * @return
+	 */
 	int editPassword(int userId, String editPassword);
 
+	/**
+	 * 找回密码
+	 * @param userId
+	 * @param password
+	 * @return
+	 */
 	User retrievePassword(int userId, String password);
 
+	/**
+	 * 是否存在该用户名
+	 * @param username
+	 * @return
+	 */
 	int isTrueUserName(String username);
 
+	/*
+	 *是否存在该手机号 
+	 */
 	int isTrueTel(int userId, String tel);
 
 	String adviseUsername(String username);
