@@ -24,90 +24,63 @@ public class User {
 	private long cyclingTime; // 用户总骑行时间
 	private Date registerTime;// 用户注册时间
 	private int locationID;
-	private int walletID;
+//	private int walletID;
 	private String payPassword;
 	
-	private List<Location> ls = Database.LOCATIONS;
+//	private List<Location> ls = Database.LOCATIONS;
 	
-	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
-			Date registerTime, int locationID,String payPassword) {
+	
+	@Override
+	public String toString() {
+		
+		
+		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		 String st = sdf.format(registerTime);
+		
+		return id + "\t" + username + "\t"  + tel + "\t"
+				 + cyclingTime + "秒" + "\t" + st ;
+	}
+	
+	
+
+	public User(String username, String password, String tel, boolean isAdmin, long cyclingTime, Date registerTime,
+		int locationID, String payPassword) {
+	super();
+	this.username = username;
+	this.password = password;
+	this.tel = tel;
+	this.isAdmin = isAdmin;
+	this.cyclingTime = cyclingTime;
+	this.registerTime = registerTime;
+	this.locationID = locationID;
+	this.payPassword = payPassword;
+}
+
+
+
+	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime, Date registerTime,
+		int locationID, String payPassword) {
+	super();
+	this.id = id;
+	this.username = username;
+	this.password = password;
+	this.tel = tel;
+	this.isAdmin = isAdmin;
+	this.cyclingTime = cyclingTime;
+	this.registerTime = registerTime;
+	this.locationID = locationID;
+	this.payPassword = payPassword;
+}
+
+
+
+	public User() {
 		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.tel = tel;
-		this.isAdmin = isAdmin;
-		this.cyclingTime = cyclingTime;
-		this.registerTime = registerTime;
-		this.locationID = locationID;
-		this.payPassword = payPassword;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getTel() {
-		return tel;
-	}
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-	public long getCyclingTime() {
-		return cyclingTime;
-	}
-	public void setCyclingTime(long cyclingTime) {
-		this.cyclingTime = cyclingTime;
-	}
-	public Date getRegisterTime() {
-		return registerTime;
-	}
-	public void setRegisterTime(Date registerTime) {
-		this.registerTime = registerTime;
-	}
-	public int getLocationID() {
-		return locationID;
-	}
-	public void setLocationID(int locationID) {
-		this.locationID = locationID;
-	}
-	public int getWalletID() {
-		return walletID;
-	}
-	public void setWalletID(int walletID) {
-		this.walletID = walletID;
-	}
-	
-	
-	public String getPayPassword() {
-		return payPassword;
-	}
-	public void setPayPassword(String payPassword) {
-		this.payPassword = payPassword;
+		// TODO Auto-generated constructor stub
 	}
 
-	
-	
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -121,9 +94,11 @@ public class User {
 		result = prime * result + ((registerTime == null) ? 0 : registerTime.hashCode());
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		result = prime * result + walletID;
 		return result;
 	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -166,54 +141,82 @@ public class User {
 				return false;
 		} else if (!username.equals(other.username))
 			return false;
-		if (walletID != other.walletID)
-			return false;
 		return true;
 	}
-	
-	
-	@Override
-	public String toString() {
-		
-		
-		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		 String st = sdf.format(registerTime);
-		
-		return id + "\t" + username + "\t"  + tel + "\t"
-				 + cyclingTime + "秒" + "\t" + st ;
+
+
+
+	public int getId() {
+		return id;
 	}
-	public User(int id, String username, String password, String tel, boolean isAdmin, long cyclingTime,
-			Date registerTime, int locationID, int walletID,String payPassword) {
-		super();
+
+	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
 		this.tel = tel;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+
+	public long getCyclingTime() {
+		return cyclingTime;
+	}
+
+	public void setCyclingTime(long cyclingTime) {
 		this.cyclingTime = cyclingTime;
+	}
+
+	public Date getRegisterTime() {
+		return registerTime;
+	}
+
+	public void setRegisterTime(Date registerTime) {
 		this.registerTime = registerTime;
+	}
+
+	public int getLocationID() {
+		return locationID;
+	}
+
+	public void setLocationID(int locationID) {
 		this.locationID = locationID;
-		this.walletID = walletID;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
 	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	public User(String username, String password, String tel, boolean isAdmin, long cyclingTime, Date registerTime,
-			int locationID, int walletID) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.tel = tel;
-		this.isAdmin = isAdmin;
-		this.cyclingTime = cyclingTime;
-		this.registerTime = registerTime;
-		this.locationID = locationID;
-		this.walletID = walletID;
-	}
-	
 	
 	
 	

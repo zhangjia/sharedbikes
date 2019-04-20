@@ -87,7 +87,7 @@ public class BillDaoImpl implements BillDao {
 		Wallet wallet = walletDao.queryByUserId(userId);
 		// G: Wallet wallet = queryWallet(walletId);
 
-		wallet.setCoupon(100);
+		wallet.setCoupon(100 + wallet.getCoupon());
 		doInsert(userId, "±¨ÐÞ½±Àø", 100);
 
 		return 0;

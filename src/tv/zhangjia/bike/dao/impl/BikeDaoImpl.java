@@ -121,7 +121,8 @@ public class BikeDaoImpl implements BikeDao {
 		Bike bike = queryById(bikeId);
 		bike.setStatus(-1);
 
-		return user.getWalletID();
+//		return user.getWalletID();
+		return user.getId();
 	}
 
 	@Override

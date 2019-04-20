@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
 		walletDao.doInsert(wallet);
 
 		// 将User和钱包关联
-		user.setWalletID(wallet.getId());
+//		user.setWalletID(wallet.getId());
 		// System.out.println("wa" + wallet.getId());
 		
 		Location lo = locationDao.randomUserLocation();

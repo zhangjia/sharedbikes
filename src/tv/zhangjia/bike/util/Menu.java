@@ -983,7 +983,7 @@ public class Menu {
 					break;
 				}
 
-				int walletId = bikeDao.setDamage(user, bikeId);
+				int walletId = walletDao.queryByUserId(bikeDao.setDamage(user, bikeId)).getId();
 
 				billDao.awardByBike(user.getId(), walletId);
 
@@ -1081,7 +1081,8 @@ public class Menu {
 			}
 		}
 
-		if (walletDao.recharge(user.getWalletID(), m) == 1) {
+		if (walletDao.recharge(walletDao.queryByUserId(user.getId()).getId(),m) == 1) {
+//			if (walletDao.recharge(user.getWalletID(), m) == 1) {
 			System.out.println("充值成功 ！\t");
 		} else {
 			System.out.println("充值失败  ！\t");
@@ -1346,7 +1347,7 @@ public class Menu {
 		if (register == 1) {
 			int uid = userDao.queryUserId(username);
 			User u = userDao.queryByUserId(uid);
-			awardRe(uid, u.getWalletID());
+			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
 			System.out.print("注册成功，是否登录？[ 是：y | 否： n ] ：");
 			String s = input.next();
 			if (s.equalsIgnoreCase("y")) {

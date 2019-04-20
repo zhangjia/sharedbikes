@@ -61,16 +61,15 @@ public class Database {
 		}
 
 		// 向数据库中默认添加一个管理员
-		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, 1, "zhangjia"));
+		USERS.add(new User(1, "admin", "1", "13863313959", true, 0, date, 1, "zhangjia"));
 		// 向数据库中默认添加二个用户
-		USERS.add(new User(2, "Luffy", "3", "15666335517", false, 0, date, 2, 2, "3"));
+		USERS.add(new User(2, "Luffy", "3", "15666335517", false, 0, date, 2,  "3"));
 
 		USEROPTIONS.add(new UserOptions(nextUserOptionsId(), 1,"免密支付", "0"));
 		USEROPTIONS.add(new UserOptions(nextUserOptionsId(), 2,"免密支付", "0"));
 
 		WALLETS.add(new Wallet(1, 1, 1000, 0, true, new Date()));
 		WALLETS.add(new Wallet(2, 2, 0, 0, false, null));
-		WALLETS.add(new Wallet(3, 3, 0, 0, false, null));
 
 		BIKES.add((new Bike(1, "脚蹬车", Double.parseDouble(OPTIONS.get(2).getValue()), 1, 1, 1, 0, "二维码")));
 		BIKES.add((new Bike(2, "助力车", Double.parseDouble(OPTIONS.get(3).getValue()), 2, 2, 1, 0, "二维码")));
