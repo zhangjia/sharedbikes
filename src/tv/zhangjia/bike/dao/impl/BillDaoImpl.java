@@ -18,7 +18,7 @@ import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.Wallet;
 import tv.zhangjia.bike.util.CommonDao;
 
-public class BillDaoImpl extends CommonDao<Bill> implements BillDao {
+public class BillDaoImpl extends CommonDao implements BillDao {
 //	private List<Bill> bills = Database.BILLS;
 //	private List<Wallet> wallets = Database.WALLETS;
 //	private List<User> users = Database.USERS;

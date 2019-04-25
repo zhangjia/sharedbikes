@@ -7,7 +7,7 @@ import tv.zhangjia.bike.dao.UserOptionsDao;
 import tv.zhangjia.bike.entity.UserOptions;
 import tv.zhangjia.bike.util.CommonDao;
 
-public class UserOptionsDaoImpl extends CommonDao<UserOptions>implements UserOptionsDao {
+public class UserOptionsDaoImpl extends CommonDao implements UserOptionsDao {
 //	List<UserSettings> userSettings = Database.USERSETTINGS;
 //	List<UserOptions> userOptions = Database.USEROPTIONS;
 

@@ -129,7 +129,7 @@ public class CommonDao extends JDBCUtils {
 					String name = field.getName();
 					// 根据属性名拼接set方法名
 					String smn = "";
-					System.out.println(field.getType().getName());
+//					System.out.println(field.getType().getName());
 					if (field.getType() == boolean.class && name.contains("is")) {
 						smn = "set" + name.substring(name.indexOf("is") + 2);
 					} else {
@@ -163,13 +163,13 @@ public class CommonDao extends JDBCUtils {
 								sm.invoke(t, value);
 								break;
 							}
-							if (field.getType() == boolean.class) {
+							if (field.getType() == boolean.class || field.getType() == Boolean.class) {
 								value = rs.getBoolean(columnName);
 								sm.invoke(t, value);
 								break;
 							}
 							// 执行set方法
-							System.out.println(value.getClass());
+//							System.out.println(value.getClass());
 							sm.invoke(t, value);
 						}
 					}

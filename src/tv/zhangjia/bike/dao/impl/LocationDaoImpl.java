@@ -17,7 +17,7 @@ import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.util.CommonDao;
 
-public class LocationDaoImpl extends CommonDao<Location>implements LocationDao {
+public class LocationDaoImpl extends CommonDao implements LocationDao {
 //	private List<Location> locations = Database.LOCATIONS;
 //	private List<Bike> bikes = Database.BIKES;
 

@@ -145,7 +145,7 @@ public class Menu {
 		String username;
 		while (true) {
 			username = input.next();
-			if (!userDao.isExistUserName(username)) {
+			if (!userDao.isUserNameExist(username)) {
 				System.out.print("没有该用户名,请重新输入：");
 			} else {
 				break;
@@ -181,7 +181,7 @@ public class Menu {
 		}
 
 		this.user = login;
-		if (user.isAdmin()) {
+		if (user.getIsAdmin()) {
 			adminMenu();
 		} else {
 			userMenu();
@@ -278,7 +278,7 @@ public class Menu {
 
 	private void usersBill() {
 
-		if (user.isAdmin()) {
+		if (user.getIsAdmin()) {
 			System.out.println("-------------下面是所有用户的账单信息-----------");
 			System.out.println("编号\t用户名\t账单名称\t余额变化\t\t产生时间");
 			List<Bill> bills = billDao.queryAll();
@@ -322,7 +322,7 @@ public class Menu {
 
 	private void usersWallet() {
 
-		if (user.isAdmin()) {
+		if (user.getIsAdmin()) {
 			System.out.println("-----------下面是所有用户的钱包信息-----------");
 			System.out.println("编号\t用户名\t账户余额\t红包余额\t用户等级\t  VIP时间");
 			List<Wallet> wallets = walletDao.queryAll();
@@ -561,7 +561,7 @@ public class Menu {
 	}
 
 	private void leaseRecord() {
-		if (user.isAdmin()) {
+		if (user.getIsAdmin()) {
 			System.out.println("----------下面是所有用户的单车租赁记录-----------");
 			List<LeaseRecord> bike = leaseRecordDao.queryAll();
 
@@ -591,7 +591,7 @@ public class Menu {
 	}
 
 	private void userInfo() {
-		if (user.isAdmin()) {
+		if (user.getIsAdmin()) {
 			System.out.println("----------------------下面是所有会员信息----------------------");
 			List<User> user = userDao.queryAll();
 			System.out.println("编号\t用户名\t用户手机号\t\t总骑行时间\t注册时间");
@@ -1383,7 +1383,7 @@ public class Menu {
 				mainMenu();
 				return;
 			}
-			if (user.isAdmin()) {
+			if (user.getIsAdmin()) {
 				adminMenu();// 管理员菜单
 			} else {
 				userMenu();// 普通用户菜单
@@ -1411,7 +1411,7 @@ public class Menu {
 				mainMenu();
 				return;
 			}
-			if (user.isAdmin()) {
+			if (user.getIsAdmin()) {
 				adminMenu();// 管理员菜单
 			} else {
 				userMenu();// 普通用户菜单

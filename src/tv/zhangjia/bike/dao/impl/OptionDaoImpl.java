@@ -8,7 +8,7 @@ import tv.zhangjia.bike.dao.OptionDao;
 import tv.zhangjia.bike.entity.Options;
 import tv.zhangjia.bike.util.CommonDao;
 
-public class OptionDaoImpl extends CommonDao<Options> implements OptionDao {
+public class OptionDaoImpl extends CommonDao implements OptionDao {
 //	List<Options> op = Database.OPTIONS;
 
 
