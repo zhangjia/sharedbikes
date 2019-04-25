@@ -3,9 +3,6 @@ package tv.zhangjia.bike.entity;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
-import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 
 public class Bill {
 	private Integer id; 		// 账单记录ID
@@ -54,10 +51,24 @@ public class Bill {
 		this.billDate = billDate;
 		this.money = money;
 	}
+	/**
+	 * 产生记录的时候，生成对象，时间和Id属性通过sql语句生成
+	 * @param billName
+	 * @param userId
+	 * @param money
+	 */
+	public Bill(String billName, Integer userId, Double money) {
+		super();
+		this.billName = billName;
+		this.userId = userId;
+		this.money = money;
+	}
 
 	public Integer getId() {
 		return id;
 	}
+
+	
 
 	public void setId(Integer id) {
 		this.id = id;

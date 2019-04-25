@@ -1,6 +1,5 @@
 package tv.zhangjia.bike.entity;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

@@ -1,8 +1,5 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.LocationDao;

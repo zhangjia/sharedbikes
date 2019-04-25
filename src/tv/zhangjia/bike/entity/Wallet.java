@@ -2,9 +2,6 @@ package tv.zhangjia.bike.entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
-import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 
 public class Wallet {
 	private Integer id; 		 // Ç®°üID

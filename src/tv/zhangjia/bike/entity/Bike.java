@@ -1,9 +1,5 @@
 package tv.zhangjia.bike.entity;
 
-import java.util.List;
-
-import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
-
 /**
  * µ•≥µ¿‡
  * 

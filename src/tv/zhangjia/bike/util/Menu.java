@@ -1353,7 +1353,7 @@ public class Menu {
 		if (register == 1) {
 			int uid = userDao.queryUserId(username);
 //			User u = userDao.queryByUserId(uid);
-//			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
+			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
 			Wallet w = walletDao.queryByUserId(uid);
 //			System.out.println(w + " ---" + uid);
 			awardRe(uid, w.getId());
