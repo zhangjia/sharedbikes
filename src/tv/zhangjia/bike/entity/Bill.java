@@ -170,11 +170,11 @@ public class Bill {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp tp = new Timestamp(billDate.getTime());
 		String sm = "";
-		// 显示是入账还是出账，因为支付金额传入的时候就是复数，所以不用加-
+		// 显示是入账还是出账
 		if (money >= 0) {
 			sm = "+" + money;
 		} else {
-			sm = "" + money;
+			sm = "-" + money;
 		}
 
 		return +id + "\t" + userName + "\t" + billName + "\t" + sm + "\t\t" + sdf.format(tp) + "\n";

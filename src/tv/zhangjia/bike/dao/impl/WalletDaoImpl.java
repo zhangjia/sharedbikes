@@ -1,13 +1,5 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.List;
 
 import tv.zhangjia.bike.dao.BillDao;
@@ -109,82 +101,34 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 		return x * x2 * y * y2;
 	}
 
-	//报修奖励
+	/**
+	 * 报修奖励
+	 * @param userId 报修的用户
+	 * @param walletId 报修用户的钱包
+	 * @return 奖励成功返回1，奖励失败返回0
+	 */
 	@Override
 	public int awardByBike(int userId, int walletId) {
-		UserDao userDao = new UserDaoImpl();
+		BillDao billDao = new BillDaoImpl();
 		WalletDao walletDao = new WalletDaoImpl();
-
-		if (userDao.queryByUserId(userId) == null) {
-			// G: if(queryUser(userId) == null) {
-			return -1; // 不存在该用户
-		}
+		// 获取报修用户的钱包
 		Wallet wallet = walletDao.queryByUserId(userId);
-		// G: Wallet wallet = queryWallet(walletId);
-
+		// 添加优惠券
 		wallet.setCoupon(100 + wallet.getCoupon());
-		walletDao.doUpdate(wallet);
-		doInsert(new Bill(userId, "报修奖励", 100, new Date(System.currentTimeMillis())));
+		// 更新用户钱包
+		int x = walletDao.doUpdate(wallet);
+		Bill bill = new Bill("报修奖励", userId, 100.0);
+		int y = billDao.doInsert(bill);
 
-		return 0;
+		return x * y;
 	}
 
-	// private User queryUser(int userId) {
-	// for (User user : users) {
-	// if(user.getId() == userId) {
-	// return user;
-	// }
-	// }
-	// return null;
-	// }
-	//
-	// private Wallet queryWallet(int walletId) {
-	// for (Wallet wallet : wallets) {
-	// if(wallet.getId() == walletId) {
-	// return wallet;
-	// }
-	// }
-	// return null;
-	// }
-
-	@Override
-	public boolean export() throws IOException {
-		List<Bill> record = Database.BILLS;
-
-		File file = new File("E:" + File.separator + "bike" + File.separator + "Bill" + File.separator + "bill.txt");
-		if (!file.getParentFile().exists()) {
-			file.getParentFile().mkdirs();
-		}
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		Writer writer = new FileWriter(file, true);
-		String str = "编号\t" + "用户名\t" + "账单名称\t\t" + "余额变化\t" + "产生时间\t" + "\r\n";
-		String str1 = "";
-
-		for (Bill bill : record) {
-			str1 += bill.toString();
-		}
-		// 3.2开始写入
-		writer.write(str);
-		writer.write(str1);
-
-		// 4释放资源
-		writer.close();
-
-		return true;
-
-		// 1.使用FIle确定要操作的文件
-
-	}
 
 	/**
 	 * 充值
 	 * 
-	 * @param userId
-	 *            要充值的用户ID
-	 * @param money
-	 *            要充值的金额
+	 * @param userId 要充值的用户ID
+	 * @param money 要充值的金额
 	 * @return 返回1充值成功，返回0充值失败
 	 * @see tv.zhangjia.bike.dao.WalletDao#recharge(int, double)
 	 */
@@ -206,56 +150,69 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	/**
 	 * 开通VIP
 	 * 
-	 * @param userId
-	 *            开通VIP的用户ID
-	 * @param month
-	 *            要开通的月份
+	 * @param userId 开通VIP的用户ID
+	 * @param month 要开通的月份
 	 * @return
 	 * @see tv.zhangjia.bike.dao.WalletDao#becomeVIP(int, int)
 	 */
 	@Override
 	public int becomeVIP(int userId, int month) {
-		Wallet wallet = queryByUserId(userId);
 		OptionDao op = new OptionDaoImpl();
-		Calendar c = Calendar.getInstance();
-		c.setTime(beforDate);
-		c.add(Calendar.MONTH, month);
-
-		Date d = new Date(c.getTimeInMillis());
+		//如果余额不足,返回-5
 		if (pay(userId, month * Double.parseDouble(op.queryValue("会员价格")), "开通会员") != 1) {
 			return -5;
 		} else {
-
-			String sql = "UPDATE wallet SET is_vip = 1,vipDate=? WHERE user_Id = ?";
-
-			return executeUpdate(sql, d, userId);
+			//如果没开通VIP,在当前时间的基础上加month，如果已经开通vip时间，在到期时间基础上加month
+			String sql = "UPDATE wallet SET is_vip = 1,vipDate= ADD_MONTHS(NVL(vipDate,sysdate),?) WHERE user_Id = ?";
+			return executeUpdate(sql, month, userId);
 		}
 	}
 
+	/**
+	 * 支付
+	 * @param userId 用户ID
+	 * @param money 支付金额
+	 * @param type  支付类型
+	 * @return 支付成功返回1，支付失败返回0
+	 */
 	@Override
 	public int pay(int userId, double money, String type) {
 		BillDao billDao = new BillDaoImpl();
 		Wallet pw = queryByUserId(userId);
+		//获取当前用户的优惠券余额
 		double coupon = pw.getCoupon();
+		//获取当前用户的账户余额
 		double balance = pw.getBalance();
-		double sum = pw.getBalance() + pw.getCoupon(); // 获取账户总金额
+		//获取当前用户的账户总额
+		double sum = coupon + balance; // 获取账户总金额
+		
+
 		// 如果总金额不够，返回没钱
 		if (sum - money < 0) {
 			return -5;
-			// 如果红包余额不够,那么使用红包和余额一起支付
+		// 如果红包余额不够,那么使用红包和余额一起支付
 		} else if (coupon < money) {
+			//计算需要从余额拿出多少钱支付
 			double h = money - coupon;
-			pw.setCoupon(0);
+			//将优惠券清零
+			pw.setCoupon(0.0);
+			//从余额扣除
 			pw.setBalance(pw.getBalance() - h);
-			// billDao.doInsert(queryUserId(pw.getId()), type, -money);
-			billDao.doInsert(new Bill(userId, type, -money, new Date(System.currentTimeMillis())));
-			return doUpdate(pw);
+			//生成记录
+			Bill bill = new Bill(type,userId, money);
+			int x = billDao.doInsert(bill);
+			//更新当前用户钱包
+			int y = doUpdate(pw);
+			return x * y;
 		} else {
 			// 如果红包余额够，只扣红包的钱
 			pw.setCoupon(coupon - money);
-			// billDao.doInsert(queryUserId(pw.getId()), type, -money);
-			billDao.doInsert(new Bill(userId, type, -money, new Date(System.currentTimeMillis())));
-			return doUpdate(pw);
+			//生成记录
+			Bill bill = new Bill(type,userId, money);
+			int x = billDao.doInsert(bill);
+			//更新当前用户钱包
+			int y = doUpdate(pw);
+			return x * y;
 		}
 	}
 

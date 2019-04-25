@@ -73,6 +73,37 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 		String sql = "SELECT * FROM bill WHERE user_id = ?";
 		return query4BeanList(sql, userId);
 	}
+	
+	@Override
+	public boolean export() throws IOException {
+		List<Bill> record = Database.BILLS;
+
+		File file = new File("E:" + File.separator + "bike" + File.separator + "Bill" + File.separator + "bill.txt");
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		Writer writer = new FileWriter(file, true);
+		String str = "编号\t" + "用户名\t" + "账单名称\t\t" + "余额变化\t" + "产生时间\t" + "\r\n";
+		String str1 = "";
+
+		for (Bill bill : record) {
+			str1 += bill.toString();
+		}
+		// 3.2开始写入
+		writer.write(str);
+		writer.write(str1);
+
+		// 4释放资源
+		writer.close();
+
+		return true;
+
+		// 1.使用FIle确定要操作的文件
+
+	}
 //
 //	@Override
 //	public int awardByregister(int user1Id, int wallet1Id, int user2Id) {
