@@ -1299,7 +1299,7 @@ public class Menu {
 		String username;
 		while (true) {
 			username = input.next();
-			if (userDao.isExistUserName(username)) {
+			if (userDao.isUserNameExist(username)) {
 				System.out.println("该用户名已经存在,建议您使用：" + userDao.adviseUsername(username));
 				printBoundary();
 				System.out.print("请重新输入用户名：");
@@ -1337,10 +1337,11 @@ public class Menu {
 		while (true) {
 			tel = input.next();
 			if (iiv.isTrueTel(tel)) {
+				//手机号存在返回true
 				if (userDao.isTelExist(tel)) {
-					break;
-				} else {
 					System.out.print("该手机号已经存在，请重新输入手机号：");
+				} else {
+					break;
 				}
 			} else {
 				System.out.print("手机号不合法，哪有这种手机号啊，请重新输入手机号：");
@@ -1353,7 +1354,7 @@ public class Menu {
 		if (register == 1) {
 			int uid = userDao.queryUserId(username);
 //			User u = userDao.queryByUserId(uid);
-			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
+//			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
 			Wallet w = walletDao.queryByUserId(uid);
 //			System.out.println(w + " ---" + uid);
 			awardRe(uid, w.getId());

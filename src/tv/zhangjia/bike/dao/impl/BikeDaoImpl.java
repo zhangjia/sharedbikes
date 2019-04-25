@@ -23,208 +23,112 @@ import tv.zhangjia.bike.util.Zxing;
  * @Version
  * @date 2019年3月26日 下午4:47:51
  */
-public class BikeDaoImpl extends CommonDao  implements BikeDao {
-//	private List<Bike> bikes = Database.BIKES;
+public class BikeDaoImpl extends CommonDao implements BikeDao {
 
-/*	@Override
-	public boolean doInsert(Bike bike) {
-		bike.setId(Database.nextBikeId());
-		bike.setLastLocationId(bike.getLocationId());
-		bikes.add(bike);
-
-		try {
-			Zxing.generateQR(bike);
-		} catch (WriterException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// 用于添加车辆的时候，位置的车辆总数+1
-		LocationDao locationDao = new LocationDaoImpl();
-		return locationDao.updateLocationBikes(bike.getLocationId());
-		
-	}*/
+	/**
+	 * 添加单车
+	 * @param bike 单车对象
+	 * @return 添加成功返回1，添加失败返回0
+	 */
 	@Override
 	public int doInsert(Bike bike) {
+		// 生成二维码
 		try {
 			Zxing.generateQR(bike);
-		} catch (WriterException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		String sql = "INSERT INTO bike VALUES(seq_bike.nextval,?,?,?,?,?,?)";
-		return executeUpdate(sql, bike.getType(),bike.getLocationId(),bike.getLocationId(),
-				bike.getStatus(),bike.getAmount(),bike.getQr());
-		
+		return executeUpdate(sql, bike.getType(), bike.getLocationId(), bike.getLocationId(), bike.getStatus(),
+				bike.getAmount(), bike.getQr());
+
 	}
 
-/*	@Override
-	public boolean doDelete(int id) {
-		Bike d = new Bike();
-		for (Bike bike : bikes) {
-			if (bike.getId() == id) {
-				d = bike;
-				bikes.remove(d);
-				return true;
-			}
-		}
-
-		return false;
-	}*/
+	/**
+	 * 删除单车
+	 * @param id 要删除的单车ID
+	 * @return 删除成功返回1，删除失败返回0
+	 */
 	@Override
 	public int doDelete(int id) {
 		String sql = "DELETE FROM bike WHERE id = ?";
 		return executeUpdate(sql, id);
 	}
 
-/*	@Override
-	public boolean doUpdate(Bike bike) {
-		for (int i = 0; i < bikes.size(); i++) {
-			if (bikes.get(i).getId() == bike.getId()) {
-				bikes.set(i, bike);
-				return true;
-			}
-
-		}
-
-		return false;
-	}*/
+	/**
+	 * 更新单车
+	 * @param id 要更新的单车ID
+	 * @return 更新成功返回1，更新失败返回0
+	 */
 	@Override
 	public int doUpdate(Bike bike) {
 		String sql = "UPDATE bike SET type = ?,location_id = ?,lastlocation_id = ?,status = ?,amount = ?,qr = ? WHERE id = ?";
-		return executeUpdate(sql,bike.getType(),bike.getLocationId(),bike.getLastLocationId(),bike.getStatus(),bike.getAmount(),bike.getQr(),bike.getId());
-		
+		return executeUpdate(sql, bike.getType(), bike.getLocationId(), bike.getLastLocationId(), bike.getStatus(),
+				bike.getAmount(), bike.getQr(), bike.getId());
+
 	}
 
-//	@Override
-//	public List<Bike> queryAll() {
-//		return bikes;
-//	}
+	/**
+	 * 查询所有单车
+	 * @return 所有单车
+	 */
 	@Override
 	public List<Bike> queryAll() {
-		String sql = "SELECT * FROM bike";
-		String sql2 = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name";
-		
-		return query4BeanList(sql,Bike.class);
+		// 通过和Option表连接，获取当前车型的价格存在price字段中
+		String sql = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name";
+		return query4BeanList(sql, Bike.class);
 	}
 
-//	@Override
-//	public Bike queryById(int id) {
-//		for (Bike bike : bikes) {
-//			if (bike.getId() == id) {
-//				return bike;
-//			}
-//		}
-//		return null;
-//	}
+	/**
+	 * 根据单车Id返回单车信息
+	 * @param id 单车ID
+	 * @return 单车信息
+	 */
 	@Override
 	public Bike queryById(int id) {
-		String sql = "SELECT * FROM bike WHERE id = ?";
-		return query4Bean(sql,id);
-	}
-//
-//	@Override
-//	public int bikeStatus(int bikeId) {
-//
-//		// 11：可借
-//		// 10：不可借
-//		// 5：没有该Id
-//		// -1：损坏
-//
-//		for (Bike bike : bikes) {
-//			if (bike.getId() == bikeId) {
-//				// 如果状态为可借，返回11
-//				if (bike.getStatus() == 1) {
-//					return 11;
-//					// 如果状态为不可借，返回10
-//				} else if (bike.getStatus() == 0) {
-//					return 10;
-//				} else if (bike.getStatus() == -1) {
-//					return -1;
-//				}
-//			}
-//		}
-//		return 5; // 没有此ID
-//	}
-	@Override
-	public int bikeStatus(int bikeId) {
-		String sql = "SELECT * FROM bike WHERE id = ?";
-		Bike bike = query4Bean(sql,bikeId);
-		return bike.getStatus();
-		
+		String sql = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name AND BIKE.id = ?";
+		return query4Bean(sql, Bike.class,id);
 	}
 
-//	@Override
-//	public int setDamage(User user, int bikeId) {
-//		Bike bike = queryById(bikeId);
-//		bike.setStatus(-1);
-//
-////		return user.getWalletID();
-//		return user.getId();
-//	}
+	/**
+	 * 查询单车状态
+	 * @param bikeId
+	 * @return
+	 */
+	@Override
+	public int bikeStatus(int bikeId) {
+		String sql = "SELECT status FROM bike WHERE id = ?";
+		return query4IntData(sql, Bike.class, bikeId);
+
+	}
+
+	// TODO 删除，用更新的方法替换
 	@Override
 	public int setDamage(User user, int bikeId) {
-		String sql2 = "UPDATE bike SET status = -1 WHERE id = ?";	
+		String sql2 = "UPDATE bike SET status = -1 WHERE id = ?";
 		executeUpdate(sql2, bikeId);
 		return user.getId();
 	}
 
-//	@Override
-//	public List<Bike> queryByDamage() {
-//		List<Bike> dbike = new ArrayList<>();
-//		for (Bike bike : bikes) {
-//			if (bike.getStatus() == -1) {
-//				dbike.add(bike);
-//			}
-//		}
-//		return dbike;
-//	}
+	// TODO 删除，已经有了报修类
 	@Override
 	public List<Bike> queryByDamage() {
 		String sql = "SELECT * FROM bike WHERE status = -1";
-		return query4BeanList(sql);
-	}
-	
-//	@Override
-//	public void updatePrice() {
-//		OptionDao as = new OptionDaoImpl();
-//		for (Bike bike : bikes) {
-//			if (bike.getType().equals("脚蹬车")) {
-//				bike.setPrice(Double.parseDouble(as.queryValue("脚蹬车")));
-//			} else {
-//				bike.setPrice(Double.parseDouble(as.queryValue("助力车")));
-//			}
-//		}
-//	}
-
-	
-	//重写抽象方法，用来返回具体的实例
-	@Override
-	public Bike getBeanFromResultSet(ResultSet rs) throws SQLException {
-		Bike bike = new Bike();
-		bike.setId(rs.getInt(1));
-		bike.setType(rs.getString(2));
-		bike.setLocationId(rs.getInt(3));
-		bike.setLastLocationId(rs.getInt(4));
-		bike.setStatus(rs.getInt(5));
-		bike.setAmount(rs.getInt(6));
-		bike.setQr(rs.getString(7));
-		return bike;
+		return null;
 	}
 
+	// TODO 删除，直接用查询来解决
 	@Override
 	public double queryBikePrice(int bikeId) {
 		String sql = "SELECT options.value FROM bike,options WHERE bike.type = options.name AND bike.id = ?";
-		return queryDoubleData(sql,bikeId);
+		return 0.0;
 	}
 
+	// TODO 删除，直接用查询来解决
 	@Override
 	public void updatePrice() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -102,7 +102,7 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public boolean isUserNameExist(String username) {
 		String sql = "SELECT * FROM users WHERE username = ?";
-		//如果找不到该用户，则返回null
+		//如果找不到该用户，query4Bean = null，则返回false
 		return query4Bean(sql, User.class, username) != null;
 	}
 
@@ -153,7 +153,11 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	public boolean isTelExist(String tel) {
 		String sql = "SELECT * FROM users WHERE tel = ?";
 		//如果找不到该用户，则返回null
+		User query4Bean = query4Bean(sql, User.class, tel);
+		System.out.println(query4Bean);
+		//如果不存在，返回是null
 		return query4Bean(sql, User.class, tel) != null;
+//		return query4Bean == null;
 	}
 
 	//TODO 去掉，直接用验证码来判断

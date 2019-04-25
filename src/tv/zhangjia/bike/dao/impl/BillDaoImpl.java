@@ -21,15 +21,11 @@ import tv.zhangjia.bike.entity.Wallet;
 import tv.zhangjia.bike.util.CommonDao;
 
 public class BillDaoImpl extends CommonDao implements BillDao {
-//	private List<Bill> bills = Database.BILLS;
-//	private List<Wallet> wallets = Database.WALLETS;
-//	private List<User> users = Database.USERS;
-
-//	@Override
-//	public boolean doInsert(int userId, String event, double money) {
-//		Bill bill = new Bill(Database.nextBillId(), event, userId, new Date(), money);
-//		return bills.add(bill);
-//	}
+	/**
+	 * 插入记录
+	 * @param bill
+	 * @return
+	 */
 	@Override
 	public int doInsert(Bill bill) {
 		String sql = "INSERT INTO bill VALUES(seq_bill.nextval,?,?,sysdate,?)";
@@ -42,31 +38,13 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 		return query4BeanList(sql);
 	}
 
-//	@Override
-//	public Bill queryByBillId(int billId) {
-//		for (Bill bill : bills) {
-//			if (bill.getId() == billId) {
-//				return bill;
-//			}
-//		}
-//		return null;
-//	}
+
 	@Override
 	public Bill queryByBillId(int billId) {
 		String sql = "SELECT * FROM bill WHERE id = ?";
 		return query4Bean(sql, billId);
 	}
-//
-//	@Override
-//	public List<Bill> queryUserBill(int userId) {
-//		List<Bill> newBill = new ArrayList<>();
-//		for (Bill bill : bills) {
-//			if (bill.getUserId() == userId) {
-//				newBill.add(bill);
-//			}
-//		}
-//		return newBill;
-//	}
+
 
 	@Override
 	public List<Bill> queryUserBill(int userId) {
@@ -76,7 +54,7 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	
 	@Override
 	public boolean export() throws IOException {
-		List<Bill> record = Database.BILLS;
+		List<Bill> record = queryAll();
 
 		File file = new File("E:" + File.separator + "bike" + File.separator + "Bill" + File.separator + "bill.txt");
 		if (!file.getParentFile().exists()) {
@@ -101,32 +79,8 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 
 		return true;
 
-		// 1.使用FIle确定要操作的文件
 
 	}
-//
-//	@Override
-//	public int awardByregister(int user1Id, int wallet1Id, int user2Id) {
-//		UserDao userDao = new UserDaoImpl();
-//		WalletDao walletDao = new WalletDaoImpl();
-//		User user2 = userDao.queryByUserId(user2Id);
-//		if (user2 == null) {
-//			// G: if(queryUser(user2Id) == null) {
-//			return -1; // 不存在该用户
-//		}
-//		// G: Wallet wallet1 = queryWallet(wallet1Id);
-//		// G: Wallet wallet2 = queryWallet(user2.getWalletID());
-//		Wallet wallet1 = walletDao.queryByUserId(user1Id);
-//		Wallet wallet2 = walletDao.queryByUserId(user2Id);
-//
-//		wallet1.setCoupon(wallet1.getCoupon() + 100);
-//		wallet2.setCoupon(wallet2.getCoupon() + 100);
-//
-//		doInsert(user1Id, "注册奖励", 100);
-//		doInsert(user2Id, "推广奖励", 100);
-//
-//		return 0;
-//	}
 
 
 }
