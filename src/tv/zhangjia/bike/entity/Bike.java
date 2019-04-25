@@ -2,121 +2,182 @@ package tv.zhangjia.bike.entity;
 
 import java.util.List;
 
-import tv.zhangjia.bike.data.Database;
+import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
 
 /**
  * 单车类
- * @ProjectName	SharedBikes	  
- * @PackgeName	tv.zhangjia.bike.entity	
- * @ClassName	Bike	
- * @author	ZhangJia
- * @Version	v1.0
- * @date	2019年3月26日 下午5:36:44
+ * 
+ * @ProjectName SharedBikes
+ * @PackgeName tv.zhangjia.bike.entity
+ * @ClassName Bike
+ * @author ZhangJia
+ * @Version v1.0
+ * @date 2019年3月26日 下午5:36:44
  */
 public class Bike {
-	private int id; 		//单车ID
-	private String type; 	//单车类型
-	private double price;	//单车价格
-	private int locationId;//单车位置
-	private int lastLocationId; //上一次单车位置
-	private int status;		//单车状态
-	private int amount;		//单车骑行次数
-	private String qr;		//单车二维码
-	private List<Location> ls = Database.LOCATIONS;
-	
-	
-	public Bike(int id, String type, double price, int locationId, int status, int amount) {
+	private Integer id; 				// 单车ID
+	private String type; 				// 单车类型
+	private Double price; 				// 单车价格
+	private Integer locationId; 		// 单车位置
+	private String locaionName; 		// 单车位置名字
+	private Integer lastLocationId; 	// 上次的位置
+	private Integer lastLocationName; 	// 上次位置名字
+	private Integer status; 			// 单车状态
+	private Integer amount; 			// 单车骑行次数
+	private String qr;					 // 单车二维码
+
+	/**
+	 * 无参的构造方法
+	 */
+	public Bike() {
+		super();
+	}
+
+	/**
+	 * 构造方法
+	 * 
+	 * @param id
+	 * @param type
+	 * @param price
+	 * @param locationId
+	 * @param lastLocationId
+	 * @param status
+	 * @param amount
+	 * @param qr
+	 */
+	public Bike(Integer id, String type, Double price, Integer locationId, Integer lastLocationId, Integer status,
+			Integer amount, String qr) {
 		super();
 		this.id = id;
 		this.type = type;
 		this.price = price;
 		this.locationId = locationId;
-		this.status = status;
-		this.amount = amount;
-	}
-	public Bike(String type, double price, int locationId, int status, int amount, String qr) {
-		super();
-		this.type = type;
-		this.price = price;
-		this.locationId = locationId;
+		this.lastLocationId = lastLocationId;
 		this.status = status;
 		this.amount = amount;
 		this.qr = qr;
 	}
-	public Bike(int id, String type, double price, int locationId, int status, int amount, String qr) {
+
+	/**
+	 * 不带ID的构造方法
+	 * 
+	 * @param type
+	 * @param price
+	 * @param locationId
+	 * @param lastLocationId
+	 * @param status
+	 * @param amount
+	 * @param qr
+	 */
+	public Bike(String type, Double price, Integer locationId, Integer lastLocationId, Integer status, Integer amount,
+			String qr) {
 		super();
-		this.id = id;
 		this.type = type;
 		this.price = price;
 		this.locationId = locationId;
+		this.lastLocationId = lastLocationId;
 		this.status = status;
 		this.amount = amount;
 		this.qr = qr;
 	}
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	public double getPrice() {
+
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+
+	public void setPrice(Double price) {
 		this.price = price;
 	}
-	public int getLocationId() {
+
+	public Integer getLocationId() {
 		return locationId;
 	}
-	public void setLocationId(int locationId) {
+
+	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
 	}
-	public int getLastLocationId() {
+
+	public String getLocaionName() {
+		return locaionName;
+	}
+
+	public void setLocaionName(String locaionName) {
+		this.locaionName = locaionName;
+	}
+
+	public Integer getLastLocationId() {
 		return lastLocationId;
 	}
-	public void setLastLocationId(int lastLocationId) {
+
+	public void setLastLocationId(Integer lastLocationId) {
 		this.lastLocationId = lastLocationId;
 	}
-	public int getStatus() {
+
+	public Integer getLastLocationName() {
+		return lastLocationName;
+	}
+
+	public void setLastLocationName(Integer lastLocationName) {
+		this.lastLocationName = lastLocationName;
+	}
+
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	public int getAmount() {
+
+	public Integer getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
+
 	public String getQr() {
 		return qr;
 	}
+
 	public void setQr(String qr) {
 		this.qr = qr;
 	}
+
+	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + amount;
-		result = prime * result + id;
-		result = prime * result + lastLocationId;
-		result = prime * result + locationId;
-		long temp;
-		temp = Double.doubleToLongBits(price);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((lastLocationId == null) ? 0 : lastLocationId.hashCode());
+		result = prime * result + ((locationId == null) ? 0 : locationId.hashCode());
+		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		result = prime * result + ((qr == null) ? 0 : qr.hashCode());
-		result = prime * result + status;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -126,22 +187,40 @@ public class Bike {
 		if (getClass() != obj.getClass())
 			return false;
 		Bike other = (Bike) obj;
-		if (amount != other.amount)
+		if (amount == null) {
+			if (other.amount != null)
+				return false;
+		} else if (!amount.equals(other.amount))
 			return false;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (lastLocationId != other.lastLocationId)
+		if (lastLocationId == null) {
+			if (other.lastLocationId != null)
+				return false;
+		} else if (!lastLocationId.equals(other.lastLocationId))
 			return false;
-		if (locationId != other.locationId)
+		if (locationId == null) {
+			if (other.locationId != null)
+				return false;
+		} else if (!locationId.equals(other.locationId))
 			return false;
-		if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
+		if (price == null) {
+			if (other.price != null)
+				return false;
+		} else if (!price.equals(other.price))
 			return false;
 		if (qr == null) {
 			if (other.qr != null)
 				return false;
 		} else if (!qr.equals(other.qr))
 			return false;
-		if (status != other.status)
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
 		if (type == null) {
 			if (other.type != null)
@@ -150,60 +229,27 @@ public class Bike {
 			return false;
 		return true;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		String locationName = null;
-		
-		for (Location location : ls) {
-			
-			if(location.getId() == locationId) {
-				locationName = location.getLocation();
-			} 
-		}
-		
-		if(locationId == -1) {
-				locationName = "骑行中";
+		String locationName = "";
+		// 如果状态是-1，则不显示当前位置，而是显示骑行
+		if (locationId == -1) {
+			locationName = "骑行中";
 		}
 		String statusName = null;
-		if(status == 1) {
+		// 如果状态是1，则显示可借
+		if (status == 1) {
 			statusName = "可借";
-		} else if(status == 0) {
+			// 如果状态是0，则显示未归还
+		} else if (status == 0) {
 			statusName = "未归还";
 		} else {
 			statusName = "损坏";
 		}
-		return id + "\t" + type + "\t" + price + "\t" + locationName
-				+ "\t"   + statusName + "\t" + amount + "\t" + qr
+
+		return id + "\t" + type + "\t" + price + "\t" + locationName + "\t" + statusName + "\t" + amount + "\t" + qr
 				+ "\n";
 	}
-	public Bike(int id, String type, double price, int locationId, int lastLocationId, int status, int amount,
-			String qr) {
-		super();
-		this.id = id;
-		this.type = type;
-		this.price = price;
-		this.locationId = locationId;
-		this.lastLocationId = lastLocationId;
-		this.status = status;
-		this.amount = amount;
-		this.qr = qr;
-	}
-	public Bike() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Bike(String type, double price, int locationId, int lastLocationId, int status, int amount, String qr) {
-		super();
-		this.type = type;
-		this.price = price;
-		this.locationId = locationId;
-		this.lastLocationId = lastLocationId;
-		this.status = status;
-		this.amount = amount;
-		this.qr = qr;
-	}
-	
-	
+
 }

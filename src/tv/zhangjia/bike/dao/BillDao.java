@@ -12,7 +12,8 @@ public interface BillDao {
 	 * @param userId
 	 * @return
 	 */
-	boolean doInsert(int userId, String event, double money);
+//	int doInsert(int userId, String event, double money);
+	int doInsert(Bill bill);
 
 	/**
 	 * 查询所有的账单记录

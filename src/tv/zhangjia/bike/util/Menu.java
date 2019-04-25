@@ -100,17 +100,13 @@ public class Menu {
 
 	}
 
-	private User retrievePassword(int userId) {
+	private int retrievePassword(int userId) {
 
 		System.out.print("请输入您的手机号：");
 		while (true) {
 			String tel = input.next();
 
-			int x = userDao.isTrueTel(userId, tel);
-			// System.out.println(tel);
-			// System.out.println(userId);
-			// System.out.println(userDao.queryUserName(userId));
-			if (x != 1) {
+			if (!userDao.isTrueTel( tel,userId)) {
 				System.out.print("该手机号和您的用户名不匹配,请重新输入：");
 			} else {
 				break;
@@ -136,7 +132,8 @@ public class Menu {
 
 		System.out.print("请输入新密码：");
 		String newPassword = input.next();
-		return userDao.retrievePassword(userId, newPassword);
+		
+		return userDao.doUpdate(new User(userId, newPassword));
 
 	}
 
@@ -149,7 +146,7 @@ public class Menu {
 		String username;
 		while (true) {
 			username = input.next();
-			if (userDao.isTrueUserName(username) != 1) {
+			if (!userDao.isExistUserName(username)) {
 				System.out.print("没有该用户名,请重新输入：");
 			} else {
 				break;
@@ -170,7 +167,7 @@ public class Menu {
 					String s = input.next();
 					printBoundary();
 					if (s.equalsIgnoreCase("y")) {
-						login = retrievePassword(userDao.queryUserId(username));
+						retrievePassword(userDao.queryUserId(username));
 						System.out.println("找回成功！请重新登录：");
 						userLogin(); // TODO :调用自己了
 					} else {
@@ -427,7 +424,8 @@ public class Menu {
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
 //					ass.setaBikePrice(dprice);
-					as.queryAlloptions().get(2).setValue(price);
+//					as.queryAlloptions().get(2).setValue(price);
+					as.doUpdate(price, "脚蹬车");
 //					bikeDao.updatePrice();
 					System.out.println("设置成功");
 					break;
@@ -443,8 +441,9 @@ public class Menu {
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
 //					ass.setbBikePrice(dprice);
-					as.queryAlloptions().get(3).setValue(price);
-					bikeDao.updatePrice();
+//					as.queryAlloptions().get(3).setValue(price);
+//					bikeDao.updatePrice();
+					as.doUpdate(price, "助力车");
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -460,7 +459,8 @@ public class Menu {
 				if (iiv.isDouble(price)) {
 					double dprice = Double.parseDouble(price);
 //					ass.setVipPrice(dprice);
-					as.queryAlloptions().get(1).setValue(price);
+//					as.queryAlloptions().get(1).setValue(price);
+					as.doUpdate(price, "会员价格");
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -476,7 +476,8 @@ public class Menu {
 				if (iiv.isDouble(discount)) {
 					double ddiscount = Double.parseDouble(discount);
 //					ass.setDiscount(ddiscount);
-					as.queryAlloptions().get(0).setValue(discount);
+//					as.queryAlloptions().get(0).setValue(discount);
+					as.doUpdate(discount, "折扣");
 					System.out.println("设置成功");
 					break;
 				} else {
@@ -489,7 +490,8 @@ public class Menu {
 			System.out.print("请输入广告内容：");
 			String advertising = input.next();
 //			ass.setAdvertising(advertising);
-			as.queryAlloptions().get(4).setValue(advertising);
+//			as.queryAlloptions().get(4).setValue(advertising);
+			as.doUpdate(advertising, "广告");
 			System.out.println("设置成功");
 			break;
 		default:
@@ -541,8 +543,10 @@ public class Menu {
 		printBoundary();
 		Location lo = locationDao.queryLocation(locationID);
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
-		List<Bike> bs = lo.getBikes();
-		for (Bike bike : bs) {
+		
+		List<Bike> bikesByLo = locationDao.queryBikesByLocation(lo.getId());
+//		List<Bike> bs = lo.getBikes();
+		for (Bike bike : bikesByLo) {
 
 			System.out.println(bike);
 		}
@@ -636,7 +640,7 @@ public class Menu {
 		int locationId = bike.getLocationId();
 		if (bikeDao.doDelete(bikeId) == 1) {
 			// locationDao.deleteLocationBikes(locationId,bikeId);
-			locationDao.updateLocationBikes(locationId);
+//			locationDao.updateLocationBikes(locationId);
 			System.out.println("删除成功");
 		} else {
 			System.out.println("删除失败");
@@ -756,12 +760,12 @@ public class Menu {
 		int doUpdate = bikeDao.doUpdate(bike);
 		if (doUpdate == 1) {
 			if (status == 0) {
-				locationDao.updateLocationBikes(bike.getLastLocationId());
+//				locationDao.updateLocationBikes(bike.getLastLocationId());
 			} else if (status == 1){
-				locationDao.updateLocationBikes(bike.getLastLocationId());
-				locationDao.updateLocationBikes(locationId);
+//				locationDao.updateLocationBikes(bike.getLastLocationId());
+//				locationDao.updateLocationBikes(locationId);
 			} else {
-				locationDao.updateLocationBikes(bike.getLocationId());
+//				locationDao.updateLocationBikes(bike.getLocationId());
 				
 			}
 			System.out.print("修改成功！");
@@ -962,7 +966,7 @@ public class Menu {
 		Location lo = locationDao.queryLocation(user.getLocationID());
 		System.out.print("您的当前位置是[ " + lo.getLocation() + " ]");
 		System.out.println("，下面是该位置下的所有的单车信息");
-		List<Bike> bike = lo.getBikes();
+		List<Bike> bike = locationDao.queryBikesByLocation(lo.getId());
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
 			System.out.println(bike2);
@@ -972,15 +976,15 @@ public class Menu {
 
 	private void awardByRepairs() {
 		printBoundary();
-		System.out.print("请输入损坏的车辆");
+		System.out.print("请输入损坏的车辆:");
 		String id = input.next();
 		while (true) {
 			if (iiv.isNumber(id)) {
 				int bikeId = Integer.parseInt(id);
 				int status = bikeDao.bikeStatus(bikeId);
 				if (status == -1) {
-					System.out.println("该车已经损坏");
-					break;
+					System.out.print("该车已经损坏,");
+					returnMenu();
 				}
 
 				int walletId = walletDao.queryByUserId(bikeDao.setDamage(user, bikeId)).getId();
@@ -1024,20 +1028,23 @@ public class Menu {
 		case 1:
 			System.out.println("----------免密支付设置----------");
 			String s = us.queryUserSetting(user.getId(), "免密支付");
-			System.out.println("您目前免密支付设置为：" + s);
+			System.out.println(s);
+			System.out.println("您目前免密支付设置为：" + (s.equals("1") ? "开" : "关"));
 			System.out.print("请更改您的设置 ： [ 打开：t | 关闭 f | 返回 r ] ：");
 			// System.out.println("打开：t,关闭：f,任意键返回");
 			String auto = input.next();
 			if (auto.equalsIgnoreCase("t")) {
 //				ps.setActp(true);
-				us.sestValues(user.getId(), "免密支付", "1");
+//				us.sestValues(new UserOptions(user.getId(), "免密支付", "1"));
+				us.doUpdate(new UserOptions(user.getId(), "免密支付", "1"));
 				System.out.print("设置成功！");
 				returnMenu();
 
 			} else if (auto.equalsIgnoreCase("f")) {
 				System.out.println("设置成功！");
 //				ps.setActp(false);
-				us.sestValues(user.getId(), "免密支付", "0");
+//				us.sestValues(user.getId(), "免密支付", "0");
+				us.doUpdate(new UserOptions(user.getId(), "免密支付", "0"));
 				returnMenu();
 			} else {
 				userMenu();
@@ -1081,8 +1088,8 @@ public class Menu {
 			}
 		}
 
-		if (walletDao.recharge(walletDao.queryByUserId(user.getId()).getId(),m) == 1) {
-//			if (walletDao.recharge(user.getWalletID(), m) == 1) {
+		if (walletDao.recharge(user.getId(),m) == 1) {
+//			if (walletDao.recharge(walletDao.queryByUserId(user.getId()).getId(),m) == 1) {
 			System.out.println("充值成功 ！\t");
 		} else {
 			System.out.println("充值失败  ！\t");
@@ -1158,7 +1165,7 @@ public class Menu {
 		List<User> users = userDao.queryAll();
 
 		for (User user2 : users) {
-			if (user2.getPayPassword().equals(payPassword) && user.getId() == user.getId()) {
+			if (user2.getPayPassword().equals(payPassword) && user2.getId() == user.getId()) {
 				return true;
 			}
 		}
@@ -1293,7 +1300,7 @@ public class Menu {
 		String username;
 		while (true) {
 			username = input.next();
-			if (userDao.isTrueUserName(username) == 1) {
+			if (userDao.isExistUserName(username)) {
 				System.out.println("该用户名已经存在,建议您使用：" + userDao.adviseUsername(username));
 				printBoundary();
 				System.out.print("请重新输入用户名：");
@@ -1346,8 +1353,11 @@ public class Menu {
 
 		if (register == 1) {
 			int uid = userDao.queryUserId(username);
-			User u = userDao.queryByUserId(uid);
-			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
+//			User u = userDao.queryByUserId(uid);
+//			awardRe(uid, walletDao.queryByUserId(u.getId()).getId());
+			Wallet w = walletDao.queryByUserId(uid);
+//			System.out.println(w + " ---" + uid);
+			awardRe(uid, w.getId());
 			System.out.print("注册成功，是否登录？[ 是：y | 否： n ] ：");
 			String s = input.next();
 			if (s.equalsIgnoreCase("y")) {

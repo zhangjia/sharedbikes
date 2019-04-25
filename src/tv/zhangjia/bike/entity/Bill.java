@@ -1,93 +1,121 @@
 package tv.zhangjia.bike.entity;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import tv.zhangjia.bike.data.Database;
+import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 
 public class Bill {
-	private int id;// 账单记录ID
-	private String billName; // 账单记录名称
-	private int userId;
-	private Date billDate; //账单记录产生时间
-	private double money;
-	private List<User> users = Database.USERS;
-	public int getId() {
+	private Integer id; 		// 账单记录ID
+	private String billName; 	// 账单记录名称
+	private Integer userId; 	// 产生该账单的用户
+	private String userName; 	// 产生该账单的用户名
+	private Date billDate; 		// 账单记录产生时间
+	private Double money; 		// 账单记录产生的金额
+
+	/**
+	 * 无参构造方法
+	 */
+	public Bill() {
+		super();
+	}
+
+	/**
+	 * 构造方法
+	 * 
+	 * @param id
+	 * @param billName
+	 * @param userId
+	 * @param billDate
+	 * @param money
+	 */
+	public Bill(Integer id, String billName, Integer userId, Date billDate, Double money) {
+		super();
+		this.id = id;
+		this.billName = billName;
+		this.billDate = billDate;
+		this.money = money;
+	}
+
+	/**
+	 * 不带ID的构造方法
+	 * 
+	 * @param billName
+	 * @param userId
+	 * @param billDate
+	 * @param money
+	 */
+	public Bill(String billName, Integer userId, Date billDate, Double money) {
+		super();
+		this.billName = billName;
+		this.userId = userId;
+		this.billDate = billDate;
+		this.money = money;
+	}
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getBillName() {
 		return billName;
 	}
+
 	public void setBillName(String billName) {
 		this.billName = billName;
 	}
-	public int getUserId() {
+
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public Date getBillDate() {
 		return billDate;
 	}
+
 	public void setBillDate(Date billDate) {
 		this.billDate = billDate;
 	}
-	public double getMoney() {
+
+	public Double getMoney() {
 		return money;
 	}
-	public void setMoney(double money) {
+
+	public void setMoney(Double money) {
 		this.money = money;
 	}
-	@Override
-	public String toString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String username = "";
-		String sm = "";
-		for (User user : users) {
-			if(user.getId() == userId) {
-				username = user.getUsername();
-			}
-			
-		}
-		if(money >= 0) {
-			sm = "+" + money;
-		} else {
-			sm = "" + money;
-		}
-		
-		return + id + "\t" + username + "\t" + billName +  "\t" + sm  
-				+ "\t\t" + sdf.format(billDate) + "\n";
-	}
-	public Bill() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Bill(int id, String billName, int userId, Date billDate, double money) {
-		super();
-		this.id = id;
-		this.billName = billName;
-		this.userId = userId;
-		this.billDate = billDate;
-		this.money = money;
-	}
+
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((billDate == null) ? 0 : billDate.hashCode());
 		result = prime * result + ((billName == null) ? 0 : billName.hashCode());
-		result = prime * result + id;
-		long temp;
-		temp = Double.doubleToLongBits(money);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + userId;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((money == null) ? 0 : money.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -107,21 +135,38 @@ public class Bill {
 				return false;
 		} else if (!billName.equals(other.billName))
 			return false;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (Double.doubleToLongBits(money) != Double.doubleToLongBits(other.money))
+		if (money == null) {
+			if (other.money != null)
+				return false;
+		} else if (!money.equals(other.money))
 			return false;
-		if (userId != other.userId)
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
 			return false;
 		return true;
 	}
-	public Bill(String billName, int userId, Date billDate, double money) {
-		super();
-		this.billName = billName;
-		this.userId = userId;
-		this.billDate = billDate;
-		this.money = money;
+
+	@Override
+	public String toString() {
+		// 格式化账单显示时间
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Timestamp tp = new Timestamp(billDate.getTime());
+		String sm = "";
+		// 显示是入账还是出账，因为支付金额传入的时候就是复数，所以不用加-
+		if (money >= 0) {
+			sm = "+" + money;
+		} else {
+			sm = "" + money;
+		}
+
+		return +id + "\t" + userName + "\t" + billName + "\t" + sm + "\t\t" + sdf.format(tp) + "\n";
 	}
-	
-	
+
 }

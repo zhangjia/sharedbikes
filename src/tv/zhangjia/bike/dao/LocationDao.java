@@ -2,6 +2,7 @@ package tv.zhangjia.bike.dao;
 
 import java.util.List;
 
+import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Location;
 
 public interface LocationDao {
@@ -17,28 +18,8 @@ public interface LocationDao {
 	 * @return
 	 */
 	Location queryLocation(int id);
-	
-	/**
-	 * 添加位置
-	 * @param id
-	 * @return
-	 */
-	int doInsert(int id);
-	
-	/**
-	 * 更新位置
-	 * @param id
-	 * @return
-	 */
-	int doUpdate(int id);
-	
-	
-	/**
-	 * 删除位置
-	 * @param id
-	 * @return
-	 */
-	int doDelete(int id);
+
+
 	
 	/**
 	 * 归还单车时，模拟随机生成位置
@@ -60,16 +41,13 @@ public interface LocationDao {
 	 */
 	List<String> dispatch();
 	
-	/*
-	int changeBikeLocation(int bikeId,int locationId, int oldLocationId);
+	List<Bike> queryBikesByLocation(int locationId);
 	
-	
-	int addBikeLocation(int bikeId, int locationId);*/
-	
-	boolean updateLocationBikes(int locationId);
-	
-	
-	 boolean deleteLocationBikes(int locationId,int bikeID);
+//	
+//	boolean updateLocationBikes(int locationId);
+//	
+//	
+//	 boolean deleteLocationBikes(int locationId,int bikeID);
 	
 	Location randomUserLocation();
 }

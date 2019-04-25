@@ -67,45 +67,36 @@ public interface UserDao {
 	 */
 	int queryUserId(String username);
 
-	/**
-	 * 添加支付密码
-	 * @param userId
-	 * @param payPassword
-	 * @return
-	 */
-	int addPayPassword(int userId, String payPassword);
 
-	/**
-	 * 修改密码
-	 * @param userId
-	 * @param editPassword
-	 * @return
-	 */
-	int editPassword(int userId, String editPassword);
-
-	/**
-	 * 找回密码
-	 * @param userId
-	 * @param password
-	 * @return
-	 */
-	User retrievePassword(int userId, String password);
+//	/**
+//	 * 修改密码
+//	 * @param userId
+//	 * @param editPassword
+//	 * @return
+//	 */
+//	int editPassword(int userId, String editPassword);
+//
+//	/**
+//	 * 找回密码
+//	 * @param userId
+//	 * @param password
+//	 * @return
+//	 */
+//	User retrievePassword(int userId, String password);
 
 	/**
 	 * 是否存在该用户名
 	 * @param username
 	 * @return
 	 */
-	int isTrueUserName(String username);
+	boolean isExistUserName(String username);
 
-	/*
-	 *是否存在该手机号 
-	 */
-	int isTrueTel(int userId, String tel);
+	int doUpdate(User user);
 
 	String adviseUsername(String username);
 	
 	boolean isTelExist(String tel);
 	
 	boolean isTruePayPassword(int userId, String payPassword);
+	boolean isTrueTel(String tel,int userId);
 }

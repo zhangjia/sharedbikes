@@ -4,55 +4,89 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import tv.zhangjia.bike.data.Database;
+import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 
 public class Wallet {
-	private int id;
-	private int userId; // 用户ID
-	private double balance; // 用户余额
-	private double coupon; // 用户优惠券余额
-	private boolean isVIP;// 用户是否是VIP，用户类型
-	private Date vipDate; // VIP时间
+	private Integer id; 		 // 钱包ID
+	private Integer userId; 	 // 用户ID
+	private Integer userName;	 // 用户名
+	private Double balance;		 // 用户余额
+	private Double coupon; 		 // 用户优惠券余额
+	private Boolean isVIP; 		 // 用户是否是VIP，用户类型
+	private Date vipDate;		 // VIP到期时间
 
-	private List<User> users = Database.USERS;
+	/**
+	 * 无参构造方法
+	 */
+	public Wallet() {
+		super();
+	}
 
-	public int getId() {
+	/**
+	 * 构造方法
+	 * 
+	 * @param id
+	 * @param userId
+	 * @param balance
+	 * @param coupon
+	 * @param isVIP
+	 * @param vipDate
+	 */
+	public Wallet(Integer id, Integer userId, Double balance, Double coupon, Boolean isVIP, Date vipDate) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.balance = balance;
+		this.coupon = coupon;
+		this.isVIP = isVIP;
+		this.vipDate = vipDate;
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
-	public double getBalance() {
+	public Integer getUserName() {
+		return userName;
+	}
+
+	public void setUserName(Integer userName) {
+		this.userName = userName;
+	}
+
+	public Double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(double balance) {
+	public void setBalance(Double balance) {
 		this.balance = balance;
 	}
 
-	public double getCoupon() {
+	public Double getCoupon() {
 		return coupon;
 	}
 
-	public void setCoupon(double coupon) {
+	public void setCoupon(Double coupon) {
 		this.coupon = coupon;
 	}
 
-	public boolean isVIP() {
+	public Boolean getIsVIP() {
 		return isVIP;
 	}
 
-	public void setVIP(boolean isVIP) {
+	public void setIsVIP(Boolean isVIP) {
 		this.isVIP = isVIP;
 	}
 
@@ -68,14 +102,11 @@ public class Wallet {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(balance);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(coupon);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + id;
-		result = prime * result + (isVIP ? 1231 : 1237);
-		result = prime * result + userId;
+		result = prime * result + ((balance == null) ? 0 : balance.hashCode());
+		result = prime * result + ((coupon == null) ? 0 : coupon.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((isVIP == null) ? 0 : isVIP.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		result = prime * result + ((vipDate == null) ? 0 : vipDate.hashCode());
 		return result;
 	}
@@ -89,15 +120,30 @@ public class Wallet {
 		if (getClass() != obj.getClass())
 			return false;
 		Wallet other = (Wallet) obj;
-		if (Double.doubleToLongBits(balance) != Double.doubleToLongBits(other.balance))
+		if (balance == null) {
+			if (other.balance != null)
+				return false;
+		} else if (!balance.equals(other.balance))
 			return false;
-		if (Double.doubleToLongBits(coupon) != Double.doubleToLongBits(other.coupon))
+		if (coupon == null) {
+			if (other.coupon != null)
+				return false;
+		} else if (!coupon.equals(other.coupon))
 			return false;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
-		if (isVIP != other.isVIP)
+		if (isVIP == null) {
+			if (other.isVIP != null)
+				return false;
+		} else if (!isVIP.equals(other.isVIP))
 			return false;
-		if (userId != other.userId)
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
 			return false;
 		if (vipDate == null) {
 			if (other.vipDate != null)
@@ -109,40 +155,9 @@ public class Wallet {
 
 	@Override
 	public String toString() {
-		 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String username = "";
-		for (User user : users) {
-			if (user.getId() == userId) {
-				username = user.getUsername();
-			}
-		}
-		
-		
-		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + (isVIP ? "VIP用户" : "普通用户" )+ "\t" + (vipDate == null ? "未开通" : sdf.format(vipDate));
-	}
-
-	public Wallet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Wallet(int id, int userId, double balance, double coupon, boolean isVIP, Date vipDate) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.balance = balance;
-		this.coupon = coupon;
-		this.isVIP = isVIP;
-		this.vipDate = vipDate;
-	}
-
-	public Wallet(int userId, double balance, double coupon, boolean isVIP, Date vipDate) {
-		super();
-		this.userId = userId;
-		this.balance = balance;
-		this.coupon = coupon;
-		this.isVIP = isVIP;
-		this.vipDate = vipDate;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return id + "\t" + userName + "\t" + balance + "\t" + coupon + (isVIP ? "VIP用户" : "普通用户") + "\t"
+				+ (vipDate == null ? "未开通" : sdf.format(vipDate));
 	}
 
 }

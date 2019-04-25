@@ -20,8 +20,8 @@ import tv.zhangjia.bike.entity.Wallet;
 public class LeaseRecordDaoImpl implements LeaseRecordDao {
 //	private AdminSettings as = Database.as;
 	private OptionDao as = new OptionDaoImpl();
-	private List<LeaseRecord> lrs = Database.LEASERECORDS;
-	private List<User> users = Database.USERS;
+//	private List<LeaseRecord> lrs = Database.LEASERECORDS;
+//	private List<User> users = Database.USERS;
 	// 借车的时候，生成借车记录时传入用户名
 	// TODO 创建根据用户ID返回用户名的方法
 	// private UserDao userDao = new UserDaoImpl();
@@ -52,7 +52,7 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 			// System.out.println(bike.getLocationId());
 
 			// 更新当前位置的信息
-			locationDao.updateLocationBikes(bike.getLastLocationId());
+//			locationDao.updateLocationBikes(bike.getLastLocationId());
 
 			// 获取当前位置的名称
 			Location lo = locationDao.queryLocation(bike.getLastLocationId());
@@ -175,7 +175,7 @@ public class LeaseRecordDaoImpl implements LeaseRecordDao {
 
 				lr.setLocations(start + " ---> " + end);
 				// 更新位置
-				locationDao.updateLocationBikes(bike.getLocationId());
+//				locationDao.updateLocationBikes(bike.getLocationId());
 				// locationDao.updateLocationBikes(bike.getLastLocationId());
 
 				return 1;// 归还成功

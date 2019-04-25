@@ -4,7 +4,8 @@ import tv.zhangjia.bike.entity.UserOptions;
 
 public interface UserOptionsDao {
 	int doInsert(UserOptions us);
-	boolean setOptions(int userId,String name,String values);
+//	boolean setOptions(int userId,String name,String values);
+//	boolean sestValues(int userId,String name, String values);
+	int doUpdate(UserOptions us);
 	String queryUserSetting(int id,String name);
-	boolean sestValues(int userId,String name, String values);
 }

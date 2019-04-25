@@ -3,14 +3,11 @@ package tv.zhangjia.bike.dao.impl;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.BikeDao;
-import tv.zhangjia.bike.dao.OptionDao;
-import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.util.CommonDao;
@@ -109,7 +106,9 @@ public class BikeDaoImpl extends CommonDao<Bike> implements BikeDao {
 	@Override
 	public List<Bike> queryAll() {
 		String sql = "SELECT * FROM bike";
-		return query4BeanList(sql);
+		String sql2 = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name";
+		
+		return query4BeanList(sql,Bike.class);
 	}
 
 //	@Override
@@ -218,8 +217,8 @@ public class BikeDaoImpl extends CommonDao<Bike> implements BikeDao {
 
 	@Override
 	public double queryBikePrice(int bikeId) {
-		String sql = "SELECT * FROM bike,options WHERE bike.type = options.name";
-		return 0;
+		String sql = "SELECT options.value FROM bike,options WHERE bike.type = options.name AND bike.id = ?";
+		return queryDoubleData(sql,bikeId);
 	}
 
 	@Override

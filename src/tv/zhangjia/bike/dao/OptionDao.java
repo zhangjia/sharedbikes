@@ -8,4 +8,5 @@ public interface OptionDao {
 	
 	List<Options> queryAlloptions();
 	String queryValue(String name);
+	 int  doUpdate(String value,String name);
 }

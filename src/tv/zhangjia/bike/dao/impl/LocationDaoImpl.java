@@ -1,5 +1,7 @@
 package tv.zhangjia.bike.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,49 +13,32 @@ import java.util.TreeMap;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.dao.LocationDao;
-import tv.zhangjia.bike.data.Database;
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Location;
+import tv.zhangjia.bike.util.CommonDao;
 
-public class LocationDaoImpl implements LocationDao {
-	private List<Location> locations = Database.LOCATIONS;
-	private List<Bike> bikes = Database.BIKES;
+public class LocationDaoImpl extends CommonDao<Location>implements LocationDao {
+//	private List<Location> locations = Database.LOCATIONS;
+//	private List<Bike> bikes = Database.BIKES;
 
 	@Override
 	public List<Location> queryAll() {
-		return locations;
+		String sql = "SELECT * FROM location";
+		return query4BeanList(sql);
+		
 	}
 
 	@Override
 	public Location queryLocation(int id) {
-		for (Location location : locations) {
-			if (location.getId() == id) {
-				return location;
-			}
-		}
-		return null;
+		String sql = "SELECT * FROM location WHERE id = ?";
+		return query4Bean(sql,id);
 	}
 
-	@Override
-	public int doInsert(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public int doUpdate(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int doDelete(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public Location randomLocation(int locationId, int bikeId, int leaseRecordId) {
+		List<Location> locations = queryAll();
 		Random ran = new Random();
 		int index = ran.nextInt(locations.size());
 		// 随机选择一个位置
@@ -71,6 +56,7 @@ public class LocationDaoImpl implements LocationDao {
 	
 	@Override
 	public Location randomUserLocation() {
+		List<Location> locations = queryAll();
 		Random ran = new Random();
 		int index = ran.nextInt(locations.size());
 		// 随机选择一个位置
@@ -90,48 +76,11 @@ public class LocationDaoImpl implements LocationDao {
 
 	@Override
 	public List<String> dispatch() {
+		BikeDao bikeDao = new BikeDaoImpl();
+		List<Bike> bikes = bikeDao.queryAll();
+		List<Location> locations = queryAll();
 		List<String> arr = new ArrayList<>();
-	/*	StringBuilder arr = new StringBuilder();
-		List<Integer> small = new ArrayList<>();
-		List<Integer> big = new ArrayList<>();
-		List<Integer> locationId = new ArrayList<>();
-		int  average = bikes.size() / queryAll().size();
-		
-		
-		for (Location lo : locations) {
-			if(lo.getBikes().size() - average > 0) {
-				big.add(lo.getBikes().size());
-			} else if(lo.getBikes().size() - average < 0){
-				
-				small.add(lo.getBikes().size());
-			}
-		}
-		
-		Collections.sort(small);
-		Collections.sort(big);
 	
-		
-		for (int i = big.size() - 1; i >= 0; i--) {
-			for (int j = 0; j < small.size(); j++) {
-				int more = big.get(i) - average;
-				int need = average - small.get(j);
-				int cost = more - need;
-				if(cost >= 0) {
-					big.set(i, big.get(i) - need );
-					small.set(j, small.get(j) + need);
-					arr.append("从" + "拿出" + need + "辆单车送往");
-					
-				} else {
-					big.set(i, big.get(i) - more );
-					small.set(j, small.get(j) + more);
-					break;
-				}
-				
-			}
-		}		
-		
-		System.out.println(big);
-		System.out.println(small);*/
 		double size = 0;
 		for (Bike bike : bikes) {
 			if(bike.getStatus() != 0) {
@@ -145,10 +94,12 @@ public class LocationDaoImpl implements LocationDao {
 		Map<Integer, Integer> small = new TreeMap<>();
 		Map<Integer, Integer> big = new TreeMap<>();
 		for (Location lo : locations) {
-			if(lo.getBikes().size() - average > 0) {
-				big.put(lo.getId(), lo.getBikes().size());
-			} else if(lo.getBikes().size() - average < 0){
-				small.put(lo.getId(),lo.getBikes().size());
+			List<Bike> bikesByLo = queryBikesByLocation(lo.getId());
+			
+			if(bikesByLo.size() - average > 0) {
+				big.put(lo.getId(), bikesByLo.size());
+			} else if(bikesByLo.size() - average < 0){
+				small.put(lo.getId(),bikesByLo.size());
 			}
 		}
 
@@ -225,62 +176,53 @@ public class LocationDaoImpl implements LocationDao {
 		
 		return arr;
 	}
-/*
-	@Override
-	public int changeBikeLocation(int bikeId, int locationId, int oldLocationId) {
-		for (Bike bike : bikes) {
-			if (bike.getId() == bikeId) {
-				// 找到车后，如果可借，那么从该位置中去掉该车
-				if (bike.getStatus() == 1) {
-					Location l = queryLocation(oldLocationId);
-					l.getBikes().remove(bike);
-					return 1;
-				} else {
-					// 如果不可借，添加到新位置
-					queryLocation(locationId).getBikes().add(bike);
-					return 1;
-				}
-			}
-		}
 
-		return 0;
-	}
 
-	@Override
-	public int addBikeLocation(int bikeId, int locationId) {
-		for (Bike bike : bikes) {
-			if (bike.getId() == bikeId) {
-
-				queryLocation(locationId).getBikes().add(bike);
-			}
-		}
-
-		return 0;
-	}*/
+//	@Override
+//	public boolean updateLocationBikes(int locationId) {
+//		List<Bike> b = new ArrayList<>();
+//		for (Bike bike : bikes) {
+//			if(bike.getLocationId() == locationId) {
+//				b.add(bike);
+//			} 
+//		}
+//		
+//		queryLocation(locationId).setBikes(b);
+//		return true;
+//	}
+	
+	
+//	@Override
+//	public boolean deleteLocationBikes(int locationId,int bikeID) {
+//		BikeDao bikeDao = new BikeDaoImpl();
+//		//获取该位置的信息
+//		Location lo = queryLocation(locationId);
+//		Bike bike = bikeDao.queryById(bikeID);
+//		
+//		lo.getBikes().remove(bike);
+//		return true;
+//	}
 
 	@Override
-	public boolean updateLocationBikes(int locationId) {
-		List<Bike> b = new ArrayList<>();
+	public List<Bike> queryBikesByLocation(int locationId) {
+		BikeDao bikeDao = new BikeDaoImpl();
+		List<Bike> bikes = bikeDao.queryAll();
+		List<Bike> bl = new ArrayList<>();
 		for (Bike bike : bikes) {
 			if(bike.getLocationId() == locationId) {
-				b.add(bike);
-			} 
+				bl.add(bike);
+			}
+			
 		}
-		
-		queryLocation(locationId).setBikes(b);
-		return true;
+		return bl;
 	}
-	
-	
+
 	@Override
-	public boolean deleteLocationBikes(int locationId,int bikeID) {
-		BikeDao bikeDao = new BikeDaoImpl();
-		//获取该位置的信息
-		Location lo = queryLocation(locationId);
-		Bike bike = bikeDao.queryById(bikeID);
-		
-		lo.getBikes().remove(bike);
-		return true;
+	public Location getBeanFromResultSet(ResultSet rs) throws SQLException {
+		Location lo = new Location();
+		lo.setId(rs.getInt(1));
+		lo.setLocation(rs.getString(2));
+		return lo;
 	}
 
 }

@@ -10,12 +10,14 @@ public interface WalletDao {
 	 * @param wt
 	 * @return
 	 */
-	boolean doInsert(Wallet wt);
+	int doInsert(Wallet wt);
 	/**
 	 * 查询全部钱包状态
 	 * @return
 	 */
 	List<Wallet> queryAll();
+	
+	int doUpdate(Wallet wallet);
 	
 	/**
 	 * 根据用户Id查询该用户的钱包状态
@@ -37,7 +39,7 @@ public interface WalletDao {
 	 * @param money
 	 * @return
 	 */
-	int recharge(int walletId, double money);
+	int recharge(int userId, double money);
 	
 	/**
 	 * 开通VIP功能
