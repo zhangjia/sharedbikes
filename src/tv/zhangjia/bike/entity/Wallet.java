@@ -41,6 +41,24 @@ public class Wallet {
 		this.isVIP = isVIP;
 		this.vipDate = vipDate;
 	}
+	
+	
+	/**
+	 * 不带ID的构造方法
+	 * @param userId
+	 * @param balance
+	 * @param coupon
+	 * @param isVIP
+	 * @param vipDate
+	 */
+	public Wallet(Integer userId, Double balance, Double coupon, Boolean isVIP, Date vipDate) {
+		super();
+		this.userId = userId;
+		this.balance = balance;
+		this.coupon = coupon;
+		this.isVIP = isVIP;
+		this.vipDate = vipDate;
+	}
 
 	public Integer getId() {
 		return id;

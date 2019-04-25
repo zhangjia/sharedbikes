@@ -5,11 +5,20 @@ public class UserOptions {
 	private Integer userId; // 用户ID
 	private String name; 	// 选项名称
 	private String value;	 // 选项值
-
+	
+	/**
+	 * 无参的构造方法
+	 */
 	public UserOptions() {
 		super();
 	}
-
+	/**
+	 * 构造方法
+	 * @param id
+	 * @param userId
+	 * @param name
+	 * @param value
+	 */
 	public UserOptions(Integer id, Integer userId, String name, String value) {
 		super();
 		this.id = id;
@@ -17,7 +26,20 @@ public class UserOptions {
 		this.name = name;
 		this.value = value;
 	}
-
+	
+	
+	/**
+	 * 不带ID的构造方法
+	 * @param userId
+	 * @param name
+	 * @param value
+	 */
+	public UserOptions(Integer userId, String name, String value) {
+		super();
+		this.userId = userId;
+		this.name = name;
+		this.value = value;
+	}
 	public Integer getId() {
 		return id;
 	}

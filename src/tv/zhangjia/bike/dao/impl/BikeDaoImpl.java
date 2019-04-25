@@ -23,7 +23,7 @@ import tv.zhangjia.bike.util.Zxing;
  * @Version
  * @date 2019年3月26日 下午4:47:51
  */
-public class BikeDaoImpl extends CommonDao<Bike> implements BikeDao {
+public class BikeDaoImpl extends CommonDao  implements BikeDao {
 //	private List<Bike> bikes = Database.BIKES;
 
 /*	@Override

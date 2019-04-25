@@ -27,7 +27,6 @@ import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.UserOptions;
-import tv.zhangjia.bike.entity.UserSettings;
 import tv.zhangjia.bike.entity.Wallet;
 
 /**
