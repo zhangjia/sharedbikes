@@ -18,24 +18,37 @@ import tv.zhangjia.bike.entity.Location;
 import tv.zhangjia.bike.util.CommonDao;
 
 public class LocationDaoImpl extends CommonDao implements LocationDao {
-//	private List<Location> locations = Database.LOCATIONS;
-//	private List<Bike> bikes = Database.BIKES;
-
+	/**
+	 * 查询所有的位置信息
+	 * @return
+	 */
 	@Override
 	public List<Location> queryAll() {
-		String sql = "SELECT * FROM location";
-		return query4BeanList(sql);
+		//用sql语句计算出每个位置的车辆总数后和location表连接
+		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id;";
+		return query4BeanList(sql,Location.class);
 		
 	}
 
+	/**
+	 * 根据位置id查询单独
+	 * @param id
+	 * @return
+	 */
 	@Override
 	public Location queryLocation(int id) {
-		String sql = "SELECT * FROM location WHERE id = ?";
-		return query4Bean(sql,id);
+		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id AND location.id =?";
+		return query4Bean(sql,Location.class,id);
 	}
 
 
-
+	/**
+	 * 生成一个随机位置
+	 * @param locationId
+	 * @param bikeId
+	 * @param leaseRecordId
+	 * @return
+	 */
 	@Override
 	public Location randomLocation(int locationId, int bikeId, int leaseRecordId) {
 		List<Location> locations = queryAll();
@@ -217,12 +230,5 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 		return bl;
 	}
 
-	@Override
-	public Location getBeanFromResultSet(ResultSet rs) throws SQLException {
-		Location lo = new Location();
-		lo.setId(rs.getInt(1));
-		lo.setLocation(rs.getString(2));
-		return lo;
-	}
 
 }

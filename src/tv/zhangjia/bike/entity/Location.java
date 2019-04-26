@@ -3,7 +3,7 @@ package tv.zhangjia.bike.entity;
 public class Location {
 	private Integer id; 		// 位置ID
 	private String location; 	// 位置名称
-	private Integer size; 		// 当前位置下的车辆总数
+	private Integer amount ; 		// 当前位置下的车辆总数
 
 	public Integer getId() {
 		return id;
@@ -21,15 +21,16 @@ public class Location {
 		this.location = location;
 	}
 
-	public Integer getSize() {
-		return size;
-	}
-
-	public void setSize(Integer size) {
-		this.size = size;
-	}
-
 	
+	
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
 
 	@Override
 	public int hashCode() {
@@ -65,7 +66,7 @@ public class Location {
 	@Override
 	public String toString() {
 
-		return +id + "\t" + location + "\t" + size;
+		return +id + "\t" + location + "\t" + amount;
 	}
 
 }

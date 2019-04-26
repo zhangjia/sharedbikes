@@ -309,4 +309,36 @@ public class CommonDao extends JDBCUtils {
 			}
 			return 0;
 		}
+		
+		
+		//获取单条字符串类型数据
+		public String query4StringData(String sql, Object... params) {
+			Connection conn = null;
+			PreparedStatement pstm = null;
+			ResultSet rs = null;
+			try {
+				// 获取连接
+				conn = getConnection();
+				// 创建语句对象
+				pstm = conn.prepareStatement(sql);
+				if (params != null && params.length > 0) {
+					// 需要设置占位符
+					for (int i = 0; i < params.length; i++) {
+						// 设置占位符
+						pstm.setObject(i + 1, params[i]);
+					}
+				}
+				// 执行SQL语句
+				rs = pstm.executeQuery();
+				// 处理结果
+				if (rs.next()) {
+					return rs.getString(1);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				close(rs, pstm, conn);
+			}
+			return null;
+		}
 }
