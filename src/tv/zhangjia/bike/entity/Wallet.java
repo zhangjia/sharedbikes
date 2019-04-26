@@ -6,7 +6,7 @@ import java.util.Date;
 public class Wallet {
 	private Integer id; 		 // 钱包ID
 	private Integer userId; 	 // 用户ID
-	private Integer userName;	 // 用户名
+	private Integer username;	 // 用户名
 	private Double balance;		 // 用户余额
 	private Double coupon; 		 // 用户优惠券余额
 	private Boolean isVIP; 		 // 用户是否是VIP，用户类型
@@ -73,12 +73,12 @@ public class Wallet {
 		this.userId = userId;
 	}
 
-	public Integer getUserName() {
-		return userName;
+	public Integer getUsername() {
+		return username;
 	}
 
-	public void setUserName(Integer userName) {
-		this.userName = userName;
+	public void setUsername(Integer username) {
+		this.username = username;
 	}
 
 	public Double getBalance() {
@@ -171,7 +171,7 @@ public class Wallet {
 	@Override
 	public String toString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return id + "\t" + userName + "\t" + balance + "\t" + coupon + (isVIP ? "VIP用户" : "普通用户") + "\t"
+		return id + "\t" + username + "\t" + balance + "\t" + coupon + (isVIP ? "VIP用户" : "普通用户") + "\t"
 				+ (vipDate == null ? "未开通" : sdf.format(vipDate));
 	}
 

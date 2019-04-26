@@ -8,7 +8,7 @@ public class Bill {
 	private Integer id; 		// 账单记录ID
 	private String billName; 	// 账单记录名称
 	private Integer userId; 	// 产生该账单的用户
-	private String userName; 	// 产生该账单的用户名
+	private String username; 	// 产生该账单的用户名
 	private Date billDate; 		// 账单记录产生时间
 	private Double money; 		// 账单记录产生的金额
 
@@ -90,12 +90,12 @@ public class Bill {
 		this.userId = userId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public Date getBillDate() {
@@ -177,7 +177,7 @@ public class Bill {
 			sm = "-" + money;
 		}
 
-		return +id + "\t" + userName + "\t" + billName + "\t" + sm + "\t\t" + sdf.format(tp) + "\n";
+		return +id + "\t" + username + "\t" + billName + "\t" + sm + "\t\t" + sdf.format(tp) + "\n";
 	}
 
 }

@@ -1,11 +1,6 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
-
-import com.google.zxing.WriterException;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.entity.Bike;
@@ -75,7 +70,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	@Override
 	public List<Bike> queryAll() {
 		// 通过和Option表连接，获取当前车型的价格存在price字段中
-		String sql = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name";
+		String sql = "SELECT bike.*,options.value price ,location.location locaion_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id";
 		return query4BeanList(sql, Bike.class);
 	}
 
@@ -86,7 +81,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	 */
 	@Override
 	public Bike queryById(int id) {
-		String sql = "SELECT BIKE.*,options.value price FROM bike,options WHERE bike.type = options.name AND BIKE.id = ?";
+		String sql = "SELECT bike.*,options.value price ,location.location locaion_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id AND bike.id = ?";
 		return query4Bean(sql, Bike.class,id);
 	}
 

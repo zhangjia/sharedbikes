@@ -6,7 +6,7 @@ public class Repair {
 	Integer id;			//报修记录ID
 	Integer bikeId;		//被报修的车辆ID
 	Integer userId;		//报修的用户ID
-	String userName; 	//报修的用户名
+	String username; 	//报修的用户名
 	Date repairDate;	//报修时间
 	String result; 		//处理结果
 	Integer admin_Id; 	//处理人ID
@@ -77,11 +77,11 @@ public class Repair {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public Date getRepairDate() {
 		return repairDate;
@@ -125,7 +125,7 @@ public class Repair {
 		result = prime * result + ((repairDate == null) ? 0 : repairDate.hashCode());
 		result = prime * result + ((this.result == null) ? 0 : this.result.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 	@Override
@@ -177,16 +177,16 @@ public class Repair {
 				return false;
 		} else if (!userId.equals(other.userId))
 			return false;
-		if (userName == null) {
-			if (other.userName != null)
+		if (username == null) {
+			if (other.username != null)
 				return false;
-		} else if (!userName.equals(other.userName))
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}
 	@Override
 	public String toString() {
-		return "Repair [id=" + id + ", bikeId=" + bikeId + ", userName=" + userName + ", repairDate=" + repairDate
+		return "Repair [id=" + id + ", bikeId=" + bikeId + ", userName=" + username + ", repairDate=" + repairDate
 				+ ", result=" + result + ", adminName=" + adminName + ", disposeDate=" + disposeDate + "]";
 	}
 	
