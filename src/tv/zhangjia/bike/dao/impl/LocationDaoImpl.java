@@ -1,14 +1,11 @@
 package tv.zhangjia.bike.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.TreeMap;
 
 import tv.zhangjia.bike.dao.BikeDao;
@@ -24,23 +21,22 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	 */
 	@Override
 	public List<Location> queryAll() {
-		//用sql语句计算出每个位置的车辆总数后和location表连接
+		// 用sql语句计算出每个位置的车辆总数后和location表连接
 		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id;";
-		return query4BeanList(sql,Location.class);
-		
+		return query4BeanList(sql, Location.class);
+
 	}
 
 	/**
-	 * 根据位置id查询单独
+	 * 根据位置id查询单条位置信息
 	 * @param id
 	 * @return
 	 */
 	@Override
 	public Location queryLocation(int id) {
 		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id AND location.id =?";
-		return query4Bean(sql,Location.class,id);
+		return query4Bean(sql, Location.class, id);
 	}
-
 
 	/**
 	 * 生成一个随机位置
@@ -50,69 +46,55 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	 * @return
 	 */
 	@Override
-	public Location randomLocation(int locationId, int bikeId, int leaseRecordId) {
-		List<Location> locations = queryAll();
-		Random ran = new Random();
-		int index = ran.nextInt(locations.size());
-		// 随机选择一个位置
-		int endId = locations.get(index).getId();
-		// 如果这个位置和当前位置相同，那么重新选择
-
-		while (locationId == endId) {
-			index = ran.nextInt(locations.size());
-			endId = locations.get(index).getId();
-		}
-
-		return queryLocation(endId);
-
+	public Location randomLocation(int locationId) {
+		String sql = "SELECT * FROM (SELECT * FROM location order by dbms_random.value) WHERE rownum =1 AND id != ?";
+		return query4Bean(sql, Location.class, locationId);
 	}
-	
+
 	@Override
 	public Location randomUserLocation() {
-		List<Location> locations = queryAll();
-		Random ran = new Random();
-		int index = ran.nextInt(locations.size());
-		// 随机选择一个位置
-		Location lo = locations.get(index);
-		// 如果这个位置和当前位置相同，那么重新选择
-
-		return lo;
+		String sql = "SELECT * FROM (SELECT * FROM location order by dbms_random.value) WHERE rownum =1";
+		return query4Bean(sql, Location.class);
 
 	}
-	
 
+	// TODO 删除，用查询代替
 	@Override
 	public String queryLocationName(int locationId) {
 		Location l = queryLocation(locationId);
-		return l.getLocation();
+		return l.getLocationName();
 	}
 
+	/**
+	 * 调度建议
+	 * @return 所有的建议信息
+	 */
 	@Override
 	public List<String> dispatch() {
 		BikeDao bikeDao = new BikeDaoImpl();
 		List<Bike> bikes = bikeDao.queryAll();
 		List<Location> locations = queryAll();
 		List<String> arr = new ArrayList<>();
-	
+
 		double size = 0;
 		for (Bike bike : bikes) {
-			if(bike.getStatus() != 0) {
+			if (bike.getStatus() != 0) {
 				size++;
 			}
 		}
-	
-		double  a = size / queryAll().size(); //自行车个数除以位置总数
-		int  average = (int) (Math.ceil(a));
-		
+
+		double a = size / queryAll().size(); // 自行车个数除以位置总数
+		int average = (int) (Math.ceil(a));
+
 		Map<Integer, Integer> small = new TreeMap<>();
 		Map<Integer, Integer> big = new TreeMap<>();
 		for (Location lo : locations) {
 			List<Bike> bikesByLo = queryBikesByLocation(lo.getId());
-			
-			if(bikesByLo.size() - average > 0) {
+
+			if (bikesByLo.size() - average > 0) {
 				big.put(lo.getId(), bikesByLo.size());
-			} else if(bikesByLo.size() - average < 0){
-				small.put(lo.getId(),bikesByLo.size());
+			} else if (bikesByLo.size() - average < 0) {
+				small.put(lo.getId(), bikesByLo.size());
 			}
 		}
 
@@ -126,8 +108,7 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 			}
 
 		});
-		
-		
+
 		List<Map.Entry<Integer, Integer>> bigs = new ArrayList<Map.Entry<Integer, Integer>>(big.entrySet());
 		// 然后通过比较器来实现排序
 		Collections.sort(bigs, new Comparator<Map.Entry<Integer, Integer>>() {
@@ -138,97 +119,62 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 			}
 
 		});
-		
-		
-		
-		//多的位置车辆总数：A  
-		//少的位置车辆总数：B
-		int x  = 0;
-		for (int i = bigs.size() - 1; i >= 0; i--,x++) {
-			
+
+		// 多的位置车辆总数：A
+		// 少的位置车辆总数：B
+		int x = 0;
+		for (int i = bigs.size() - 1; i >= 0; i--, x++) {
+
 			for (int j = x; j < smalls.size(); j++) {
-				int more = bigs.get(i).getValue() - average; //A比平均数多出来多少辆
-//				System.out.println("more = " + more);
-//				int more = big.get(i) - average;
+				int more = bigs.get(i).getValue() - average; // A比平均数多出来多少辆
+				// System.out.println("more = " + more);
+				// int more = big.get(i) - average;
 				int need = average - smalls.get(j).getValue(); // B比平均数少多少辆
-//				System.out.println("need = " + need);
+				// System.out.println("need = " + need);
 				int cost = more - need; // A 需要给B 多少辆
-//				System.out.println("cost = " + cost);
-				
-				if(more == 0) {
+				// System.out.println("cost = " + cost);
+
+				if (more == 0) {
 					break;
 				}
-				
-				//如果B需要的车辆 < A
-				if(cost >= 0) {
-					bigs.get(i).setValue(bigs.get(i).getValue() - need);  //A给B所需要的所有车辆
-					smalls.get(j).setValue(smalls.get(j).getValue() + need); //B加上A给的的车辆
+
+				// 如果B需要的车辆 < A
+				if (cost >= 0) {
+					bigs.get(i).setValue(bigs.get(i).getValue() - need); // A给B所需要的所有车辆
+					smalls.get(j).setValue(smalls.get(j).getValue() + need); // B加上A给的的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
 					String smallname = queryLocationName(smalls.get(j).getKey());
 					arr.add("从" + bigname + "拿出" + need + "辆单车送往" + smallname);
-					
-				//如果A中还有剩余车辆，但是无法满足B的所有需求
+
+					// 如果A中还有剩余车辆，但是无法满足B的所有需求
 				} else {
-	
-					bigs.get(i).setValue(bigs.get(i).getValue() - more); //A把能给的都给B
-					smalls.get(j).setValue(smalls.get(j).getValue() + more); //B加上A给的车辆
+
+					bigs.get(i).setValue(bigs.get(i).getValue() - more); // A把能给的都给B
+					smalls.get(j).setValue(smalls.get(j).getValue() + more); // B加上A给的车辆
 					String bigname = queryLocationName(bigs.get(i).getKey());
 					String smallname = queryLocationName(smalls.get(j).getKey());
 					arr.add("从" + bigname + "拿出" + more + "辆单车送往" + smallname);
 					break;
 				}
-				
+
 			}
-			
-			
-		}		
-		
-//
-		
-		
-		
+
+		}
+
+		//
+
 		return arr;
 	}
-
-
-//	@Override
-//	public boolean updateLocationBikes(int locationId) {
-//		List<Bike> b = new ArrayList<>();
-//		for (Bike bike : bikes) {
-//			if(bike.getLocationId() == locationId) {
-//				b.add(bike);
-//			} 
-//		}
-//		
-//		queryLocation(locationId).setBikes(b);
-//		return true;
-//	}
 	
-	
-//	@Override
-//	public boolean deleteLocationBikes(int locationId,int bikeID) {
-//		BikeDao bikeDao = new BikeDaoImpl();
-//		//获取该位置的信息
-//		Location lo = queryLocation(locationId);
-//		Bike bike = bikeDao.queryById(bikeID);
-//		
-//		lo.getBikes().remove(bike);
-//		return true;
-//	}
-
+	/**
+	 * 根据位置ID查询当前位置下的所有车辆
+	 * @param locationId 位置ID
+	 * @return 当前位置下的所有车辆
+	 */
 	@Override
 	public List<Bike> queryBikesByLocation(int locationId) {
-		BikeDao bikeDao = new BikeDaoImpl();
-		List<Bike> bikes = bikeDao.queryAll();
-		List<Bike> bl = new ArrayList<>();
-		for (Bike bike : bikes) {
-			if(bike.getLocationId() == locationId) {
-				bl.add(bike);
-			}
-			
-		}
-		return bl;
+		String sql = "SELECT * FROM bike WHERE location_id = ?";
+		return query4BeanList(sql, Bike.class, locationId);
 	}
-
 
 }

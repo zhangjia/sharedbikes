@@ -25,7 +25,7 @@ public interface LocationDao {
 	 * 归还单车时，模拟随机生成位置
 	 * @return
 	 */
-	Location randomLocation(int loctionId, int bikeId,int leaseRecordId);
+	Location randomLocation(int loctionId);
 	
 	/**
 	 * 根据位置ID，查询Id名字

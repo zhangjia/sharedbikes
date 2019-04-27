@@ -1,9 +1,9 @@
 package tv.zhangjia.bike.entity;
 
 public class Location {
-	private Integer id; 		// 位置ID
-	private String location; 	// 位置名称
-	private Integer amount ; 		// 当前位置下的车辆总数
+	private Integer id; // 位置ID
+	private String locationName; // 位置名称
+	private Integer amount; // 当前位置下的车辆总数
 
 	public Integer getId() {
 		return id;
@@ -13,16 +13,13 @@ public class Location {
 		this.id = id;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
-
-	
-	
 
 	public Integer getAmount() {
 		return amount;
@@ -37,7 +34,7 @@ public class Location {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
+		result = prime * result + ((locationName == null) ? 0 : locationName.hashCode());
 		return result;
 	}
 
@@ -55,10 +52,10 @@ public class Location {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (location == null) {
-			if (other.location != null)
+		if (locationName == null) {
+			if (other.locationName != null)
 				return false;
-		} else if (!location.equals(other.location))
+		} else if (!locationName.equals(other.locationName))
 			return false;
 		return true;
 	}
@@ -66,7 +63,7 @@ public class Location {
 	@Override
 	public String toString() {
 
-		return +id + "\t" + location + "\t" + amount;
+		return +id + "\t" + locationName + "\t" + amount;
 	}
 
 }
