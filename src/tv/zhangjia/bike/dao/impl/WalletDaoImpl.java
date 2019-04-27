@@ -159,7 +159,7 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	public int becomeVIP(int userId, int month) {
 		OptionDao op = new OptionDaoImpl();
 		//如果余额不足,返回-5
-		if (pay(userId, month * Double.parseDouble(op.queryValue("会员价格")), "开通会员") != 1) {
+		if (pay(userId, +(month * Double.parseDouble(op.queryValue("会员价格"))), "开通会员") != 1) {
 			return -5;
 		} else {
 			//如果没开通VIP,在当前时间的基础上加month，如果已经开通vip时间，在到期时间基础上加month
@@ -208,7 +208,7 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 			// 如果红包余额够，只扣红包的钱
 			pw.setCoupon(coupon - money);
 			//生成记录
-			Bill bill = new Bill(type,userId, money);
+			Bill bill = new Bill(type,userId, -money);
 			int x = billDao.doInsert(bill);
 			//更新当前用户钱包
 			int y = doUpdate(pw);

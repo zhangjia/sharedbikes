@@ -24,9 +24,9 @@ public interface UserDao {
 
 	List<User> queryAll();
 
-	String queryUserName(int id);
+//	String queryUserName(int id);
 
-	int queryUserId(String username);
+//	int queryUserId(String username);
 
 	boolean isUserNameExist(String username);
 

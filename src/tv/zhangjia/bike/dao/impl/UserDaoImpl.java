@@ -32,7 +32,7 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 * @param password	密码
 	 * @param tel	手机号
 	 * @param payPassword 支付密码
-	 * @return   注册是否成功，成功返回1，不成功返回0
+	 * @return   注册是否成功，成功返回注册的ID，不成功返回0
 	 */
 	@Override
 	public int register(String username, String password, String tel, String payPassword) {
@@ -45,7 +45,6 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 		// 获取随机的位置
 		Location lo = locationDao.randomUserLocation();
 		int locaionId = lo.getId();
-		System.out.println(userId + "lo = " + locaionId);
 		String sql = "INSERT INTO users VALUES(?,?,?,?,?,?,?,sysdate,?)";
 
 		// 生成用户
@@ -57,7 +56,12 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 
 		// 必须三者都成功，才能算注册成功
 		// TODO ：添加事物控制
-		return i * j * x;
+
+		if (i * j * x == 1) {
+			return userId;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -79,18 +83,7 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public List<User> queryAll() {
 		String sql = "SELECT * FROM users";
-		return query4BeanList(sql,User.class);
-	}
-
-	// TODO 删除该方法，doInsert中的查询方法用User.getUserName代替
-	@Override
-	public String queryUserName(int id) {
-		// for (User user : users) {
-		// if (user.getId() == id) {
-		// return user.getUsername();
-		// }
-		// }
-		return null;
+		return query4BeanList(sql, User.class);
 	}
 
 	/**
@@ -102,7 +95,7 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public boolean isUserNameExist(String username) {
 		String sql = "SELECT * FROM users WHERE username = ?";
-		//如果找不到该用户，query4Bean = null，则返回false
+		// 如果找不到该用户，query4Bean = null，则返回false
 		return query4Bean(sql, User.class, username) != null;
 	}
 
@@ -116,31 +109,10 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	public String adviseUsername(String username) {
 		int i = 0;
 		String newUsername = username + (++i);
-		while(isUserNameExist(newUsername)) {
-			 newUsername = username + (++i);
+		while (isUserNameExist(newUsername)) {
+			newUsername = username + (++i);
 		}
 		return newUsername;
-	}
-
-	/**
-	 * 
-	 * @param username
-	 * @return   
-	 * @see tv.zhangjia.bike.dao.UserDao#queryUserId(java.lang.String)
-	 */
-	
-	
-	//TODO 删除此方法，用手机号来找回密码
-	@Override
-	public int queryUserId(String username) {
-//		List<User> users = queryAll();
-//		for (User user : users) {
-//			// System.out.println("yon" + username);
-//			if (user.getUsername().equalsIgnoreCase(username)) {
-//				return user.getId();
-//			}
-//		}
-		return -1;
 	}
 
 	/**
@@ -152,15 +124,11 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public boolean isTelExist(String tel) {
 		String sql = "SELECT * FROM users WHERE tel = ?";
-		//如果找不到该用户，则返回null
-		User query4Bean = query4Bean(sql, User.class, tel);
-		System.out.println(query4Bean);
-		//如果不存在，返回是null
+		// 如果找不到该用户，则返回null
 		return query4Bean(sql, User.class, tel) != null;
-//		return query4Bean == null;
 	}
 
-	//TODO 去掉，直接用验证码来判断
+	// TODO 去掉，直接用验证码来判断
 	@Override
 	public boolean isTrueTel(String tel, int userId) {
 		User user = queryByUserId(userId);
@@ -177,11 +145,10 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public boolean isTruePayPassword(int userId, String payPassword) {
 		String sql = "SELECT * FROM users WHERE user_id = ? AND pay_password = ?";
-		//如果找不到该用户，则返回null
-		return query4Bean(sql, User.class, userId,payPassword) != null;
+		// 如果找不到该用户，则返回null
+		return query4Bean(sql, User.class, userId, payPassword) != null;
 	}
 
-	
 	/**
 	 * 
 	 * @param user
@@ -190,11 +157,11 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 */
 	@Override
 	public int doUpdate(User user) {
-		//可以更改用户的名，用户密码，用户支付密码，用户手机号，用户位置
+		// 可以更改用户的名，用户密码，用户支付密码，用户手机号，用户位置
 		String sql = "UPDATE users SET username = ?, password = ? ,pay_password,tel = ?,"
 				+ "location_id = ? WHERE id = ?";
-		return executeUpdate(sql, user.getUsername(),user.getPassword(),user.getPayPassword(), 
-				user.getTel(),user.getLocationID(),user.getId());
+		return executeUpdate(sql, user.getUsername(), user.getPassword(), user.getPayPassword(), user.getTel(),
+				user.getLocationID(), user.getId());
 	}
 
 }
