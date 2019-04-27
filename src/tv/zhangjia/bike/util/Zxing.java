@@ -36,10 +36,9 @@ public class Zxing {
 	
 
 	public static void generateQR(Bike bike) throws WriterException, IOException {
-		String bikeInformation = bike.toString().replaceAll("\\t", "   ");
-		BitMatrix bt = encode(bikeInformation);
-		String bikeName = bike.getId() + "";
-		File file = new File("E:" + File.separator + "bike" + File.separator + "img"   + File.separator + new Date().getTime() + ".png");
+		String bi2 = "ID:" + bike.getId() + "  车型：" + bike.getType() +"  状态" + bike.getStatus()+ "  次数" + bike.getAmount();
+		BitMatrix bt = encode(bi2);
+		File file = new File("E:" + File.separator + "bike" + File.separator + "img"   + File.separator + bike.getId() + ".png");
 		
 		if (!file.getParentFile().exists()) {
 			file.getParentFile().mkdirs();
@@ -47,7 +46,6 @@ public class Zxing {
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		Writer writer = new FileWriter(file, true);
 		String address = file.toString();
 		bike.setQr(address);
 		writeToFile(bt, "png", file);

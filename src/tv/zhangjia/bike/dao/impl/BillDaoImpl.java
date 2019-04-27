@@ -28,7 +28,7 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	 */
 	@Override
 	public List<Bill> queryAll() {
-		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id;";
+		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id ORDER BY bill.id";
 		return query4BeanList(sql,Bill.class);
 	}
 

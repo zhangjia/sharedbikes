@@ -82,7 +82,7 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 */
 	@Override
 	public List<User> queryAll() {
-		String sql = "SELECT * FROM users";
+		String sql = "SELECT * FROM users ORDER BY users.id";
 		return query4BeanList(sql, User.class);
 	}
 
@@ -158,10 +158,9 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	@Override
 	public int doUpdate(User user) {
 		// 可以更改用户的名，用户密码，用户支付密码，用户手机号，用户位置
-		String sql = "UPDATE users SET username = ?, password = ? ,pay_password,tel = ?,"
-				+ "location_id = ? WHERE id = ?";
+		String sql = "UPDATE users SET username = ?, password = ?,pay_password =?,tel = ?,is_admin = ?,cycling_time = ?,register_time = ?,location_id = ? WHERE id = ?";
 		return executeUpdate(sql, user.getUsername(), user.getPassword(), user.getPayPassword(), user.getTel(),
-				user.getLocationID(), user.getId());
+				user.getIsAdmin(),user.getCyclingTime(),user.getRegisterTime(),user.getLocationID(),user.getId());
 	}
 
 }

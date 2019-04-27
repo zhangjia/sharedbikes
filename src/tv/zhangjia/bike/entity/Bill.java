@@ -174,7 +174,7 @@ public class Bill {
 		if (money >= 0) {
 			sm = "+" + money;
 		} else {
-			sm = "-" + money;
+			sm = "" +  money;
 		}
 
 		return +id + "\t" + username + "\t" + billName + "\t" + sm + "\t\t" + sdf.format(tp) + "\n";

@@ -22,7 +22,7 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	@Override
 	public List<Location> queryAll() {
 		// 用sql语句计算出每个位置的车辆总数后和location表连接
-		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id;";
+		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id";
 		return query4BeanList(sql, Location.class);
 
 	}
@@ -34,7 +34,7 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	 */
 	@Override
 	public Location queryLocation(int id) {
-		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id AND location.id =?";
+		String sql = "SELECT location.*,s.amount FROM location,(SELECT count(*) amount, location_id FROM bike GROUP BY location_id HAVING location_id != -1) s WHERE location.id = s.location_id AND location.id =? ORDER BY location.id";
 		return query4Bean(sql, Location.class, id);
 	}
 
@@ -173,7 +173,7 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	 */
 	@Override
 	public List<Bike> queryBikesByLocation(int locationId) {
-		String sql = "SELECT * FROM bike WHERE location_id = ?";
+		String sql = "SELECT bike.*,options.value price,location_name FROM bike,options,location WHERE location.id = bike.location_id AND options.name=bike.type AND bike.status=1 AND location.id = ?";
 		return query4BeanList(sql, Bike.class, locationId);
 	}
 

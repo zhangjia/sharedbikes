@@ -31,7 +31,7 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	 */
 	@Override
 	public List<Wallet> queryAll() {
-		String sql = "SELECT * FROM wallet";
+		String sql = "SELECT wallet.*,username FROM wallet,users WHERE wallet.user_id = users.id ORDER BY wallet.id";
 		return query4BeanList(sql, Wallet.class);
 	}
 
@@ -42,7 +42,7 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	 */
 	@Override
 	public Wallet queryByUserId(int id) {
-		String sql = "SELECT * FROM wallet WHERE user_Id = ?";
+		String sql = "SELECT wallet.*,username FROM wallet,users WHERE wallet.user_id = users.id AND user_Id = ?";
 		return query4Bean(sql, Wallet.class, id);
 	}
 
@@ -53,7 +53,7 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	 */
 	@Override
 	public int doUpdate(Wallet wallet) {
-		String sql = "UPDATE wallet SET balance=?,coupon=?,is_vip = ?,vipDate=? WHERE id =?";
+		String sql = "UPDATE wallet SET balance=?,coupon=?,is_vip = ?,vip_date=? WHERE id =?";
 		// return executeUpdate(sql, wallet.getBalance(), wallet.getCoupon(),
 		// wallet.getIsVIP() ? 1 : 0,
 		// wallet.getVipDate() == null ? null : new Date(wallet.getVipDate().getTime())
@@ -123,7 +123,6 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 		return x * y;
 	}
 
-
 	/**
 	 * 充值
 	 * 
@@ -158,12 +157,12 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	@Override
 	public int becomeVIP(int userId, int month) {
 		OptionDao op = new OptionDaoImpl();
-		//如果余额不足,返回-5
+		// 如果余额不足,返回-5
 		if (pay(userId, +(month * Double.parseDouble(op.queryValue("会员价格"))), "开通会员") != 1) {
 			return -5;
 		} else {
-			//如果没开通VIP,在当前时间的基础上加month，如果已经开通vip时间，在到期时间基础上加month
-			String sql = "UPDATE wallet SET is_vip = 1,vipDate= ADD_MONTHS(NVL(vipDate,sysdate),?) WHERE user_Id = ?";
+			// 如果没开通VIP,在当前时间的基础上加month，如果已经开通vip时间，在到期时间基础上加month
+			String sql = "UPDATE wallet SET is_vip = 1,vip_date= ADD_MONTHS(NVL(vip_date,sysdate),?) WHERE user_Id = ?";
 			return executeUpdate(sql, month, userId);
 		}
 	}
@@ -173,46 +172,45 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	 * @param userId 用户ID
 	 * @param money 支付金额
 	 * @param type  支付类型
-	 * @return 支付成功返回1，支付失败返回0
+	 * @return 支付成功返回1，支付失败返回0,余额不足返回-5
 	 */
 	@Override
 	public int pay(int userId, double money, String type) {
 		BillDao billDao = new BillDaoImpl();
 		Wallet pw = queryByUserId(userId);
-		//获取当前用户的优惠券余额
+		// 获取当前用户的优惠券余额
 		double coupon = pw.getCoupon();
-		//获取当前用户的账户余额
+		// 获取当前用户的账户余额
 		double balance = pw.getBalance();
-		//获取当前用户的账户总额
+		// 获取当前用户的账户总额
 		double sum = coupon + balance; // 获取账户总金额
-		
 
 		// 如果总金额不够，返回没钱
 		if (sum - money < 0) {
 			return -5;
-		// 如果红包余额不够,那么使用红包和余额一起支付
+			// 如果红包余额不够,那么使用红包和余额一起支付
 		} else if (coupon < money) {
-			//计算需要从余额拿出多少钱支付
+			// 计算需要从余额拿出多少钱支付
 			double h = money - coupon;
-			//将优惠券清零
+			// 将优惠券清零
 			pw.setCoupon(0.0);
-			//从余额扣除
+			// 从余额扣除
 			pw.setBalance(pw.getBalance() - h);
-			//生成记录
-			Bill bill = new Bill(type,userId, money);
-			int x = billDao.doInsert(bill);
-			//更新当前用户钱包
-			int y = doUpdate(pw);
-			return x * y;
+
 		} else {
 			// 如果红包余额够，只扣红包的钱
 			pw.setCoupon(coupon - money);
-			//生成记录
-			Bill bill = new Bill(type,userId, -money);
-			int x = billDao.doInsert(bill);
-			//更新当前用户钱包
-			int y = doUpdate(pw);
+		}
+
+		// 更新当前用户钱包
+		int x = doUpdate(pw);
+		// 生成记录
+		if (x == 1) {
+			Bill bill = new Bill(type, userId, -money);
+			int y = billDao.doInsert(bill);
 			return x * y;
+		} else {
+			return 0;
 		}
 	}
 

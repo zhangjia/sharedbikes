@@ -4,13 +4,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Wallet {
-	private Integer id; 		 // 钱包ID
-	private Integer userId; 	 // 用户ID
-	private Integer username;	 // 用户名
-	private Double balance;		 // 用户余额
-	private Double coupon; 		 // 用户优惠券余额
-	private Boolean isVIP; 		 // 用户是否是VIP，用户类型
-	private Date vipDate;		 // VIP到期时间
+	private Integer id; // 钱包ID
+	private Integer userId; // 用户ID
+	private String username; // 用户名
+	private Double balance; // 用户余额
+	private Double coupon; // 用户优惠券余额
+	private Boolean isVIP; // 用户是否是VIP，用户类型
+	private Date vipDate; // VIP到期时间
 
 	/**
 	 * 无参构造方法
@@ -38,8 +38,7 @@ public class Wallet {
 		this.isVIP = isVIP;
 		this.vipDate = vipDate;
 	}
-	
-	
+
 	/**
 	 * 不带ID的构造方法
 	 * @param userId
@@ -73,11 +72,11 @@ public class Wallet {
 		this.userId = userId;
 	}
 
-	public Integer getUsername() {
+	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(Integer username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
@@ -171,7 +170,7 @@ public class Wallet {
 	@Override
 	public String toString() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return id + "\t" + username + "\t" + balance + "\t" + coupon + (isVIP ? "VIP用户" : "普通用户") + "\t"
+		return id + "\t" + username + "\t" + balance + "\t" + coupon + "\t" + (isVIP ? "VIP用户" : "普通用户") + "\t"
 				+ (vipDate == null ? "未开通" : sdf.format(vipDate));
 	}
 

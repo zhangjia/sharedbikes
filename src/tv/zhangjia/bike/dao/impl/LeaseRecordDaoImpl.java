@@ -72,17 +72,17 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		bike.setStatus(0); // 设置为借出状态
 		bike.setAmount(bike.getAmount() + 1); // 借出次数+1
 		bike.setLastLocationId(bike.getLocationId()); // 更新起点
-		bike.setLocationId(-1); // -1为骑行状态
+//		bike.setLocationId(-1); // -1为骑行状态
 
 		// 设置路程名
-		Location lo = locationDao.queryLocation(bike.getLastLocationId());
+		Location lo = locationDao.queryLocation(bike.getLocationId());
 		String journey = lo.getLocationName() + " ---> " + "骑行中\t";
 		// 生成借车记录
-		// LeaseRecord lr = new LeaseRecord(Database.nextLeaseRecordId(), bikeId,
-		// userId, userDao.queryUserName(userId),
-		// new Date(), null, loName, 0, 0);
-		String sql = "INSERT INTO lease_record VALUES(seq_lease_record.nextval,?,?,sysdate,null,?,0.0,0L)";
-		return executeUpdate(sql, bikeId, userId, journey);
+
+		String sql = "INSERT INTO lease_record VALUES(seq_lease_record.nextval,?,?,sysdate,null,?,0.0,0.0)";
+		int x = bikeDao.doUpdate(bike);
+		int y = executeUpdate(sql, bikeId, userId, journey);
+		return x * y;
 
 	}
 
@@ -103,7 +103,8 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public List<LeaseRecord> queryByUserId(int id) {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.id AND users.id = ?";
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND users.id = ?";
+		
 		return query4BeanList(sql, LeaseRecord.class, id);
 	}
 
@@ -125,7 +126,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public List<LeaseRecord> queryNotReturnByUserId(int userId) {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.id AND users.id = ? AND lease_record.return_time IS NULL";
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND users.id = ? AND lease_record.return_time IS NULL";
 		return query4BeanList(sql, LeaseRecord.class, userId);
 	}
 
@@ -249,16 +250,20 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		// 更改车辆状态
 		Bike bike = bikeDao.queryById(bikeId);
 		bike.setStatus(1);
-		//随机生成归还位置
-		bike.setLastLocationId(locationDao.randomLocation(bikeId).getId()); 
+		// 随机生成归还位置
+		bike.setLocationId(locationDao.randomLocation(bikeId).getId());
 		int w = bikeDao.doUpdate(bike);
-		
-		
-		// 应支付价格= 售价 * 折扣 （会员才享受折扣）
-		double price = bikeDao.queryBikePrice(bikeId) * (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
-		// 计算好了归还时间，起始位置，消费金额，骑行时间
 
-		String sql = "SELECT id,bike_id,user_id,lease_time,sysdate return_time,(SELECT location_name FROM location,bike WHERE bike.location_id = location.id AND bike.id = ?)||' ---> '||(SELECT location_name FROM location,bike WHERE bike.lastlocation_id = location.id AND bike.id = ?) journey,((sysdate - lease_time) * 24 * 60 * 60) * ? cost,((sysdate - lease_time) * 24 * 60 * 60) time FROM lease_record  WHERE bike_id = ? AND return_time IS NULL;";
+		// 应支付价格= 售价 * 折扣 （会员才享受折扣）
+	
+		double a = bikeDao.queryBikePrice(bikeId);
+		double b = (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
+		double price = bikeDao.queryBikePrice(bikeId)
+				* (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
+		// 计算好了归还时间，起始位置，消费金额，骑行时间
+		System.out.println("price =" + price + "a = " + a + "b = " + b);
+		System.out.println(bike.getLocationName() + bike.getLocationName());
+		String sql = "SELECT id,bike_id,user_id,lease_time,sysdate return_time,(SELECT location_name FROM location,bike WHERE bike.lastlocation_id = location.id AND bike.id = ?)||' ---> '||(SELECT location_name FROM location,bike WHERE bike.location_id = location.id AND bike.id = ?) journey,((sysdate - lease_time) * 24 * 60 * 60) * ? cost,((sysdate - lease_time) * 24 * 60 * 60) time FROM lease_record  WHERE bike_id = ? AND return_time IS NULL";
 		LeaseRecord lr = query4Bean(sql, LeaseRecord.class, bikeId, bikeId, price, bikeId);
 
 		// 如果账户余额不足，直接返回-5
@@ -272,6 +277,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		int y = userDao.doUpdate(user);
 
 		int z = doUpdate(lr);
+		System.out.println("x = " + x + " y = " + y + "z = " + z + "w = " + w);
 		return w * x * y * z;
 
 		// 0：不是该用户
@@ -289,7 +295,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public LeaseRecord queryNotReturnRecordId(int bikeId) {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.id AND users.id = 1 AND lease_record.return_time IS NULL AND lease_record.bike_id = ?";
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND lease_record.return_time IS NULL AND lease_record.bike_id = ?";
 		return query4Bean(sql, LeaseRecord.class, bikeId);
 	}
 
@@ -307,10 +313,8 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 
 	@Override
 	public int doUpdate(LeaseRecord lr) {
-		String sql = "UPDATE lease_record SET(return_time=?,journey=?,cost=?,time=?) WHERE id = ?";
-		return executeUpdate(sql,lr.getBikeId(),lr.getUserId(),lr.getJourney(),lr.getCost(),lr.getTime(),lr.getId());
+		String sql = "UPDATE lease_record SET return_time=sysdate,journey=?,cost=?,time=? WHERE id = ?";
+		return executeUpdate(sql,  lr.getJourney(), lr.getCost(), lr.getTime(),lr.getId());
 	}
-
-
 
 }

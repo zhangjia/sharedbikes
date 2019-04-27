@@ -11,16 +11,16 @@ package tv.zhangjia.bike.entity;
  * @date 2019年3月26日 下午5:36:44
  */
 public class Bike {
-	private Integer id; 				// 单车ID
-	private String type; 				// 单车类型
-	private Double price; 				// 单车价格
-	private Integer locationId; 		// 单车位置
-	private String locaionName; 		// 单车位置名字
-	private Integer lastLocationId; 	// 上次的位置
-	private Integer lastLocationName; 	// 上次位置名字
-	private Integer status; 			// 单车状态
-	private Integer amount; 			// 单车骑行次数
-	private String qr;					 // 单车二维码
+	private Integer id; // 单车ID
+	private String type; // 单车类型
+	private Double price; // 单车价格
+	private Integer locationId; // 单车位置
+	private String locationName; // 单车位置名字
+	private Integer lastLocationId; // 上次的位置
+	private Integer lastLocationName; // 上次位置名字
+	private Integer status; // 单车状态
+	private Integer amount; // 单车骑行次数
+	private String qr; // 单车二维码
 
 	/**
 	 * 无参的构造方法
@@ -41,12 +41,11 @@ public class Bike {
 	 * @param amount
 	 * @param qr
 	 */
-	public Bike(Integer id, String type, Double price, Integer locationId, Integer lastLocationId, Integer status,
-			Integer amount, String qr) {
+	public Bike(Integer id, String type, Integer locationId, Integer lastLocationId, Integer status, Integer amount,
+			String qr) {
 		super();
 		this.id = id;
 		this.type = type;
-		this.price = price;
 		this.locationId = locationId;
 		this.lastLocationId = lastLocationId;
 		this.status = status;
@@ -65,11 +64,9 @@ public class Bike {
 	 * @param amount
 	 * @param qr
 	 */
-	public Bike(String type, Double price, Integer locationId, Integer lastLocationId, Integer status, Integer amount,
-			String qr) {
+	public Bike(String type, Integer locationId, Integer lastLocationId, Integer status, Integer amount, String qr) {
 		super();
 		this.type = type;
-		this.price = price;
 		this.locationId = locationId;
 		this.lastLocationId = lastLocationId;
 		this.status = status;
@@ -109,12 +106,12 @@ public class Bike {
 		this.locationId = locationId;
 	}
 
-	public String getLocaionName() {
-		return locaionName;
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setLocaionName(String locaionName) {
-		this.locaionName = locaionName;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
 	public Integer getLastLocationId() {
@@ -156,8 +153,6 @@ public class Bike {
 	public void setQr(String qr) {
 		this.qr = qr;
 	}
-
-	
 
 	@Override
 	public int hashCode() {
@@ -228,9 +223,9 @@ public class Bike {
 
 	@Override
 	public String toString() {
-		String locationName = "";
-		// 如果状态是-1，则不显示当前位置，而是显示骑行
-		if (locationId == -1) {
+
+		// 如果状态是骑行中(0)，则不显示当前位置，而是显示骑行
+		if (status == 0) {
 			locationName = "骑行中";
 		}
 		String statusName = null;

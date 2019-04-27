@@ -58,6 +58,7 @@ public class User {
 		this.locationID = locationID;
 		this.payPassword = payPassword;
 	}
+	
 
 	public Integer getId() {
 		return id;
