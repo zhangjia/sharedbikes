@@ -115,7 +115,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	// TODO 删除，直接用查询来解决
 	@Override
 	public double queryBikePrice(int bikeId) {
-		String sql = "SELECT options.value FROM bike,options WHERE bike.type = options.name AND bike.id = ?";
+		String sql = "SELECT TO_NUMBER(options.value) FROM bike,options WHERE bike.type = options.name AND bike.id = ?";
 		return 0.0;
 	}
 

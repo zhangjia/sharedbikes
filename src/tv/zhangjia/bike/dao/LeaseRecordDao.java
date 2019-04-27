@@ -57,6 +57,9 @@ public interface LeaseRecordDao {
 	
 	 
 	 boolean isCurrentUserLease(int userId,int bikeId);
+	 
+	 
+	 int doUpdate(LeaseRecord lr);
 	
 	
 	
