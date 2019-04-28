@@ -12,6 +12,10 @@ public interface RepairDao {
 	int doUpdate(Repair repair);
 
 	List<Repair> queryAll();
-	
+
 	int doDispose();
+
+	Repair queryByBikeId(int bikeId);
+
+	boolean isRepair(int bikeId);
 }

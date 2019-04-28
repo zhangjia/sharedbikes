@@ -10,6 +10,7 @@ import tv.zhangjia.bike.dao.BillDao;
 import tv.zhangjia.bike.dao.LeaseRecordDao;
 import tv.zhangjia.bike.dao.LocationDao;
 import tv.zhangjia.bike.dao.OptionDao;
+import tv.zhangjia.bike.dao.RepairDao;
 import tv.zhangjia.bike.dao.UserDao;
 import tv.zhangjia.bike.dao.UserOptionsDao;
 import tv.zhangjia.bike.dao.WalletDao;
@@ -18,6 +19,7 @@ import tv.zhangjia.bike.dao.impl.BillDaoImpl;
 import tv.zhangjia.bike.dao.impl.LeaseRecordDaoImpl;
 import tv.zhangjia.bike.dao.impl.LocationDaoImpl;
 import tv.zhangjia.bike.dao.impl.OptionDaoImpl;
+import tv.zhangjia.bike.dao.impl.RepairDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserDaoImpl;
 import tv.zhangjia.bike.dao.impl.UserOptionsDaoImpl;
 import tv.zhangjia.bike.dao.impl.WalletDaoImpl;
@@ -25,6 +27,7 @@ import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.Bill;
 import tv.zhangjia.bike.entity.LeaseRecord;
 import tv.zhangjia.bike.entity.Location;
+import tv.zhangjia.bike.entity.Repair;
 import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.entity.UserOptions;
 import tv.zhangjia.bike.entity.Wallet;
@@ -53,6 +56,7 @@ public class Menu {
 	private OptionDao as = new OptionDaoImpl();
 	private UserOptionsDao us = new UserOptionsDaoImpl();
 	// private UserSettingsDao us = new UserSettingsDaoImpl();
+	private RepairDao repairDao = new RepairDaoImpl();
 
 	/**
 	 * 主菜单，进入该系统的用户看到的第一个界面
@@ -345,17 +349,46 @@ public class Menu {
 	}
 
 	private void damage() {
-		List<Bike> bikes = bikeDao.queryByDamage();
+		List<Repair> repairs = repairDao.queryAll();
 		System.out.println("----------下面是已经损坏的车辆信息----------");
-		if (bikes.isEmpty()) {
+		if (repairs.isEmpty()) {
 			System.out.println("太好了，目前没有车辆损坏！");
-
 		} else {
-			System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
-			for (Bike bike : bikes) {
-				System.out.println(bike);
+			System.out.println("编号\t单车ID\t报修用户\t报修日期\t\t\t处理结果\t处理人\t处理日期");
+			for (Repair repair : repairs) {
+				System.out.println(repair);
 			}
 		}
+		System.out.print("请输入您要处理的单车ID：");
+		int bikeId = 0;
+		while (true) {
+			String str = input.next();
+			if (iiv.isNumber(str)) {
+
+				bikeId = Integer.parseInt(str);
+				if (!repairDao.isRepair(bikeId)) {
+					System.out.print("该车辆不存在，请重新输入：");
+					continue;
+				} else {
+					break;
+				}
+			} else {
+				System.out.print("输入不合法,请重新输入：");
+			}
+		}
+		Repair repair = repairDao.queryByBikeId(bikeId);
+		repair.setAdmin_Id(user.getId());
+		
+		System.out.print("请选择处理结果：[ 损坏：y | 未损坏：n ] ");
+		String s = input.next();
+		if (s.equalsIgnoreCase("y")) {
+			repair.setResult("损坏");
+			walletDao.awardByBike(repair.getUserId(), walletDao.queryByUserId(repair.getUserId()).getId());
+		} else {
+			repair.setResult("未损坏");
+		}
+		repairDao.doUpdate(repair);
+		System.out.print("处理完成！");
 		returnMenu();
 
 	}
@@ -955,27 +988,37 @@ public class Menu {
 	private void awardByRepairs() {
 		printBoundary();
 		System.out.print("请输入损坏的车辆:");
-		String id = input.next();
+		int bikeId = 0;
 		while (true) {
+			String id = input.next();
 			if (iiv.isNumber(id)) {
-				int bikeId = Integer.parseInt(id);
-				int status = bikeDao.bikeStatus(bikeId);
-				if (status == -1) {
-					System.out.print("该车已经损坏,");
-					returnMenu();
+				bikeId = Integer.parseInt(id);
+				System.out.println(bikeId);
+				Bike bike = bikeDao.queryById(bikeId);
+				if (bike == null) {
+					System.out.print("该车辆不存在！请重新输入:");
+					// input.next();
+					continue;
+				} else if (bike.getStatus() == -1) {
+					System.out.print("该车已经报修2,请重新输入：");
+					continue;
+				} else if (repairDao.isRepair(bikeId)) {
+					System.out.println("该车辆已经被报修，请重新输入：");
+					continue;
+				} else {
+					break;
 				}
 
-				int walletId = walletDao.queryByUserId(bikeDao.setDamage(user, bikeId)).getId();
-
-				// billDao.awardByBike(user.getId(), walletId);
-				walletDao.awardByBike(user.getId(), walletId);
-
-				break;
 			} else {
 				System.out.print("输入不合法，请重新输入：");
 			}
 		}
-		System.out.print("该车辆已经报修！感谢您为城市的环境做出贡献！");
+		Repair repair = new Repair(bikeId, user.getId(), "未处理");
+		if (repairDao.doInsert(repair) == 1) {
+			System.out.print("该车辆已经报修！感谢您为城市的环境做出贡献！");
+		} else {
+			System.out.println("报修失败！");
+		}
 		returnMenu();
 
 	}
@@ -1213,13 +1256,15 @@ public class Menu {
 				Bike bike = bikeDao.queryById(bikeId);
 				if (bike == null) {
 					System.out.print("该车辆不存在，请重新输入：");
-					
-				} else if (bike.getStatus() != 0 || leaseRecordDao.queryNotReturnRecordId(bikeId).getUserId() != user.getId()) {
+
+				} else if (bike.getStatus() != 0
+						|| leaseRecordDao.queryNotReturnRecordId(bikeId).getUserId() != user.getId()) {
 					System.out.print("您没有租借该单车,请重新输入：");
 				} else {
-					//进入此层说明找到了该用户所借车的那条记录
+					// 进入此层说明找到了该用户所借车的那条记录
 					while (true) {
-						boolean openPayPassword = (us.queryUserSetting(user.getId(), "免密支付").equals("1") ? true : false);
+						boolean openPayPassword = (us.queryUserSetting(user.getId(), "免密支付").equals("1") ? true
+								: false);
 						while (!openPayPassword) {
 							System.out.print("请输入您的支付密码：");
 							String payPassword = input.next();

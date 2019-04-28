@@ -3,22 +3,23 @@ package tv.zhangjia.bike.entity;
 import java.util.Date;
 
 public class Repair {
-	Integer id;			//报修记录ID
-	Integer bikeId;		//被报修的车辆ID
-	Integer userId;		//报修的用户ID
-	String username; 	//报修的用户名
-	Date repairDate;	//报修时间
-	String result; 		//处理结果
-	Integer admin_Id; 	//处理人ID
-	String adminName;	//处理人用户名
-	Date disposeDate;	//处理时间
-	
+	Integer id; // 报修记录ID
+	Integer bikeId; // 被报修的车辆ID
+	Integer userId; // 报修的用户ID
+	String username; // 报修的用户名
+	Date repairDate; // 报修时间
+	String result; // 处理结果
+	Integer admin_Id; // 处理人ID
+	String adminName; // 处理人用户名
+	Date disposeDate; // 处理时间
+
 	/**
 	 * 无参构造方法
 	 */
 	public Repair() {
 		super();
 	}
+
 	/**
 	 * 构造方法
 	 * @param id
@@ -59,60 +60,94 @@ public class Repair {
 		this.admin_Id = admin_Id;
 		this.disposeDate = disposeDate;
 	}
+
+	/**
+	 * 报修添加记录时的构造方法
+	 * @param id
+	 * @param bikeId
+	 * @param userId
+	 * @param repairDate
+	 * @param result
+	 */
+	public Repair(Integer bikeId, Integer userId, String result) {
+		super();
+		this.bikeId = bikeId;
+		this.userId = userId;
+		this.result = result;
+	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public Integer getBikeId() {
 		return bikeId;
 	}
+
 	public void setBikeId(Integer bikeId) {
 		this.bikeId = bikeId;
 	}
+
 	public Integer getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
+
 	public String getUsername() {
 		return username;
 	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	public Date getRepairDate() {
 		return repairDate;
 	}
+
 	public void setRepairDate(Date repairDate) {
 		this.repairDate = repairDate;
 	}
+
 	public String getResult() {
 		return result;
 	}
+
 	public void setResult(String result) {
 		this.result = result;
 	}
+
 	public Integer getAdmin_Id() {
 		return admin_Id;
 	}
+
 	public void setAdmin_Id(Integer admin_Id) {
 		this.admin_Id = admin_Id;
 	}
+
 	public String getAdminName() {
 		return adminName;
 	}
+
 	public void setAdminName(String adminName) {
 		this.adminName = adminName;
 	}
+
 	public Date getDisposeDate() {
 		return disposeDate;
 	}
+
 	public void setDisposeDate(Date disposeDate) {
 		this.disposeDate = disposeDate;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -128,6 +163,7 @@ public class Repair {
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -184,12 +220,18 @@ public class Repair {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
-		return "Repair [id=" + id + ", bikeId=" + bikeId + ", userName=" + username + ", repairDate=" + repairDate
-				+ ", result=" + result + ", adminName=" + adminName + ", disposeDate=" + disposeDate + "]";
+		if (adminName == null) {
+			adminName = "未处理";
+		} 
+		
+		if (result == null) {
+			result = "未处理";
+		}
+		return id + "\t" + bikeId + "\t" + username + "\t" + repairDate + "\t" + result + "\t" + adminName + "\t"
+				+ (disposeDate == null ? "未处理" : disposeDate);
 	}
-	
-	
-	
+
 }
