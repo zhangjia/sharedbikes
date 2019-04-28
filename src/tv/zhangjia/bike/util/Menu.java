@@ -105,33 +105,34 @@ public class Menu {
 
 	private int retrievePassword(int userId) {
 
+		CommonRpc cr = new CommonRpc();
 		System.out.print("请输入您的手机号：");
+		String tel = "";
 		while (true) {
-			String tel = input.next();
-
-			if (!userDao.isTrueTel(tel, userId)) {
-				System.out.print("该手机号和您的用户名不匹配,请重新输入：");
+			tel = input.next();
+			if (iiv.isTrueTel(tel)) {
+				// 手机号存在返回true
+				if (!userDao.isTelExist(tel)) {
+					System.out.print("该手机号不存在，请重新输入手机号：");
+				} else {
+					String code = cr.sendCode(tel);
+					System.out.print("验证码已发送至您的手机，请输入您的验证码：");
+					while(true) {
+						String c = input.next();
+						if(code.equals(c)) {
+							System.out.print("验证码输入正确，验证成功！");
+							break;
+						} else {
+							System.out.print("验证码输入有误，请重新输入：");
+						}
+					}
+					break;
+				}
 			} else {
-				break;
+				System.out.print("手机号不合法，哪有这种手机号啊，请重新输入手机号：");
 			}
-		}
-		String codes = VerificationCode.randomCode();
-		System.out.print("请输入您的验证码：");
 
-		try {
-			Thread.sleep(1500);//
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
-		// 没有手机给你发验证码，只能委屈你自己输出了
-		System.out.print(codes);
-
-		try {
-			Thread.sleep(500);//
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("   验证码正确！");
 
 		System.out.print("请输入新密码：");
 		String newPassword = input.next();
@@ -1436,6 +1437,7 @@ public class Menu {
 		}
 
 		String tel;
+		CommonRpc cr = new CommonRpc();
 		System.out.print("请输入您的手机号：");
 		while (true) {
 			tel = input.next();
@@ -1444,6 +1446,17 @@ public class Menu {
 				if (userDao.isTelExist(tel)) {
 					System.out.print("该手机号已经存在，请重新输入手机号：");
 				} else {
+					String code = cr.sendCode(tel);
+					System.out.print("验证码已发送至您的手机，请输入您的验证码：");
+					while(true) {
+						String c = input.next();
+						if(code.equals(c)) {
+							System.out.print("验证码输入正确，验证成功！");
+							break;
+						} else {
+							System.out.print("验证码输入有误，请重新输入：");
+						}
+					}
 					break;
 				}
 			} else {
