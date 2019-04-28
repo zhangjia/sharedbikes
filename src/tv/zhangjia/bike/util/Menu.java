@@ -117,9 +117,9 @@ public class Menu {
 				} else {
 					String code = cr.sendCode(tel);
 					System.out.print("验证码已发送至您的手机，请输入您的验证码：");
-					while(true) {
+					while (true) {
 						String c = input.next();
-						if(code.equals(c)) {
+						if (code.equals(c)) {
 							System.out.print("验证码输入正确，验证成功！");
 							break;
 						} else {
@@ -626,7 +626,7 @@ public class Menu {
 							System.out.print("此记录不允许删除，请重新输入：");
 							continue;
 						} else if (ld.getDeleteStatus() == 0) {
-							
+
 							System.out.print("此记录不存在，请重新输入：");
 							continue;
 						} else {
@@ -675,6 +675,17 @@ public class Menu {
 	 */
 	private void deleteBike() {
 		printBoundary();
+
+		System.out.println("---------------------下面是系统内所有可删除的单车信息-----------------------");
+		List<Bike> bikes = bikeDao.queryAllByNotDelete();
+		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
+		for (Bike bike : bikes) {
+			if (bike.getStatus() != 1) {
+				continue;
+			}
+			System.out.println(bike);
+		}
+
 		System.out.print("请输入您要删除的单车ID：");
 		Bike bike = null;
 		int bikeId = -1;
@@ -697,7 +708,9 @@ public class Menu {
 			System.out.print("请重新输入要删除的ID：");
 		}
 
-		if (bikeDao.doDelete(bikeId) == 1) {
+		// 逻辑删除
+		bike.setDeleteStatus(0);
+		if (bikeDao.doUpdate(bike) == 1) {
 			System.out.println("删除成功");
 		} else {
 			System.out.println("删除失败");
@@ -904,7 +917,7 @@ public class Menu {
 	private void queryBikes() {
 		System.out.println("---------------------下面是系统内所有的单车相关信息-----------------------");
 		List<Bike> bike = bikeDao.queryAll();
-		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
+		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t数据\t二维码");
 		for (Bike bike2 : bike) {
 			System.out.println(bike2);
 		}
@@ -913,10 +926,10 @@ public class Menu {
 
 	private void queryUserBikes() {
 		System.out.println("---------------------下面是系统内所有的单车相关信息-----------------------");
-		List<Bike> bike = bikeDao.queryAll();
+		List<Bike> bike = bikeDao.queryAllByNotDelete();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
-			if (bike2.getStatus() != 1) {
+			if (bike2.getStatus() != 1 || bike2.getDeleteStatus() != 1) {
 				continue;
 			}
 			System.out.println(bike2);
@@ -1448,9 +1461,9 @@ public class Menu {
 				} else {
 					String code = cr.sendCode(tel);
 					System.out.print("验证码已发送至您的手机，请输入您的验证码：");
-					while(true) {
+					while (true) {
 						String c = input.next();
-						if(code.equals(c)) {
+						if (code.equals(c)) {
 							System.out.print("验证码输入正确，验证成功！");
 							break;
 						} else {

@@ -73,4 +73,6 @@ public interface BikeDao {
 	 void updatePrice();
 	 
 	 double queryBikePrice(int bikeId);
+	 
+	 List<Bike> queryAllByNotDelete();
 }

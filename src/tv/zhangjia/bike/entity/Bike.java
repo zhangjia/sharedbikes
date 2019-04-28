@@ -21,6 +21,7 @@ public class Bike {
 	private Integer status; // 单车状态
 	private Integer amount; // 单车骑行次数
 	private String qr; // 单车二维码
+	private Integer deleteStatus;
 
 	/**
 	 * 无参的构造方法
@@ -153,12 +154,22 @@ public class Bike {
 	public void setQr(String qr) {
 		this.qr = qr;
 	}
+	
+
+	public Integer getDeleteStatus() {
+		return deleteStatus;
+	}
+
+	public void setDeleteStatus(Integer deleteStatus) {
+		this.deleteStatus = deleteStatus;
+	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + ((deleteStatus == null) ? 0 : deleteStatus.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((lastLocationId == null) ? 0 : lastLocationId.hashCode());
 		result = prime * result + ((locationId == null) ? 0 : locationId.hashCode());
@@ -182,6 +193,11 @@ public class Bike {
 			if (other.amount != null)
 				return false;
 		} else if (!amount.equals(other.amount))
+			return false;
+		if (deleteStatus == null) {
+			if (other.deleteStatus != null)
+				return false;
+		} else if (!deleteStatus.equals(other.deleteStatus))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -238,8 +254,9 @@ public class Bike {
 		} else {
 			statusName = "损坏";
 		}
+		
 
-		return id + "\t" + type + "\t" + price + "\t" + locationName + "\t" + statusName + "\t" + amount + "\t" + qr
+		return id + "\t" + type + "\t" + price + "\t" + locationName + "\t" + statusName + "\t" + amount + "\t" + (deleteStatus == null ? "": (deleteStatus == 1 ? "正常\t": "已删除\t")) + qr
 				+ "\n";
 	}
 

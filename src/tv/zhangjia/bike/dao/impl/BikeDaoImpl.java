@@ -39,7 +39,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 			e.printStackTrace();
 		}
 
-		String sql = "INSERT INTO bike VALUES(?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO bike VALUES(?,?,?,?,?,?,?,1)";
 
 		int x = executeUpdate(sql, bikeId, bike.getType(), bike.getLocationId(), bike.getLocationId(), bike.getStatus(),
 				bike.getAmount(), bike.getQr());
@@ -66,9 +66,9 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	 */
 	@Override
 	public int doUpdate(Bike bike) {
-		String sql = "UPDATE bike SET type = ?,location_id = ?,lastlocation_id = ?,status = ?,amount = ?,qr = ? WHERE id = ?";
+		String sql = "UPDATE bike SET type = ?,location_id = ?,lastlocation_id = ?,status = ?,amount = ?,qr = ?,delete_status =  ? WHERE id = ?";
 		return executeUpdate(sql, bike.getType(), bike.getLocationId(), bike.getLastLocationId(), bike.getStatus(),
-				bike.getAmount(), bike.getQr(), bike.getId());
+				bike.getAmount(), bike.getQr(),bike.getDeleteStatus(), bike.getId());
 
 	}
 
@@ -82,6 +82,19 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 		String sql = "SELECT bike.*,options.value price ,location_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id ORDER BY bike.id ";
 		return query4BeanList(sql, Bike.class);
 	}
+	
+	/**
+	 * 查询未删除的所有单车
+	 * @return 所有单车
+	 */
+	@Override
+	public List<Bike> queryAllByNotDelete() {
+		// 通过和Option表连接，获取当前车型的价格存在price字段中
+//		String sql = "SELECT bike.*,options.value price ,location_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id AND bike.delete_status = 1 ORDER BY bike.id";
+		String sql = "SELECT bike.id,bike.type,bike.location_id,bike.lastlocation_id,bike.status,bike.amount,bike.qr,options.value price ,location_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id AND bike.delete_status = 1 ORDER BY bike.id";
+
+		return query4BeanList(sql, Bike.class);
+	}
 
 	/**
 	 * 根据单车Id返回单车信息
@@ -90,7 +103,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	 */
 	@Override
 	public Bike queryById(int id) {
-		String sql = "SELECT bike.*,options.value price ,location_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id AND bike.id = ?";
+		String sql = "SELECT bike.*,options.value price ,location_name FROM bike,options,location WHERE bike.type = options.name AND bike.location_id = location.id AND delete_status = 1 AND bike.id = ?";
 		return query4Bean(sql, Bike.class, id);
 	}
 

@@ -72,7 +72,7 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	@Override
 	public List<String> dispatch() {
 		BikeDao bikeDao = new BikeDaoImpl();
-		List<Bike> bikes = bikeDao.queryAll();
+		List<Bike> bikes = bikeDao.queryAllByNotDelete();
 		List<Location> locations = queryAll();
 		List<String> arr = new ArrayList<>();
 
