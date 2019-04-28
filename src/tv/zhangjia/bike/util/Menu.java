@@ -378,7 +378,7 @@ public class Menu {
 		}
 		Repair repair = repairDao.queryByBikeId(bikeId);
 		repair.setAdmin_Id(user.getId());
-		
+
 		System.out.print("请选择处理结果：[ 损坏：y | 未损坏：n ] ");
 		String s = input.next();
 		if (s.equalsIgnoreCase("y")) {
@@ -608,7 +608,44 @@ public class Menu {
 			for (LeaseRecord leaseRecord : bike) {
 				System.out.println(leaseRecord);
 			}
-			returnMenu();
+			System.out.print("请选择接下来的操作[ 删除 ：y | 返回：r ]  : ");
+			String againEdit = input.next();
+			if (againEdit.equalsIgnoreCase("y")) {
+				System.out.print("请输入您要删除的记录ID：");
+				int id = 0;
+				while (true) {
+					String str = input.next();
+					if (iiv.isNumber(str)) {
+						id = Integer.parseInt(str);
+						LeaseRecord ld = leaseRecordDao.queryById(id);
+						if (ld == null) {
+							System.out.print("此记录不存在，请重新输入：");
+							continue;
+						} else if (ld.getReturnTime() == null) {
+							System.out.print("此记录不允许删除，请重新输入：");
+							continue;
+						} else if (ld.getDeleteStatus() == 0) {
+							
+							System.out.print("此记录不存在，请重新输入：");
+							continue;
+						} else {
+							if (leaseRecordDao.doDelele(id) == 1) {
+								System.out.print("删除成功！");
+								break;
+							}
+						}
+
+					} else {
+						System.out.print("输入不合法，请重新输入：");
+					}
+
+				}
+				returnMenu();
+
+			} else {
+				userMenu();
+			}
+
 		}
 
 	}

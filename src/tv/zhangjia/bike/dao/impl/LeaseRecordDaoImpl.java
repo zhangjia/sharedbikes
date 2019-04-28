@@ -79,7 +79,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		String journey = lo.getLocationName() + " ---> " + "骑行中\t";
 		// 生成借车记录
 
-		String sql = "INSERT INTO lease_record VALUES(seq_lease_record.nextval,?,?,sysdate,null,?,0.0,0.0)";
+		String sql = "INSERT INTO lease_record VALUES(seq_lease_record.nextval,?,?,sysdate,null,?,0.0,0.0,1)";
 		int x = bikeDao.doUpdate(bike);
 		int y = executeUpdate(sql, bikeId, userId, journey);
 		return x * y;
@@ -92,7 +92,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public List<LeaseRecord> queryAll() {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.id";
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id";
 		return query4BeanList(sql, LeaseRecord.class);
 	}
 
@@ -103,8 +103,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public List<LeaseRecord> queryByUserId(int id) {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND users.id = ?";
-		
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND users.id = ? AND delete_status =1";
 		return query4BeanList(sql, LeaseRecord.class, id);
 	}
 
@@ -115,7 +114,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 */
 	@Override
 	public LeaseRecord queryById(int id) {
-		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.id AND lease_record.id = ?";
+		String sql = "SELECT lease_record.*,users.username FROM users,lease_record WHERE users.id = lease_record.user_id AND lease_record.id = ?";
 		return query4Bean(sql, LeaseRecord.class, id);
 	}
 
@@ -315,6 +314,12 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	public int doUpdate(LeaseRecord lr) {
 		String sql = "UPDATE lease_record SET return_time=sysdate,journey=?,cost=?,time=? WHERE id = ?";
 		return executeUpdate(sql,  lr.getJourney(), lr.getCost(), lr.getTime(),lr.getId());
+	}
+
+	@Override
+	public int doDelele(int id) {
+		String sql = "UPDATE lease_record SET delete_status = 0 WHERE id = ?";
+		return executeUpdate(sql, id);
 	}
 
 }

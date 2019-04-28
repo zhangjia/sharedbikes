@@ -60,6 +60,8 @@ public interface LeaseRecordDao {
 	 
 	 
 	 int doUpdate(LeaseRecord lr);
+	 
+	 int doDelele(int id);
 	
 	
 	
