@@ -14,10 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-/**
- * 递归获取目录树
- * @author Kevin
- */
+
 public class Codes {
 	static int fileCount = 0; // 文件数
 	static int codeCount = 0; // 代码数

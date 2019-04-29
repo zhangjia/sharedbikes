@@ -39,7 +39,7 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	 */
 	@Override
 	public Bill queryByBillId(int billId) {
-		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.id=?";
+		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.id=? ";
 		return query4Bean(sql, Bill.class, billId);
 	}
 
@@ -50,7 +50,7 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	 */
 	@Override
 	public List<Bill> queryUserBill(int userId) {
-		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.user_id = ?";
+		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.user_id = ? ORDER BY bill.id";
 		return query4BeanList(sql, Bill.class, userId);
 	}
 

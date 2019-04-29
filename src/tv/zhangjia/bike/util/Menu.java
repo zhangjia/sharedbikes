@@ -614,7 +614,7 @@ public class Menu {
 			System.out.println("----------下面是所有用户的单车租赁记录-----------");
 			List<LeaseRecord> bike = leaseRecordDao.queryAll();
 
-			System.out.println("编号\t自行车ID\t租赁用户\t租借时间\t\t归还时间\t\t起始位置\t\t\t骑行时间\t  消费金额\t数据");
+			System.out.println("编号\t自行车ID\t租赁用户\t租借时间\t\t归还时间\t\t起始位置\t\t\t骑行时间\t  消费金额\t记录状态");
 			if (bike.isEmpty()) {
 				printBoundary();
 				System.out.println("你的生意惨淡，没有任何人借车");
@@ -706,7 +706,7 @@ public class Menu {
 		List<Bike> bikes = bikeDao.queryAllByNotDelete();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike : bikes) {
-			if (bike.getStatus() != 1) {
+			if (bike.getStatus() == 0) {
 				continue;
 			}
 			System.out.println(bike);
@@ -943,7 +943,7 @@ public class Menu {
 	private void queryBikes() {
 		System.out.println("---------------------下面是系统内所有的单车相关信息-----------------------");
 		List<Bike> bike = bikeDao.queryAll();
-		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t数据\t二维码");
+		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t记录状态\t二维码");
 		for (Bike bike2 : bike) {
 			System.out.println(bike2);
 		}
@@ -1127,7 +1127,7 @@ public class Menu {
 		case 1:
 			System.out.println("----------免密支付设置----------");
 			String s = us.queryUserSetting(user.getId(), "免密支付");
-			System.out.println(s);
+//			System.out.println(s);
 			System.out.println("您目前免密支付设置为：" + (s.equals("1") ? "开" : "关"));
 			System.out.print("请更改您的设置 ： [ 打开：t | 关闭 f | 返回 r ] ：");
 			// System.out.println("打开：t,关闭：f,任意键返回");
@@ -1578,5 +1578,4 @@ public class Menu {
 	private void printBoundary() {
 		System.out.println("---------------------------------------");
 	}
-
 }

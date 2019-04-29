@@ -21,12 +21,12 @@ pom.xml
 */
 public class CommonRpc {
 	public static void main(String[] args) {
-		new CommonRpc().sendCode("15628791997");
+		new CommonRpc().sendCode("15666335517");
 	}
 
 	public String sendCode(String tel) {
-		DefaultProfile profile = DefaultProfile.getProfile("default", "xxx",
-				"xxx");
+		DefaultProfile profile = DefaultProfile.getProfile("default", "LTAIlsCaVRpjMFVB",
+				"yGg77K38ZRLa1pOmlRfkHB8A5k4ySZ");
 		IAcsClient client = new DefaultAcsClient(profile);
 
 		CommonRequest request = new CommonRequest();
@@ -35,8 +35,8 @@ public class CommonRpc {
 		request.setVersion("2017-05-25");
 		request.setAction("SendSms");
 		request.putQueryParameter("PhoneNumbers", tel);
-		request.putQueryParameter("SignName", "xxx");
-		request.putQueryParameter("TemplateCode", "xxxxx");
+		request.putQueryParameter("SignName", "Ð¡ÂÌµ¥³µ");
+		request.putQueryParameter("TemplateCode", "SMS_164510483");
 		String random = String.valueOf(new Random().nextInt(9999) + 100);
 		request.putQueryParameter("TemplateParam", "{\"code\":\"" + random + "\"}");
 		try {
