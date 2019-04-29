@@ -4,6 +4,7 @@ import java.util.List;
 
 import tv.zhangjia.bike.entity.Bike;
 import tv.zhangjia.bike.entity.User;
+
 /**
  * Bike接口
  * @ProjectName	SharedBikes	  
@@ -14,65 +15,51 @@ import tv.zhangjia.bike.entity.User;
  * @date	2019年3月26日 下午5:37:20
  */
 public interface BikeDao {
+
 	/**
 	 * 添加单车
-	 * @param bike
-	 * @return 
+	 * @param bike 单车对象
+	 * @return 添加成功返回1，添加失败返回0
 	 */
-	 int doInsert(Bike bike);
-	 
-	 /**
-	  * 根据单车ID删除单车
-	  * @param bikeId
-	  * @return
-	  */
-	 int doDelete(int id);
-	 
-	 /**
-	  * 修改单车
-	  * @param bike
-	  * @return
-	  */
-	 int doUpdate(Bike bike);
-	 /**
-	  * 查询所有单车
-	  * @return
-	  */
-	 List<Bike> queryAll();
-	 /**
-	  * 根据单车ID查询单车
-	  * @param bikeid
-	  * @return
-	  */
-	 Bike queryById(int id); 
+	int doInsert(Bike bike);
 
-	 /**
-	  * 根据单车id查询单车的状态
-	  * @param bikeId
-	  * @return
-	  */
-	 int bikeStatus(int bikeId);
-	 
-	 /**
-	  * 根据单车ID修改单车的状态为损坏
-	  * @param user
-	  * @param bikeId
-	  * @return
-	  */
-	 int setDamage(User user, int bikeId);
-	 
-	 /**
-	  * 查询已经损坏的单车
-	  * @return
-	  */
-	 List<Bike> queryByDamage();
-	 
-	 /**
-	  * 更新单车价格
-	  */
-	 void updatePrice();
-	 
-	 double queryBikePrice(int bikeId);
-	 
-	 List<Bike> queryAllByNotDelete();
+	/**
+	 * 删除单车
+	 * @param id 要删除的单车ID
+	 * @return 删除成功返回1，删除失败返回0
+	 */
+	int doDelete(int id);
+
+	/**
+	 * 更新单车
+	 * @param id 要更新的单车ID
+	 * @return 更新成功返回1，更新失败返回0
+	 */
+	int doUpdate(Bike bike);
+
+	/**
+	 * 查询所有单车
+	 * @return 所有单车
+	 */
+	List<Bike> queryAll();
+
+	/**
+	 * 根据单车Id返回单车信息
+	 * @param id 单车ID
+	 * @return 单车信息
+	 */
+	Bike queryById(int id);
+
+	/**
+	 * 根据单车ID查询其价格
+	 * @param bikeId 要查询的单车
+	 * @return 该单车的价格
+	 */
+	double queryBikePrice(int bikeId);
+
+	/**
+	 * 查询未删除的所有单车
+	 * @return 所有单车
+	 */
+	List<Bike> queryAllByNotDelete();
 }
