@@ -1,5 +1,6 @@
 package tv.zhangjia.bike.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -64,7 +65,7 @@ public class Menu {
 	 * @Title mainMenu
 	 */
 	public void mainMenu() {
-		System.out.println("----------欢迎您使用共享单车租赁系统----------");
+		System.out.println("----------欢迎您使用小绿单车租赁系统----------");
 		System.out.println("\t\t1.登录");
 		System.out.println("\t\t2.注册");
 		System.out.println("\t\t3.退出 ");
@@ -214,6 +215,7 @@ public class Menu {
 		System.out.println("\t12.系统设置");
 		System.out.println("\t13.退出登录");
 		System.out.println("\t14.退出系统");
+		System.out.println("\t15.代码统计");
 		printBoundary();
 		System.out.print("请选择您接下来的操作：");
 		int index = 1;
@@ -221,7 +223,7 @@ public class Menu {
 			String nextInt = input.next();
 			if (iiv.isNumber(nextInt)) {
 				index = Integer.parseInt(nextInt);
-				if (index > 14) {
+				if (index > 15) {
 					System.out.print("不存在此选项,请重新输入：");
 				} else {
 					break;
@@ -275,10 +277,33 @@ public class Menu {
 		case 14:
 			exit();
 			break;
+		case 15:
+			StatisticalCode();
+			break;
 		default:
 			System.out.print("没有该选项，请重新输入：");
 		}
 
+	}
+	
+	private void StatisticalCode() {
+		Codes code = new Codes();
+		System.out.print("请输入您的Src目录[格式：x:\\xx\\xx\\……\\src]：");
+		File file = null;
+		String f = "";
+		while (true) {
+			 f =  input.next();
+			// f = input.nextLine();
+			file = new File(f);
+			if (!file.exists()) {
+				System.out.print("输入地址不合法，请重新输入：");
+			} else {
+				break;
+			}
+
+		}
+		code.exeMethod(f,file);
+		returnMenu();
 	}
 
 	private void usersBill() {
@@ -589,13 +614,15 @@ public class Menu {
 			System.out.println("----------下面是所有用户的单车租赁记录-----------");
 			List<LeaseRecord> bike = leaseRecordDao.queryAll();
 
-			System.out.println("编号\t自行车ID\t租赁用户\t租借时间\t\t归还时间\t\t起始位置\t\t\t骑行时间\t  消费金额");
+			System.out.println("编号\t自行车ID\t租赁用户\t租借时间\t\t归还时间\t\t起始位置\t\t\t骑行时间\t  消费金额\t数据");
 			if (bike.isEmpty()) {
 				printBoundary();
 				System.out.println("你的生意惨淡，没有任何人借车");
 			}
 			for (LeaseRecord leaseRecord : bike) {
-				System.out.println(leaseRecord);
+				System.out.print(leaseRecord);
+				System.out.print("\t");
+				System.out.println(leaseRecord.getDeleteStatus() == 1 ? "正常" : "用户已删除");
 			}
 			returnMenu();
 		} else {

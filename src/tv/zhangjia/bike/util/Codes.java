@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 /**
@@ -24,40 +28,56 @@ public class Codes {
 	static Map<String, Integer> codes = new TreeMap<>();
 	static Map<String, Integer> methods = new TreeMap<>();
 
-	public static void main(String[] args) {
-		System.out.print("请输入您的Src目录[格式：X:\\XX\\XX\\……\\src]：");
-		Scanner input = new Scanner(System.in);
-		File file = null;
-		while (true) {
-			String f = input.nextLine();
-			file = new File(f);
-			if (!file.exists()) {
-				System.out.print("输入地址不合法，请重新输入：");
-			} else {
-				break;
-			}
+	public void exeMethod(String f, File file) {
 
-		}
+		// Scanner input = new Scanner(System.in);
+		// File file = null;
+		// while (true) {
+		// // f = input.nextLine();
+		// file = new File(f);
+		// if (!file.exists()) {
+		// System.out.print("输入地址不合法，请重新输入：");
+		// } else {
+		// break;
+		// }
+		//
+		// }
+
 		statistics(file);
 		int i = 1;
-	
-		
-		for (Map.Entry<String, Integer> entry : codes.entrySet()) {
+//		System.out.println(codes);
+		//根据值升序
+		List<Entry<String, Integer>> list = new ArrayList<Entry<String, Integer>>(codes.entrySet());
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return (o1.getValue() - o2.getValue());
+			}
+		});
+		/*
+		 * for (Map.Entry<String, Integer> entry : codes.entrySet()) {
+		 * System.out.print(i++ + ":\t"); System.out.printf("%-20s", entry.getKey());
+		 * System.out.print("\t有  " + entry.getValue() + " 行代码"); method +=
+		 * methods.get(entry.getKey()); System.out.println("\t有  " +
+		 * methods.get(entry.getKey()) + "个方法"); codeCount += entry.getValue(); }
+		 * 
+		 */
+		for (Entry<String, Integer> code : list) {
 			System.out.print(i++ + ":\t");
-			System.out.printf("%-20s", entry.getKey());
-			System.out.print("\t有  " + entry.getValue() + " 行代码");
-			method += methods.get(entry.getKey());
-			System.out.println("\t有  " + methods.get(entry.getKey()) + "个方法");
-			codeCount += entry.getValue();
+			System.out.printf("%-20s", code.getKey());
+			System.out.print("\t有  " + code.getValue() + " 行代码");
+			method += methods.get(code.getKey());
+			System.out.println("\t有  " + methods.get(code.getKey()) + "个方法");
+			codeCount += code.getValue();
 		}
 		System.out.println("\n\n--------------------本项目统计结果如下--------------------");
-		System.out.print("一共有：\n" + fileCount + "个文件\n" + classCount + "个类\n" + interfaceCount + "个接口\n" + method + "个方法\n");
-		System.out.println(codeCount + "行代码\n代码多并不代表写的好，可能十行就能解决的功能，你写了100行");
-		
-		input.close();
+		System.out.print(
+				"一共有：\n" + fileCount + "个文件\n" + classCount + "个类\n" + interfaceCount + "个接口\n" + method + "个方法\n");
+		System.out.println(codeCount + "行代码\n代码多并不代表写的好，可能十行就能解决的功能，你写了100行，继续加油吧！");
+
+		// input.close();
 	}
 
-	public static void statistics(File file) {
+	public void statistics(File file) {
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
 			for (File f : files) {
@@ -123,4 +143,5 @@ public class Codes {
 		}
 
 	}
+
 }
