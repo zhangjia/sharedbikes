@@ -14,22 +14,22 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	/**
 	 * 插入记录
 	 * @param bill
-	 * @return
+	 * @return 添加成功返回1，添加失败返回0
 	 */
 	@Override
 	public int doInsert(Bill bill) {
 		String sql = "INSERT INTO bill VALUES(seq_bill.nextval,?,?,sysdate,?)";
-		return executeUpdate(sql, bill.getUserId(),bill.getBillName(),bill.getMoney());
+		return executeUpdate(sql, bill.getUserId(), bill.getBillName(), bill.getMoney());
 	}
-	
+
 	/**
-	 * 查询所有账单
-	 * @return
+	 * 查询所有账单（包括被用户删除的）
+	 * @return 所有的账单
 	 */
 	@Override
 	public List<Bill> queryAll() {
 		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id ORDER BY bill.id";
-		return query4BeanList(sql,Bill.class);
+		return query4BeanList(sql, Bill.class);
 	}
 
 	/**
@@ -40,9 +40,8 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	@Override
 	public Bill queryByBillId(int billId) {
 		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.id=?";
-		return query4Bean(sql, Bill.class,billId);
+		return query4Bean(sql, Bill.class, billId);
 	}
-
 
 	/**
 	 * 根据用户id查询指定用户的所有账单
@@ -52,12 +51,12 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 	@Override
 	public List<Bill> queryUserBill(int userId) {
 		String sql = "SELECT bill.*, users.username FROM bill,users WHERE bill.user_id = users.id AND bill.user_id = ?";
-		return query4BeanList(sql, Bill.class,userId);
+		return query4BeanList(sql, Bill.class, userId);
 	}
-	
+
 	/**
 	 * 导出记录到本地
-	 * @return
+	 * @return 导出成功返回true，导出失败返回false
 	 * @throws IOException
 	 */
 	@Override
@@ -87,8 +86,6 @@ public class BillDaoImpl extends CommonDao implements BillDao {
 
 		return true;
 
-
 	}
-
 
 }

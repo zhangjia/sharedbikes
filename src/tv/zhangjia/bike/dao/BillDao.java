@@ -6,45 +6,38 @@ import java.util.List;
 import tv.zhangjia.bike.entity.Bill;
 
 public interface BillDao {
-
 	/**
-	 * 插入账单记录
-	 * @param userId
-	 * @return
+	 * 插入记录
+	 * @param bill
+	 * @return 添加成功返回1，添加失败返回0
 	 */
-//	int doInsert(int userId, String event, double money);
 	int doInsert(Bill bill);
 
 	/**
-	 * 查询所有的账单记录
-	 * @return
+	 * 查询所有账单（包括被用户删除的）
+	 * @return 所有的账单
 	 */
 	List<Bill> queryAll();
 
 	/**
-	 * 根据账单ID返回账单记录
-	 * @param billId
-	 * @return
+	 * 根据账单id查询单条记录
+	 * @param billId 账单ID
+	 * @return 对应的记录
 	 */
 	Bill queryByBillId(int billId);
 
-	
 	/**
-	 * 根据该用户的ID，返回该用户的全部账单记录
-	 * @param userId
-	 * @return
+	 * 根据用户id查询指定用户的所有账单
+	 * @param userId 用户id
+	 * @return 该用户产生的所有账单
 	 */
 	List<Bill> queryUserBill(int userId);
 
+	/**
+	 * 导出记录到本地
+	 * @return 导出成功返回true，导出失败返回false
+	 * @throws IOException
+	 */
 	boolean export() throws IOException;
-	
-//	int awardByregister(int user1Id,int wallet1Id,int user2Id);
-//	
-//	int awardByBike(int userId, int walletId);
-//    int recharge(int userId, double money);
-//
-//	int becomeVIP(int userId, int month);
-//
-//	int pay(int userId,double money,String type);
 
 }
