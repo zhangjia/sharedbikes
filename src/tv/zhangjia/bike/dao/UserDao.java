@@ -21,7 +21,7 @@ public interface UserDao {
 	int register(String username, String password, String tel, String payPassword);
 
 	User queryByUserId(int userId);
-
+	User queryByUserTel(String tel);
 	List<User> queryAll();
 
 //	String queryUserName(int id);

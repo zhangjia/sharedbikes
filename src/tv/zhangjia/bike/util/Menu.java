@@ -103,7 +103,7 @@ public class Menu {
 
 	}
 
-	private int retrievePassword(int userId) {
+	private int retrievePassword() {
 
 		CommonRpc cr = new CommonRpc();
 		System.out.print("请输入您的手机号：");
@@ -136,7 +136,7 @@ public class Menu {
 
 		System.out.print("请输入新密码：");
 		String newPassword = input.next();
-		User user = userDao.queryByUserId(userId);
+		User user = userDao.queryByUserTel(tel);
 		user.setPassword(newPassword);
 		return userDao.doUpdate(user);
 	}
@@ -171,8 +171,7 @@ public class Menu {
 					String s = input.next();
 					printBoundary();
 					if (s.equalsIgnoreCase("y")) {
-						// -1代表是找回密码，登录用户是修改密码，传入的是用户的id
-						retrievePassword(-1);
+						retrievePassword();
 						System.out.println("找回成功！请重新登录：");
 						userLogin(); // TODO :调用自己了
 					} else {
@@ -863,7 +862,7 @@ public class Menu {
 		while (true) {
 			type = input.next();
 			if (type.equals("1")) {
-				System.out.println(as.queryValue("脚蹬车"));
+//				System.out.println(as.queryValue("脚蹬车"));
 				break;
 			} else if (type.equals("2")) {
 				break;
@@ -929,7 +928,7 @@ public class Menu {
 		List<Bike> bike = bikeDao.queryAllByNotDelete();
 		System.out.println("编号\t类型\t价格\t位置\t状态\t次数\t二维码");
 		for (Bike bike2 : bike) {
-			if (bike2.getStatus() != 1 || bike2.getDeleteStatus() != 1) {
+			if (bike2.getStatus() != 1) {
 				continue;
 			}
 			System.out.println(bike2);
@@ -1044,17 +1043,16 @@ public class Menu {
 			String id = input.next();
 			if (iiv.isNumber(id)) {
 				bikeId = Integer.parseInt(id);
-				System.out.println(bikeId);
 				Bike bike = bikeDao.queryById(bikeId);
 				if (bike == null) {
 					System.out.print("该车辆不存在！请重新输入:");
 					// input.next();
 					continue;
 				} else if (bike.getStatus() == -1) {
-					System.out.print("该车已经报修2,请重新输入：");
+					System.out.print("该车已经报修,请重新输入：");
 					continue;
 				} else if (repairDao.isRepair(bikeId)) {
-					System.out.println("该车辆已经被报修，请重新输入：");
+					System.out.print("该车辆已经被报修，请重新输入：");
 					continue;
 				} else {
 					break;
@@ -1125,7 +1123,7 @@ public class Menu {
 			}
 			break;
 		case 2:
-			retrievePassword(user.getId());
+			retrievePassword();
 			System.out.println("修改成功，请重新登录：");
 			userLogin();
 			break;

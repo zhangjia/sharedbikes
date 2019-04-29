@@ -260,8 +260,8 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		double price = bikeDao.queryBikePrice(bikeId)
 				* (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
 		// 计算好了归还时间，起始位置，消费金额，骑行时间
-		System.out.println("price =" + price + "a = " + a + "b = " + b);
-		System.out.println(bike.getLocationName() + bike.getLocationName());
+//		System.out.println("price =" + price + "a = " + a + "b = " + b);
+//		System.out.println(bike.getLocationName() + bike.getLocationName());
 		String sql = "SELECT id,bike_id,user_id,lease_time,sysdate return_time,(SELECT location_name FROM location,bike WHERE bike.lastlocation_id = location.id AND bike.id = ?)||' ---> '||(SELECT location_name FROM location,bike WHERE bike.location_id = location.id AND bike.id = ?) journey,((sysdate - lease_time) * 24 * 60 * 60) * ? cost,((sysdate - lease_time) * 24 * 60 * 60) time FROM lease_record  WHERE bike_id = ? AND return_time IS NULL";
 		LeaseRecord lr = query4Bean(sql, LeaseRecord.class, bikeId, bikeId, price, bikeId);
 
@@ -276,7 +276,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		int y = userDao.doUpdate(user);
 
 		int z = doUpdate(lr);
-		System.out.println("x = " + x + " y = " + y + "z = " + z + "w = " + w);
+//		System.out.println("x = " + x + " y = " + y + "z = " + z + "w = " + w);
 		return w * x * y * z;
 
 		// 0：不是该用户

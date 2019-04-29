@@ -46,7 +46,7 @@ public class RepairDaoImpl extends CommonDao implements RepairDao {
 	 */
 	@Override
 	public List<Repair> queryAll() {
-		String sql = "SELECT tb1.*,tb2.admin_name FROM (SElECT repair.*,repair.id ids,username FROM repair,users WHERE users.id = repair.user_id) tb1 LEFT JOIN (SELECT username admin_name,repair.id ids,repair.admin_id FROM repair,users WHERE users.id  = repair.admin_id) tb2 ON (tb2.admin_id = tb1.admin_id AND tb2.ids = tb1.ids )";
+		String sql = "SELECT tb1.*,tb2.admin_name FROM (SElECT repair.*,repair.id ids,username FROM repair,users WHERE users.id = repair.user_id) tb1 LEFT JOIN (SELECT username admin_name,repair.id ids,repair.admin_id FROM repair,users WHERE users.id  = repair.admin_id) tb2 ON (tb2.admin_id = tb1.admin_id AND tb2.ids = tb1.ids)  ORDER BY tb1.ids";
 		return query4BeanList(sql, Repair.class);
 	}
 

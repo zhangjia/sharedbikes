@@ -163,4 +163,10 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 				user.getIsAdmin(),user.getCyclingTime(),user.getRegisterTime(),user.getLocationID(),user.getId());
 	}
 
+	@Override
+	public User queryByUserTel(String tel) {
+		String sql = "SELECT * FROM users WHERE tel = ?";
+		return query4Bean(sql, User.class, tel);
+	}
+
 }

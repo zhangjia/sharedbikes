@@ -27,7 +27,7 @@ public class BikeDaoImpl extends CommonDao implements BikeDao {
 	 */
 	@Override
 	public int doInsert(Bike bike) {
-		String sqlid = "SELECT seq_users.nextval id FROM dual";
+		String sqlid = "SELECT seq_bike.nextval id FROM dual";
 		// 获取要添加的单车的ID
 		int bikeId = query4IntData(sqlid);
 		// 设置单车ID，用户生成二维码
