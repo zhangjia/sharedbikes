@@ -1,6 +1,5 @@
 package tv.zhangjia.bike.util;
 
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -129,7 +128,7 @@ public class CommonDao extends JDBCUtils {
 					String name = field.getName();
 					// 根据属性名拼接set方法名
 					String smn = "";
-//					System.out.println(field.getType().getName());
+					// System.out.println(field.getType().getName());
 					if (field.getType() == boolean.class && name.contains("is")) {
 						smn = "set" + name.substring(name.indexOf("is") + 2);
 					} else {
@@ -157,7 +156,7 @@ public class CommonDao extends JDBCUtils {
 								sm.invoke(t, value);
 								break;
 							}
-							
+
 							if (type == long.class || type == Long.class) {
 								value = rs.getLong(columnName);
 								sm.invoke(t, value);
@@ -169,7 +168,7 @@ public class CommonDao extends JDBCUtils {
 								break;
 							}
 							// 执行set方法
-//							System.out.println(value.getClass());
+							// System.out.println(value.getClass());
 							sm.invoke(t, value);
 						}
 					}
@@ -246,9 +245,8 @@ public class CommonDao extends JDBCUtils {
 	protected interface BeanResultSetHandler<T> {
 		T getBeanFromResultSet(ResultSet rs) throws SQLException;
 	}
-	
-	
-	//获取单条int类型的数据
+
+	// 获取单条int类型的数据
 	public int query4IntData(String sql, Object... params) {
 		Connection conn = null;
 		PreparedStatement pstm = null;
@@ -278,67 +276,66 @@ public class CommonDao extends JDBCUtils {
 		}
 		return 0;
 	}
-	
-	//获取单条double类型的数据
-		public double query4DoubleData(String sql, Object... params) {
-			Connection conn = null;
-			PreparedStatement pstm = null;
-			ResultSet rs = null;
-			try {
-				// 获取连接
-				conn = getConnection();
-				// 创建语句对象
-				pstm = conn.prepareStatement(sql);
-				if (params != null && params.length > 0) {
-					// 需要设置占位符
-					for (int i = 0; i < params.length; i++) {
-						// 设置占位符
-						pstm.setObject(i + 1, params[i]);
-					}
+
+	// 获取单条double类型的数据
+	public double query4DoubleData(String sql, Object... params) {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			// 获取连接
+			conn = getConnection();
+			// 创建语句对象
+			pstm = conn.prepareStatement(sql);
+			if (params != null && params.length > 0) {
+				// 需要设置占位符
+				for (int i = 0; i < params.length; i++) {
+					// 设置占位符
+					pstm.setObject(i + 1, params[i]);
 				}
-				// 执行SQL语句
-				rs = pstm.executeQuery();
-				// 处理结果
-				if (rs.next()) {
-					return rs.getDouble(1);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				close(rs, pstm, conn);
 			}
-			return 0;
-		}
-		
-		
-		//获取单条字符串类型数据
-		public String query4StringData(String sql, Object... params) {
-			Connection conn = null;
-			PreparedStatement pstm = null;
-			ResultSet rs = null;
-			try {
-				// 获取连接
-				conn = getConnection();
-				// 创建语句对象
-				pstm = conn.prepareStatement(sql);
-				if (params != null && params.length > 0) {
-					// 需要设置占位符
-					for (int i = 0; i < params.length; i++) {
-						// 设置占位符
-						pstm.setObject(i + 1, params[i]);
-					}
-				}
-				// 执行SQL语句
-				rs = pstm.executeQuery();
-				// 处理结果
-				if (rs.next()) {
-					return rs.getString(1);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				close(rs, pstm, conn);
+			// 执行SQL语句
+			rs = pstm.executeQuery();
+			// 处理结果
+			if (rs.next()) {
+				return rs.getDouble(1);
 			}
-			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, pstm, conn);
 		}
+		return 0;
+	}
+
+	// 获取单条字符串类型数据
+	public String query4StringData(String sql, Object... params) {
+		Connection conn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			// 获取连接
+			conn = getConnection();
+			// 创建语句对象
+			pstm = conn.prepareStatement(sql);
+			if (params != null && params.length > 0) {
+				// 需要设置占位符
+				for (int i = 0; i < params.length; i++) {
+					// 设置占位符
+					pstm.setObject(i + 1, params[i]);
+				}
+			}
+			// 执行SQL语句
+			rs = pstm.executeQuery();
+			// 处理结果
+			if (rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close(rs, pstm, conn);
+		}
+		return null;
+	}
 }

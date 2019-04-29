@@ -78,7 +78,6 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	/**
 	 * 查询所有的用户
 	 * @return   所有的用户
-	 * @see tv.zhangjia.bike.dao.UserDao#queryAll()
 	 */
 	@Override
 	public List<User> queryAll() {
@@ -90,7 +89,6 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 * 用户名是否已经存在
 	 * @param username 要检测的用户名
 	 * @return   存在返回true，不存在返回flase
-	 * @see tv.zhangjia.bike.dao.UserDao#isExistUserName(java.lang.String)
 	 */
 	@Override
 	public boolean isUserNameExist(String username) {
@@ -103,7 +101,6 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 * 给出建议的用户名
 	 * @param username 用户注册时输入的已存在的用户名
 	 * @return   系统建议的用户名
-	 * @see tv.zhangjia.bike.dao.UserDao#adviseUsername(java.lang.String)
 	 */
 	@Override
 	public String adviseUsername(String username) {
@@ -119,7 +116,6 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	 * 手机号是否已存在
 	 * @param tel 要判断的手机号
 	 * @return   存在返回true，不存在返回false
-	 * @see tv.zhangjia.bike.dao.UserDao#isTelExist(java.lang.String)
 	 */
 	@Override
 	public boolean isTelExist(String tel) {
@@ -128,19 +124,11 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 		return query4Bean(sql, User.class, tel) != null;
 	}
 
-	// TODO 去掉，直接用验证码来判断
-	@Override
-	public boolean isTrueTel(String tel, int userId) {
-		User user = queryByUserId(userId);
-		return user.getTel().equals(tel);
-	}
-
 	/**
 	 * 用户的支付密码是否正确
 	 * @param userId
 	 * @param payPassword
 	 * @return   
-	 * @see tv.zhangjia.bike.dao.UserDao#isTruePayPassword(int, java.lang.String)
 	 */
 	@Override
 	public boolean isTruePayPassword(int userId, String payPassword) {
@@ -150,19 +138,22 @@ public class UserDaoImpl extends CommonDao implements UserDao {
 	}
 
 	/**
-	 * 
-	 * @param user
-	 * @return   
-	 * @see tv.zhangjia.bike.dao.UserDao#doUpdate(tv.zhangjia.bike.entity.User)
+	 * 更新用户信息
+	 * @param user 该用户
+	 * @return   更新成功返回1，更新失败返回0
 	 */
 	@Override
 	public int doUpdate(User user) {
 		// 可以更改用户的名，用户密码，用户支付密码，用户手机号，用户位置
 		String sql = "UPDATE users SET username = ?, password = ?,pay_password =?,tel = ?,is_admin = ?,cycling_time = ?,register_time = ?,location_id = ? WHERE id = ?";
 		return executeUpdate(sql, user.getUsername(), user.getPassword(), user.getPayPassword(), user.getTel(),
-				user.getIsAdmin(),user.getCyclingTime(),user.getRegisterTime(),user.getLocationID(),user.getId());
+				user.getIsAdmin(), user.getCyclingTime(), user.getRegisterTime(), user.getLocationID(), user.getId());
 	}
-
+	/**
+	 * 根据用手机号查询该用户
+	 * @param tel 用户的手机号
+	 * @return  该手机号所对应的用户
+	 */
 	@Override
 	public User queryByUserTel(String tel) {
 		String sql = "SELECT * FROM users WHERE tel = ?";

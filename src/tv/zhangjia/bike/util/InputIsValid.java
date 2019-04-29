@@ -22,9 +22,8 @@ public class InputIsValid {
 
 	/**
 	 * 输入是否是Int类型的正整数 和 0
-	 * 
-	 * @param str
-	 * @return
+	 * @param str 要判断的字符串
+	 * @return 合法返回true，不合法返回false
 	 */
 	public boolean isNumber(String str) {
 		if (str.matches("^[0-9]*$")) {
@@ -43,9 +42,8 @@ public class InputIsValid {
 
 	/**
 	 * 输入是否是Int类型的正整数，不包括0
-	 * 
-	 * @param str
-	 * @return
+	 * @param str 要判断的字符串
+	 * @return 合法返回true，不合法返回false
 	 */
 	public boolean isPositiveInteger(String str) {
 		if (str.matches("^[1-9]*$")) {
@@ -63,9 +61,8 @@ public class InputIsValid {
 
 	/**
 	 * 输入是否是Int类型的整数（负整数，正整数，0）
-	 * 
-	 * @param str
-	 * @return
+	 * @param str 要判断的字符串
+	 * @return 合法返回true，不合法返回false
 	 */
 	public boolean isInt(String str) {
 		if (str.matches("^-?[0-9]\\d*$")) {
@@ -85,8 +82,8 @@ public class InputIsValid {
 	/**
 	 * 输入的是否是正整数或者正double
 	 * 
-	 * @param str
-	 * @return
+	 * @param str 要判断的字符串
+	 * @return 合法返回true，不合法返回false
 	 */
 	public boolean isDouble(String str) {
 		if (str.matches("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[1-9]\\d*$")) {
@@ -96,6 +93,11 @@ public class InputIsValid {
 		}
 	}
 	
+	/**
+	 * 判断输入的手机号是否合法
+	 * @param str 要判断的手机号
+	 * @return 合法返回true，不合法返回false
+	 */
 	public boolean isTrueTel(String str) {
 		if (str.matches( "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$")) {
 			return true;

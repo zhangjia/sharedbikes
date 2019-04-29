@@ -17,7 +17,7 @@ import tv.zhangjia.bike.util.CommonDao;
 public class LocationDaoImpl extends CommonDao implements LocationDao {
 	/**
 	 * 查询所有的位置信息
-	 * @return
+	 * @return 所有的位置信息
 	 */
 	@Override
 	public List<Location> queryAll() {
@@ -29,8 +29,8 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 
 	/**
 	 * 根据位置id查询单条位置信息
-	 * @param id
-	 * @return
+	 * @param id 位置id
+	 * @return 该位置信息
 	 */
 	@Override
 	public Location queryLocation(int id) {
@@ -39,11 +39,9 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 	}
 
 	/**
-	 * 生成一个随机位置
-	 * @param locationId
-	 * @param bikeId
-	 * @param leaseRecordId
-	 * @return
+	 * 随机生成一个不同于当前位置的位置
+	 * @param locationId 当前位置id
+	 * @return 随机生成的位置
 	 */
 	@Override
 	public Location randomLocation(int locationId) {
@@ -51,6 +49,10 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 		return query4Bean(sql, Location.class, locationId);
 	}
 
+	/**
+	 * 随机生成一个用户的位置
+	 * @return 生成的随机位置
+	 */
 	@Override
 	public Location randomUserLocation() {
 		String sql = "SELECT * FROM (SELECT * FROM location order by dbms_random.value) WHERE rownum =1";
@@ -58,7 +60,11 @@ public class LocationDaoImpl extends CommonDao implements LocationDao {
 
 	}
 
-	// TODO 删除，用查询代替
+	/**
+	 * 根据位置Id查询位置名词
+	 * @param locationId 位置ID
+	 * @return 位置名称
+	 */
 	@Override
 	public String queryLocationName(int locationId) {
 		Location l = queryLocation(locationId);

@@ -4,7 +4,6 @@ import java.util.List;
 
 import tv.zhangjia.bike.dao.BikeDao;
 import tv.zhangjia.bike.entity.Bike;
-import tv.zhangjia.bike.entity.User;
 import tv.zhangjia.bike.util.CommonDao;
 import tv.zhangjia.bike.util.Zxing;
 

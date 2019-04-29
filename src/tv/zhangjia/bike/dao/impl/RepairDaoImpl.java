@@ -24,7 +24,7 @@ public class RepairDaoImpl extends CommonDao implements RepairDao {
 	/**
 	 * 处理记录
 	 * @param repair
-	 * @return
+	 * @return 处理成功返回1，处理失败返回0
 	 */
 	@Override
 	public int doUpdate(Repair repair) {
@@ -50,20 +50,10 @@ public class RepairDaoImpl extends CommonDao implements RepairDao {
 		return query4BeanList(sql, Repair.class);
 	}
 
-	@Override
-	public int doDispose() {
-		return 0;
-	}
-
-	@Override
-	public int doDelete(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	
 	/**
 	 * 根据单车iD查询单条记录
-	 * @return 
+	 * @return  该条记录
 	 */
 	@Override
 	public Repair queryByBikeId(int bikeId) {

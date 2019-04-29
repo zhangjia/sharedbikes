@@ -8,46 +8,47 @@ import tv.zhangjia.bike.entity.Location;
 public interface LocationDao {
 	/**
 	 * 查询所有的位置信息
-	 * @return
+	 * @return 所有的位置信息
 	 */
 	List<Location> queryAll();
-	
+
 	/**
-	 * 查询单个位置信息
-	 * @param id
-	 * @return
+	 * 根据位置id查询单条位置信息
+	 * @param id 位置id
+	 * @return 该位置信息
 	 */
 	Location queryLocation(int id);
 
-
-	
 	/**
-	 * 归还单车时，模拟随机生成位置
-	 * @return
+	 * 随机生成一个不同于当前位置的位置
+	 * @param locationId 当前位置id
+	 * @return 随机生成的位置
 	 */
 	Location randomLocation(int loctionId);
-	
+
 	/**
-	 * 根据位置ID，查询Id名字
-	 * @param locationId
-	 * @return
+	 * 根据位置Id查询位置名词
+	 * @param locationId 位置ID
+	 * @return 位置名称
 	 */
 	String queryLocationName(int locationId);
-	
-	
+
 	/**
-	 * 调度
-	 * @return
+	 * 调度建议
+	 * @return 所有的建议信息
 	 */
 	List<String> dispatch();
-	
+
+	/**
+	 * 根据位置ID查询当前位置下的所有车辆
+	 * @param locationId 位置ID
+	 * @return 当前位置下的所有车辆
+	 */
 	List<Bike> queryBikesByLocation(int locationId);
-	
-//	
-//	boolean updateLocationBikes(int locationId);
-//	
-//	
-//	 boolean deleteLocationBikes(int locationId,int bikeID);
-	
+
+	/**
+	 * 随机生成一个用户的位置
+	 * @return 生成的随机位置
+	 */
 	Location randomUserLocation();
 }

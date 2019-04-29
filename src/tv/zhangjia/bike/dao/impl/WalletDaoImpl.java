@@ -27,7 +27,6 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	/**
 	 * 查询全部钱包
 	 * @return 所有的钱包信息
-	 * @see tv.zhangjia.bike.dao.WalletDao#queryAll()
 	 */
 	@Override
 	public List<Wallet> queryAll() {
@@ -54,11 +53,6 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	@Override
 	public int doUpdate(Wallet wallet) {
 		String sql = "UPDATE wallet SET balance=?,coupon=?,is_vip = ?,vip_date=? WHERE id =?";
-		// return executeUpdate(sql, wallet.getBalance(), wallet.getCoupon(),
-		// wallet.getIsVIP() ? 1 : 0,
-		// wallet.getVipDate() == null ? null : new Date(wallet.getVipDate().getTime())
-		// // 保证传进来的时间不变和空指针异常
-		// , wallet.getId());
 		return executeUpdate(sql, wallet.getBalance(), wallet.getCoupon(), wallet.getIsVIP() ? 1 : 0,
 				wallet.getVipDate() == null ? null : wallet.getVipDate() // 保证传进来的时间不变和空指针异常
 				, wallet.getId());
@@ -70,7 +64,6 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 	 * @param wallet1Id 注册的用户钱包ID
 	 * @param user2Id 推荐人的用户ID
 	 * @return 添加成功返回1，添加失败返回0
-	 * @see tv.zhangjia.bike.dao.WalletDao#awardByregister(int, int, int)
 	 */
 	@Override
 	public int awardByregister(int user1Id, int wallet1Id, int user2Id) {
@@ -125,11 +118,9 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 
 	/**
 	 * 充值
-	 * 
 	 * @param userId 要充值的用户ID
 	 * @param money 要充值的金额
 	 * @return 返回1充值成功，返回0充值失败
-	 * @see tv.zhangjia.bike.dao.WalletDao#recharge(int, double)
 	 */
 	@Override
 	public int recharge(int userId, double money) {
@@ -148,11 +139,9 @@ public class WalletDaoImpl extends CommonDao implements WalletDao {
 
 	/**
 	 * 开通VIP
-	 * 
 	 * @param userId 开通VIP的用户ID
 	 * @param month 要开通的月份
 	 * @return
-	 * @see tv.zhangjia.bike.dao.WalletDao#becomeVIP(int, int)
 	 */
 	@Override
 	public int becomeVIP(int userId, int month) {

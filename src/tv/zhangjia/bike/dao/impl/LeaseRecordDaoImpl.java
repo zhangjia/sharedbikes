@@ -23,47 +23,9 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 * @param bikeId 借的车
 	 * @return 借车成功返回1，借车失败返回0
 	 */
-	// @Override
-	// public int doInsert(int userId, int bikeId) {
-	// UserDao userDao = new UserDaoImpl();
-	// BikeDao bikeDao = new BikeDaoImpl();
-	// LocationDao locationDao = new LocationDaoImpl();
-	// int s = bikeDao.bikeStatus(bikeId);
-	// // 如果是11,说明状态可借
-	// if (s == 11) {
-	// Bike bike = bikeDao.queryById(bikeId);
-	//
-	// bike.setStatus(0); // 设置为借出状态
-	// bike.setAmount(bike.getAmount() + 1); // 借出次数+1
-	// bike.setLastLocationId(bike.getLocationId());
-	// bike.setLocationId(-1); // -1为骑行状态
-	// // System.out.println(bike.getLocationId());
-	//
-	// // 更新当前位置的信息
-	//// locationDao.updateLocationBikes(bike.getLastLocationId());
-	//
-	// // 获取当前位置的名称
-	// Location lo = locationDao.queryLocation(bike.getLastLocationId());
-	//
-	// // 设置路程名
-	// String loName = lo.getLocation() + " ---> " + "骑行中\t";
-	// // 生成借车记录
-	// LeaseRecord lr = new LeaseRecord(Database.nextLeaseRecordId(), bikeId,
-	// userId,
-	// userDao.queryUserName(userId), new Date(), null, loName, 0, 0);
-	// lrs.add(lr);
-	//
-	// return 1; // 借出成功
-	// }
-	//
-	// return s;
-	// // s = 10 ：单车已经被借
-	// // s = 5：单车ID不存在
-	// // s = -1：单车损坏
-	// }
+
 	@Override
 	public int doInsert(int userId, int bikeId) {
-		// UserDao userDao = new UserDaoImpl();
 		BikeDao bikeDao = new BikeDaoImpl();
 		LocationDao locationDao = new LocationDaoImpl();
 
@@ -72,7 +34,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		bike.setStatus(0); // 设置为借出状态
 		bike.setAmount(bike.getAmount() + 1); // 借出次数+1
 		bike.setLastLocationId(bike.getLocationId()); // 更新起点
-//		bike.setLocationId(-1); // -1为骑行状态
+		// bike.setLocationId(-1); // -1为骑行状态
 
 		// 设置路程名
 		Location lo = locationDao.queryLocation(bike.getLocationId());
@@ -87,8 +49,8 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	}
 
 	/**
-	 * 查询所有的租车记录
-	 * @return
+	 * 查询所有的租车记录（包括用户删除的)
+	 * @return 所有的租车记录
 	 */
 	@Override
 	public List<LeaseRecord> queryAll() {
@@ -121,7 +83,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	/**
 	 * 查询某个用户所有未归还的车辆
 	 * @param userId
-	 * @return
+	 * @return 该用户当前所有未归还的车辆
 	 */
 	@Override
 	public List<LeaseRecord> queryNotReturnByUserId(int userId) {
@@ -135,93 +97,7 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 	 * @param userId 用户id
 	 * @return 归还成功返回1，归还失败返回0，账户余额不足返回-5
 	 */
-	// @Override
-	// public int returnBike(int bikeId, int userId) {
-	// UserDao userDao = new UserDaoImpl();
-	// BikeDao bikeDao = new BikeDaoImpl();
-	// WalletDao walletDao = new WalletDaoImpl();
-	// LocationDao locationDao = new LocationDaoImpl();
-	// int s = bikeDao.bikeStatus(bikeId);
-	// Wallet w = walletDao.queryByUserId(userId);
-	// if (s == 10) {
-	// // 获取要归还的单车
-	// Bike bike = bikeDao.queryById(bikeId);
-	// // 根据BikeID找到这辆车的骑行记录的ID
-	//
-	// // 根据骑行记录的ID返回这条记录信息
-	// LeaseRecord lr = queryNotReturnRecordId(bikeId);
-	// if (lr.getUserId() == userId) {
-	// Date returnTime = new Date();
-	// // 计算骑行时间（秒）
-	// Date lendTime = lr.getLeaseTime();
-	// long second = (returnTime.getTime() - lendTime.getTime()) / 1000;
-	// // 根据单车类型查找售价
-	// // double price = bike.getType().equals("助力车") ? as.getbBikePrice() :
-	// // as.getaBikePrice();
-	// double price = bike.getType().equals("助力车") ?
-	// Double.parseDouble(as.queryValue("助力车"))
-	// : Double.parseDouble(as.queryValue("脚蹬车"));
-	//
-	// // double discount = w.isVIP() ? as.getDiscount() : 1;
-	// double discount = w.isVIP() ? Double.parseDouble(as.queryValue("折扣")) : 1;
-	// // 计算消费金额
-	// double cost = second * price * discount;
-	// // 支付
-	// int i = walletDao.pay(userId, cost, "租车");
-	//
-	// // 如果没钱，返回-5
-	// if (i != 1) {
-	// return -5;
-	// }
-	//
-	// // 更改记录消费金额
-	// lr.setCost(cost);
-	// // 更改归还时间
-	// lr.setReturnTime(returnTime);
-	// // 添加骑行时间
-	// lr.setTime(second);
-	// // G: User user = queryUserByUserId(userId);
-	// User user = userDao.queryByUserId(userId);
-	// user.setCyclingTime(user.getCyclingTime() + second);
-	//
-	// // 更改车辆状态
-	// bike.setStatus(1);
-	// // 获取单车当前位置的ID
-	// int startLocationId = bike.getLastLocationId();
-	// // 获取单车当前位置的名字
-	// String start = locationDao.queryLocationName(startLocationId);
-	//
-	// // 获取归还的时候新的位置
-	// Location nowLocation = locationDao.randomLocation(bike.getLastLocationId(),
-	// bikeId, lr.getId());
-	// // 获取新的位置名字
-	// String end = nowLocation.getLocation();
-	// // 1. 修改单车的位置
-	//
-	// bike.setLocationId(nowLocation.getId());
-	//
-	// // 2. 修改骑行记录中的行程
-	//
-	// lr.setLocations(start + " ---> " + end);
-	// // 更新位置
-	// // locationDao.updateLocationBikes(bike.getLocationId());
-	// // locationDao.updateLocationBikes(bike.getLastLocationId());
-	//
-	// return 1;// 归还成功
-	//
-	// }
-	// return 0; // 不是该用户
-	// } else {
-	// return s;
-	// }
-	//
-	// // 0：不是该用户
-	// // -5 : 余额没钱了
-	// // s = 11：没有被借出
-	// // s = 5 ：没有该ID
-	// // s = -1：该车已经损坏
-	//
-	// }
+
 	@Override
 	public int returnBike(int bikeId, int userId) {
 		UserDao userDao = new UserDaoImpl();
@@ -254,14 +130,10 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		int w = bikeDao.doUpdate(bike);
 
 		// 应支付价格= 售价 * 折扣 （会员才享受折扣）
-	
-		double a = bikeDao.queryBikePrice(bikeId);
-		double b = (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
+
 		double price = bikeDao.queryBikePrice(bikeId)
 				* (wt.getIsVIP() ? Double.valueOf(optionDao.queryValue("折扣")) : 1);
 		// 计算好了归还时间，起始位置，消费金额，骑行时间
-//		System.out.println("price =" + price + "a = " + a + "b = " + b);
-//		System.out.println(bike.getLocationName() + bike.getLocationName());
 		String sql = "SELECT id,bike_id,user_id,lease_time,sysdate return_time,(SELECT location_name FROM location,bike WHERE bike.lastlocation_id = location.id AND bike.id = ?)||' ---> '||(SELECT location_name FROM location,bike WHERE bike.location_id = location.id AND bike.id = ?) journey,((sysdate - lease_time) * 24 * 60 * 60) * ? cost,((sysdate - lease_time) * 24 * 60 * 60) time FROM lease_record  WHERE bike_id = ? AND return_time IS NULL";
 		LeaseRecord lr = query4Bean(sql, LeaseRecord.class, bikeId, bikeId, price, bikeId);
 
@@ -276,21 +148,13 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		int y = userDao.doUpdate(user);
 
 		int z = doUpdate(lr);
-//		System.out.println("x = " + x + " y = " + y + "z = " + z + "w = " + w);
 		return w * x * y * z;
-
-		// 0：不是该用户
-		// -5 : 余额没钱了
-		// s = 11：没有被借出
-		// s = 5 ：没有该ID
-		// s = -1：该车已经损坏
-
 	}
 
 	/**
 	 * 根据车辆id和车辆状态，确认唯一的订单记录
 	 * @param bikeId
-	 * @return
+	 * @return 该条记录
 	 */
 	@Override
 	public LeaseRecord queryNotReturnRecordId(int bikeId) {
@@ -298,24 +162,22 @@ public class LeaseRecordDaoImpl extends CommonDao implements LeaseRecordDao {
 		return query4Bean(sql, LeaseRecord.class, bikeId);
 	}
 
-	@Override
-	public boolean isCurrentUserLease(int userId, int bikeId) {
-		// 根据骑行记录的ID返回这条记录信息
-		LeaseRecord lr = queryNotReturnRecordId(bikeId);
-
-		// 如果该车是该用户借的，并且不是未还状态
-		if (lr != null && lr.getUserId() == userId) {
-			return true;
-		}
-		return false;
-	}
-
+	/**
+	 * 更新记录
+	 * @param lr 要更新的记录对象
+	 * @return 更新成功返回1，更是失败返回0
+	 */
 	@Override
 	public int doUpdate(LeaseRecord lr) {
 		String sql = "UPDATE lease_record SET return_time=sysdate,journey=?,cost=?,time=? WHERE id = ?";
-		return executeUpdate(sql,  lr.getJourney(), lr.getCost(), lr.getTime(),lr.getId());
+		return executeUpdate(sql, lr.getJourney(), lr.getCost(), lr.getTime(), lr.getId());
 	}
 
+	/**
+	 * 删除记录（假删除）
+	 * @param id 记录ID
+	 * @return 删除成功返回1，删除失败返回0
+	 */
 	@Override
 	public int doDelele(int id) {
 		String sql = "UPDATE lease_record SET delete_status = 0 WHERE id = ?";

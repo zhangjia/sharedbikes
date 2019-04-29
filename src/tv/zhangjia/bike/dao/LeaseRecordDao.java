@@ -5,64 +5,68 @@ import java.util.List;
 import tv.zhangjia.bike.entity.LeaseRecord;
 
 public interface LeaseRecordDao {
+	/**
+	 * 添加借车记录（借车功能）
+	 * @param userId 借车的用户ID
+	 * @param bikeId 借的车
+	 * @return 借车成功返回1，借车失败返回0
+	 */
+	int doInsert(int userId, int bikeId);
 
 	/**
-	 * 添加记录
-	 * @param lr
-	 * @return
+	 * 查询所有的租车记录（包括用户删除的)
+	 * @return 所有的租车记录
 	 */
-	 int doInsert(int userId, int bikeId);
+	List<LeaseRecord> queryAll();
 
 	/**
-	 * 查询所有租车记录
-	 * @return
+	 * 查询单个用户的所有租车记录
+	 * @param id 用户id
+	 * @return 该用户的所有租车记录
 	 */
-	 List<LeaseRecord> queryAll();
+	List<LeaseRecord> queryByUserId(int id);
 
 	/**
-	 * 根据用户ID查询该用户的全部租车记录
-	 * @param id
-	 * @return
+	 * 根据账单ID查询单条记录
+	 * @param id 要查询的账单id
+	 * @return 该条账单的信息
 	 */
-	 List<LeaseRecord> queryByUserId(int id);
+	LeaseRecord queryById(int id);
 
 	/**
-	 * 根据记录ID，查询某条记录
-	 * @param id
-	 * @return
+	 * 查询某个用户所有未归还的车辆
+	 * @param userId
+	 * @return 该用户当前所有未归还的车辆
 	 */
-	 LeaseRecord queryById(int id);
+	List<LeaseRecord> queryNotReturnByUserId(int userid);
 
-	/**
-	 * 根据用户的ID查询用户所有未归还的租车记录
-	 * @param userid
-	 * @return
-	 */
-	 List<LeaseRecord> queryNotReturnByUserId(int userid);
-	
 	/**
 	 * 归还单车
-	 * @param bikeId
-	 * @param userId
-	 * @return
+	 * @param bikeId 要归还的单车id
+	 * @param userId 用户id
+	 * @return 归还成功返回1，归还失败返回0，账户余额不足返回-5
 	 */
-	 int returnBike(int bikeId, int userId);
-	
+	int returnBike(int bikeId, int userId);
+
 	/**
-	 * 根据单车的ID返回该车辆未归还的记录ID
+	 * 根据车辆id和车辆状态，确认唯一的订单记录
 	 * @param bikeId
-	 * @return
+	 * @return 该条记录
 	 */
-	 LeaseRecord queryNotReturnRecordId(int bikeId);
-	
-	 
-	 boolean isCurrentUserLease(int userId,int bikeId);
-	 
-	 
-	 int doUpdate(LeaseRecord lr);
-	 
-	 int doDelele(int id);
-	
-	
-	
+	LeaseRecord queryNotReturnRecordId(int bikeId);
+
+	/**
+	 * 删除记录（假删除）
+	 * @param id 记录ID
+	 * @return 删除成功返回1，删除失败返回0
+	 */
+	int doUpdate(LeaseRecord lr);
+
+	/**
+	 * 删除记录（假删除）
+	 * @param id 记录ID
+	 * @return 删除成功返回1，删除失败返回0
+	 */
+	int doDelele(int id);
+
 }

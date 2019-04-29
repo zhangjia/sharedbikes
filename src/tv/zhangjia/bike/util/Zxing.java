@@ -25,7 +25,12 @@ import tv.zhangjia.bike.entity.Bike;
 public class Zxing {
 	private static final int BLACK = 0xFF000000;
 	private static final int WHITE = 0xFFFFFFFF;
-
+	/**
+	 * 设置二维码参数
+	 * @param contents 二维码内容
+	 * @return 
+	 * @throws WriterException
+	 */
 	private static BitMatrix encode(String contents) throws WriterException {
 		final Map<EncodeHintType, Object> hints = new HashMap<>();
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
@@ -34,7 +39,12 @@ public class Zxing {
 	}
 
 	
-
+	/**
+	 * 生成二维码
+	 * @param bike 要生成的bike对象
+	 * @throws WriterException
+	 * @throws IOException
+	 */
 	public static void generateQR(Bike bike) throws WriterException, IOException {
 		String bi2 = "ID:" + bike.getId() + "  车型：" + bike.getType() +"  状态" + bike.getStatus()+ "  次数" + bike.getAmount();
 		BitMatrix bt = encode(bi2);
@@ -52,7 +62,11 @@ public class Zxing {
 	}
 
 	
-
+	/**
+	 * 设置图片大小和颜色
+	 * @param matrix
+	 * @return
+	 */
 	public static BufferedImage toBufferedImage(BitMatrix matrix) {
 		int width = matrix.getWidth();
 		int height = matrix.getHeight();

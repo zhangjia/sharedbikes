@@ -261,19 +261,19 @@ public class Menu {
 			userInfo();
 			break;
 		case 10:
-			usersWallet();//
+			usersWallet();
 			break;
 		case 11:
-			usersBill();//
+			usersBill();
 			break;
 		case 12:
-			systemSettings();//
+			systemSettings();
 			break;
 		case 13:
-			logout();//
+			logout();
 			break;
 		case 14:
-			exit();//
+			exit();
 			break;
 		default:
 			System.out.print("没有该选项，请重新输入：");

@@ -3,7 +3,6 @@ package tv.zhangjia.bike.dao;
 import java.util.List;
 
 import tv.zhangjia.bike.entity.Bike;
-import tv.zhangjia.bike.entity.User;
 
 /**
  * Bike½Ó¿Ú
