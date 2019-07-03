@@ -905,12 +905,12 @@ public class Menu {
 			String str = input.next();
 			if (iiv.isNumber(str)) {
 				locationId = Integer.parseInt(str);
-				if (locationDao.queryLocation(locationId) == null) {
+				/*if (locationDao.queryLocation(locationId) == null) {
 					System.out.print("该位置不存在");
 				} else {
 					break;
-				}
-
+				}*/
+				break;
 			} else {
 				System.out.print("输入不合法，");
 			}
